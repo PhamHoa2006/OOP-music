@@ -1,4 +1,4 @@
-package com.playlist;
+package com.musicPlayer;
 
 public class Song {
     
