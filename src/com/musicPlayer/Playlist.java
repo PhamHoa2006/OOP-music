@@ -1,8 +1,12 @@
 package com.musicPlayer;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 
 public class Playlist {
@@ -36,7 +40,7 @@ public class Playlist {
     public int getTotalDurationSeconds() {
         int total = 0;
         for (Song s : songs) {
-            total += s.getDuration();
+            total += s.getDuration(); // Errors disappear after finishing Song class
         }
         return total;
     }
@@ -46,10 +50,7 @@ public class Playlist {
     	return this.name;
     }
     
-    // Set or change name
-    public void setName(String name) {
-    	this.name = name; 
-    }
+    // Set or change name 
     
     // Get song list
     public List<Song> getSongs(){

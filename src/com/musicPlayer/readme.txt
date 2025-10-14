@@ -19,3 +19,9 @@ UPDATE:{
 	- Thêm class Comment trong Playlist, methods: add, remove, get..
 	
 }
+
+NOTE:{
+	Một số lỗi như phương thức getDuration, sort(Song), ... liên quan tới Song class vẫn lỗi vì class Song chưa được hoàn thiện.
+	Một số tính năng chỉ demo hoặc chưa hoạt động đúng, sẽ cần hoàn thiện thêm.
+
+}
