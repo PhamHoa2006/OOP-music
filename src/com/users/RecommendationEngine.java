@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+// Gợi ý một số bài hát cho người dùng
 public class RecommendationEngine {
 
     // Gợi ý list bài hát user nghe nhiều nhất
