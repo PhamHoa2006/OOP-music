@@ -91,12 +91,12 @@ public class History {
     }
 
     // Lấy top n bài hát được nghe nhiều nhất
-    public List<Song> getGlobalTrending(int topN) {
+    public static List<Song> getGlobalTrending(int topN) {
         if (topN <= 0) {
             return new ArrayList<>();
         }
 
-        List<Map.Entry<Song, Integer>> entry = new ArrayList<>(userPlayCount.entrySet());
+        List<Map.Entry<Song, Integer>> entry = new ArrayList<>(globalPlayCount.entrySet());
         entry.sort((a, b) -> b.getValue().compareTo(a.getValue()));
 
         List<Song> topTrending = new ArrayList<>();
