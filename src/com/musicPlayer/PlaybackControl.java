@@ -1,4 +1,4 @@
-package musicplayer;
+package com.musicPlayer;
 
 public class PlaybackControl {
 
