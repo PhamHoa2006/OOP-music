@@ -2,152 +2,179 @@ package com.musicPlayer;
 
 public class PlaybackControl {
 
-    private double volume;      // 0.0 - 1.0
-    private double speed;       // 0.5x - 2.0x
-    private boolean shuffle;
-    private String repeatMode;  // "OFF", "ALL", "ONE"
+    private int volume = 50;                  // 0-100
+    private boolean isMuted = false;
+    private double playbackSpeed = 1.0;       // 0.5x - 2.0x
+    private boolean isShuffle = false;
+    private boolean isRepeat = false;
 
     public PlaybackControl() {
-        this.volume = 1.0;
-        this.speed = 1.0;
-        this.shuffle = false;
-        this.repeatMode = "OFF";
+        this.volume = 50;
+        this.isMuted = false;
+        this.playbackSpeed = 1.0;
+        this.isShuffle = false;
+        this.isRepeat = false;
     }
 
     // ==================== VOLUME ====================
     
-    public double getVolume() {
+    public int getVolume() {
         return volume;
     }
 
-    public void setVolume(double volume) {
-        if (volume < 0.0) {
-            this.volume = 0.0;
-        } else if (volume > 1.0) {
-            this.volume = 1.0;
+    public void setVolume(int volume) {
+        if (volume < 0) {
+            this.volume = 0;
+        } else if (volume > 100) {
+            this.volume = 100;
         } else {
             this.volume = volume;
         }
+        System.out.println("Volume: " + this.volume);
     }
 
-    public void volumeUp(double amount) {
-        setVolume(this.volume + amount);
+    public void increaseVolume() {
+        if (volume < 100) {
+            volume += 5;
+        }
+        System.out.println("Volume: " + volume);
     }
 
-    public void volumeUp() {
-        volumeUp(0.1);
+    public void increaseVolume(int amount) {
+        volume += amount;
+        if (volume > 100) {
+            volume = 100;
+        }
+        System.out.println("Volume: " + volume);
     }
 
-    public void volumeDown(double amount) {
-        setVolume(this.volume - amount);
+    public void decreaseVolume() {
+        if (volume > 0) {
+            volume -= 5;
+        }
+        System.out.println("Volume: " + volume);
     }
 
-    public void volumeDown() {
-        volumeDown(0.1);
+    public void decreaseVolume(int amount) {
+        volume -= amount;
+        if (volume < 0) {
+            volume = 0;
+        }
+        System.out.println("Volume: " + volume);
     }
 
-    public int getVolumePercent() {
-        return (int) Math.round(volume * 100);
+    public boolean isMuted() {
+        return isMuted;
     }
 
-    public void mute() {
-        this.volume = 0.0;
+    public void setMuted(boolean muted) {
+        this.isMuted = muted;
+        System.out.println(isMuted ? "Muted" : "Unmuted");
+    }
+
+    public void toggleMute() {
+        isMuted = !isMuted;
+        System.out.println(isMuted ? "Muted" : "Unmuted");
     }
 
     // ==================== SPEED ====================
     
-    public double getSpeed() {
-        return speed;
+    public double getPlaybackSpeed() {
+        return playbackSpeed;
     }
 
-    public void setSpeed(double speed) {
+    public void changeSpeed(double speed) {
         if (speed < 0.5) {
-            this.speed = 0.5;
+            this.playbackSpeed = 0.5;
         } else if (speed > 2.0) {
-            this.speed = 2.0;
+            this.playbackSpeed = 2.0;
         } else {
-            this.speed = speed;
+            this.playbackSpeed = speed;
+        }
+        System.out.println("Speed: " + this.playbackSpeed + "x");
+    }
+
+    public void setSpeedPreset(String preset) {
+        switch (preset) {
+            case "0.5x":
+                changeSpeed(0.5);
+                break;
+            case "1x":
+                changeSpeed(1.0);
+                break;
+            case "1.25x":
+                changeSpeed(1.25);
+                break;
+            case "1.5x":
+                changeSpeed(1.5);
+                break;
+            case "2x":
+                changeSpeed(2.0);
+                break;
+            default:
+                changeSpeed(1.0);
         }
     }
 
     public void resetSpeed() {
-        this.speed = 1.0;
+        changeSpeed(1.0);
     }
 
     // ==================== SHUFFLE ====================
     
     public boolean isShuffle() {
-        return shuffle;
+        return isShuffle;
     }
 
     public void setShuffle(boolean shuffle) {
-        this.shuffle = shuffle;
+        this.isShuffle = shuffle;
+        System.out.println("Shuffle: " + isShuffle);
     }
 
     public void toggleShuffle() {
-        this.shuffle = !this.shuffle;
+        isShuffle = !isShuffle;
+        System.out.println("Shuffle: " + isShuffle);
     }
 
     // ==================== REPEAT ====================
     
-    public String getRepeatMode() {
-        return repeatMode;
+    public boolean isRepeat() {
+        return isRepeat;
     }
 
-    public void setRepeatMode(String mode) {
-        if (mode.equals("OFF") || mode.equals("ALL") || mode.equals("ONE")) {
-            this.repeatMode = mode;
-        }
+    public void setRepeat(boolean repeat) {
+        this.isRepeat = repeat;
+        System.out.println("Repeat: " + isRepeat);
     }
 
-    public void toggleRepeatMode() {
-        switch (repeatMode) {
-            case "OFF":
-                repeatMode = "ALL";
-                break;
-            case "ALL":
-                repeatMode = "ONE";
-                break;
-            case "ONE":
-                repeatMode = "OFF";
-                break;
-        }
-    }
-
-    public String getRepeatModeText() {
-        switch (repeatMode) {
-            case "OFF":
-                return "Không lặp";
-            case "ALL":
-                return "Lặp tất cả";
-            case "ONE":
-                return "Lặp 1 bài";
-            default:
-                return "Không xác định";
-        }
+    public void toggleRepeat() {
+        isRepeat = !isRepeat;
+        System.out.println("Repeat: " + isRepeat);
     }
 
     // ==================== UTILITY ====================
     
     public void resetAll() {
-        this.volume = 1.0;
-        this.speed = 1.0;
-        this.shuffle = false;
-        this.repeatMode = "OFF";
+        this.volume = 50;
+        this.isMuted = false;
+        this.playbackSpeed = 1.0;
+        this.isShuffle = false;
+        this.isRepeat = false;
+        System.out.println("All settings reset to default");
     }
 
     public void printSettings() {
         System.out.println("========== THIẾT LẬP PHÁT NHẠC ==========");
-        System.out.println("Âm lượng: " + getVolumePercent() + "%");
-        System.out.println("Tốc độ: " + speed + "x");
-        System.out.println("Shuffle: " + (shuffle ? "BẬT" : "TẮT"));
-        System.out.println("Repeat: " + getRepeatModeText());
+        System.out.println("Volume: " + volume + (isMuted ? " (MUTED)" : ""));
+        System.out.println("Speed: " + playbackSpeed + "x");
+        System.out.println("Shuffle: " + isShuffle);
+        System.out.println("Repeat: " + isRepeat);
         System.out.println("=========================================");
     }
 
     @Override
     public String toString() {
-        return String.format("PlaybackControl[volume=%.0f%%, speed=%.1fx, shuffle=%s, repeat=%s]",
-            volume * 100, speed, shuffle ? "ON" : "OFF", repeatMode);
+        return String.format("PlaybackControl[volume=%d, speed=%.1fx, shuffle=%s, repeat=%s, muted=%s]",
+            volume, playbackSpeed, isShuffle, isRepeat, isMuted);
     }
 }
