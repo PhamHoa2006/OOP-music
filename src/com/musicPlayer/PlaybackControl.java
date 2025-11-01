@@ -2,27 +2,23 @@ package com.musicPlayer;
 
 public class PlaybackControl {
 
-    private int volume = 50;                  // 0-100
-    private boolean isMuted = false;
-    private double playbackSpeed = 1.0;       // 0.5x - 2.0x
-    private boolean isShuffle = false;
-    private boolean isRepeat = false;
+    private int volume;                  // Từ 0 đến 100
+    private boolean isMuted;
+    private double playbackSpeed;        // x0.5 - x2.0
+    private boolean isShuffle;
+    private boolean isRepeat;
 
     public PlaybackControl() {
-        this.volume = 50;
-        this.isMuted = false;
-        this.playbackSpeed = 1.0;
-        this.isShuffle = false;
-        this.isRepeat = false;
+        resetAll();
     }
 
-    // ==================== VOLUME ====================
-    
+    // Cho phép các hàm khác và UI đọc giá trị volume hiện tại
     public int getVolume() {
         return volume;
     }
 
-    public void setVolume(int volume) {
+    // Đặt âm lượng mới từ 0 đến 100, tự động giới hạn
+    public int setVolume(int volume) {
         if (volume < 0) {
             this.volume = 0;
         } else if (volume > 100) {
@@ -30,60 +26,43 @@ public class PlaybackControl {
         } else {
             this.volume = volume;
         }
-        System.out.println("Volume: " + this.volume);
+        return this.volume;
     }
 
-    public void increaseVolume() {
-        if (volume < 100) {
-            volume += 5;
-        }
-        System.out.println("Volume: " + volume);
+    // Hàm tăng hoặc giảm âm lượng theo giá trị amount, amount có thể âm hoặc dương
+    public int changeVolume(int amount) {
+        this.volume += amount;
+        if (volume > 100) volume = 100;
+        if (volume < 0) volume = 0;
+        return volume;
     }
 
-    public void increaseVolume(int amount) {
-        volume += amount;
-        if (volume > 100) {
-            volume = 100;
-        }
-        System.out.println("Volume: " + volume);
-    }
-
-    public void decreaseVolume() {
-        if (volume > 0) {
-            volume -= 5;
-        }
-        System.out.println("Volume: " + volume);
-    }
-
-    public void decreaseVolume(int amount) {
-        volume -= amount;
-        if (volume < 0) {
-            volume = 0;
-        }
-        System.out.println("Volume: " + volume);
-    }
-
+    // Kiểm tra xem hiện tại có đang tắt tiếng hay không
     public boolean isMuted() {
         return isMuted;
     }
 
-    public void setMuted(boolean muted) {
+    // Cập nhật trạng thái tắt tiếng theo giá trị truyền vào (true = mute, false = unmute)
+    public boolean setMuted(boolean muted) {
         this.isMuted = muted;
-        System.out.println(isMuted ? "Muted" : "Unmuted");
+        return this.isMuted;
     }
 
-    public void toggleMute() {
+    // Đảo trạng thái mute
+    public boolean toggleMute() {
         isMuted = !isMuted;
-        System.out.println(isMuted ? "Muted" : "Unmuted");
+        return isMuted;
     }
 
-    // ==================== SPEED ====================
-    
+    // Tốc độ phát
+
+    // Lấy tốc độ phát hiện tại
     public double getPlaybackSpeed() {
         return playbackSpeed;
     }
 
-    public void changeSpeed(double speed) {
+    // Đặt tốc độ phát trong khoảng 0.5x – 2.0x, tự động giới hạn nếu vượt ngoài biên
+    public double changeSpeed(double speed) {
         if (speed < 0.5) {
             this.playbackSpeed = 0.5;
         } else if (speed > 2.0) {
@@ -91,90 +70,83 @@ public class PlaybackControl {
         } else {
             this.playbackSpeed = speed;
         }
-        System.out.println("Speed: " + this.playbackSpeed + "x");
+        return this.playbackSpeed;
     }
 
-    public void setSpeedPreset(String preset) {
+    // Chọn tốc độ phát từ danh sách preset (ví dụ: x0.5, x1.25, x2), thay vì nhập số trực tiếp
+    public double setSpeedPreset(String preset) {
         switch (preset) {
-            case "0.5x":
-                changeSpeed(0.5);
-                break;
-            case "1x":
-                changeSpeed(1.0);
-                break;
-            case "1.25x":
-                changeSpeed(1.25);
-                break;
-            case "1.5x":
-                changeSpeed(1.5);
-                break;
-            case "2x":
-                changeSpeed(2.0);
-                break;
-            default:
-                changeSpeed(1.0);
+            case "x0.5": return changeSpeed(0.5);
+            case "x0.75": return changeSpeed(0.75);
+            case "x1": return changeSpeed(1.0);
+            case "x1.25": return changeSpeed(1.25);
+            case "x1.5": return changeSpeed(1.5);
+            case "x1.75": return changeSpeed(1.75);
+            case "x2": return changeSpeed(2.0);
+            default: return changeSpeed(1.0);
         }
     }
 
-    public void resetSpeed() {
-        changeSpeed(1.0);
+    // Đặt lại tốc độ phát về mặc định (1.0x)
+    public double resetSpeed() {
+        return changeSpeed(1.0);
     }
 
-    // ==================== SHUFFLE ====================
-    
+    // Phát ngẫu nhiên
+
+    // Kiểm tra trạng thái phát ngẫu nhiên
     public boolean isShuffle() {
         return isShuffle;
     }
 
-    public void setShuffle(boolean shuffle) {
+    // Cập nhật trạng thái phát ngẫu nhiên theo giá trị truyền vào
+    public boolean setShuffle(boolean shuffle) {
         this.isShuffle = shuffle;
-        System.out.println("Shuffle: " + isShuffle);
+        return this.isShuffle;
     }
 
-    public void toggleShuffle() {
+    // Đảo trạng thái phát ngẫu nhiên
+    public boolean toggleShuffle() {
         isShuffle = !isShuffle;
-        System.out.println("Shuffle: " + isShuffle);
+        return isShuffle;
     }
 
-    // ==================== REPEAT ====================
-    
+    // Phát lại
+
+    // Kiểm tra xem có đang bật chế độ lặp lại hay không
     public boolean isRepeat() {
         return isRepeat;
     }
 
-    public void setRepeat(boolean repeat) {
+    // Ép trạng thái repeat theo giá trị truyền vào
+    public boolean setRepeat(boolean repeat) {
         this.isRepeat = repeat;
-        System.out.println("Repeat: " + isRepeat);
+        return this.isRepeat;
     }
 
-    public void toggleRepeat() {
+    // Đảo trạng thái Repeat
+    public boolean toggleRepeat() {
         isRepeat = !isRepeat;
-        System.out.println("Repeat: " + isRepeat);
+        return isRepeat;
     }
 
-    // ==================== UTILITY ====================
-    
+    // Hàm tiện ích
+
+    // Đưa toàn bộ cài đặt (âm lượng, tốc độ, phát ngẫu nhiên, lặp lại, tắt tiếng) về mặc định
     public void resetAll() {
         this.volume = 50;
         this.isMuted = false;
         this.playbackSpeed = 1.0;
         this.isShuffle = false;
         this.isRepeat = false;
-        System.out.println("All settings reset to default");
     }
 
-    public void printSettings() {
-        System.out.println("========== THIẾT LẬP PHÁT NHẠC ==========");
-        System.out.println("Volume: " + volume + (isMuted ? " (MUTED)" : ""));
-        System.out.println("Speed: " + playbackSpeed + "x");
-        System.out.println("Shuffle: " + isShuffle);
-        System.out.println("Repeat: " + isRepeat);
-        System.out.println("=========================================");
-    }
-
+    // Trả về chuỗi mô tả đầy đủ trạng thái hiện tại của PlaybackControl
     @Override
     public String toString() {
-        return String.format("PlaybackControl[volume=%d, speed=%.1fx, shuffle=%s, repeat=%s, muted=%s]",
-            volume, playbackSpeed, isShuffle, isRepeat, isMuted);
+        return String.format(
+                "PlaybackControl[volume=%d, speed=%.1fx, shuffle=%s, repeat=%s, muted=%s]",
+                volume, playbackSpeed, isShuffle, isRepeat, isMuted
+        );
     }
 }
