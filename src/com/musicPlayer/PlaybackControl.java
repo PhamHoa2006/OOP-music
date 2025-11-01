@@ -145,7 +145,7 @@ public class PlaybackControl {
     @Override
     public String toString() {
         return String.format(
-                "PlaybackControl[volume=%d, speed=%.1fx, shuffle=%s, repeat=%s, muted=%s]",
+                "PlaybackControl[volume=%d, speed=%.2f, shuffle=%s, repeat=%s, muted=%s]",
                 volume, playbackSpeed, isShuffle, isRepeat, isMuted
         );
     }
