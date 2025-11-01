@@ -1,6 +1,8 @@
-package com.musicPlayer;
+    package com.musicPlayer;
 
-public class PlaybackControl {
+    // Lớp PlaybackControl quản lý trạng thái và thao tác điều khiển phát nhạc (âm lượng, tốc độ, shuffle, repeat, mute)
+
+    public class PlaybackControl {
 
     private int volume;                  // Từ 0 đến 100
     private boolean isMuted;
@@ -32,9 +34,9 @@ public class PlaybackControl {
     // Hàm tăng hoặc giảm âm lượng theo giá trị amount, amount có thể âm hoặc dương
     public int changeVolume(int amount) {
         this.volume += amount;
-        if (volume > 100) volume = 100;
-        if (volume < 0) volume = 0;
-        return volume;
+        if (this.volume > 100) this.volume = 100;
+        if (this.volume < 0) this.volume = 0;
+        return this.volume;
     }
 
     // Kiểm tra xem hiện tại có đang tắt tiếng hay không
@@ -62,7 +64,7 @@ public class PlaybackControl {
     }
 
     // Đặt tốc độ phát trong khoảng 0.5x – 2.0x, tự động giới hạn nếu vượt ngoài biên
-    public double changeSpeed(double speed) {
+    public double setSpeed(double speed) {
         if (speed < 0.5) {
             this.playbackSpeed = 0.5;
         } else if (speed > 2.0) {
@@ -76,20 +78,20 @@ public class PlaybackControl {
     // Chọn tốc độ phát từ danh sách preset (ví dụ: x0.5, x1.25, x2), thay vì nhập số trực tiếp
     public double setSpeedPreset(String preset) {
         switch (preset) {
-            case "x0.5": return changeSpeed(0.5);
-            case "x0.75": return changeSpeed(0.75);
-            case "x1": return changeSpeed(1.0);
-            case "x1.25": return changeSpeed(1.25);
-            case "x1.5": return changeSpeed(1.5);
-            case "x1.75": return changeSpeed(1.75);
-            case "x2": return changeSpeed(2.0);
-            default: return changeSpeed(1.0);
+            case "x0.5": return setSpeed(0.5);
+            case "x0.75": return setSpeed(0.75);
+            case "x1": return setSpeed(1.0);
+            case "x1.25": return setSpeed(1.25);
+            case "x1.5": return setSpeed(1.5);
+            case "x1.75": return setSpeed(1.75);
+            case "x2": return setSpeed(2.0);
+            default: return setSpeed(1.0);
         }
     }
 
     // Đặt lại tốc độ phát về mặc định (1.0x)
     public double resetSpeed() {
-        return changeSpeed(1.0);
+        return setSpeed(1.0);
     }
 
     // Phát ngẫu nhiên
@@ -145,7 +147,7 @@ public class PlaybackControl {
     @Override
     public String toString() {
         return String.format(
-                "PlaybackControl[volume=%d, speed=%.2f, shuffle=%s, repeat=%s, muted=%s]",
+                "PlaybackControl[volume=%d, speed=%.1fx, shuffle=%s, repeat=%s, muted=%s]",
                 volume, playbackSpeed, isShuffle, isRepeat, isMuted
         );
     }
