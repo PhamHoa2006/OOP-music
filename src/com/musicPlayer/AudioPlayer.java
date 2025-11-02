@@ -1,8 +1,5 @@
 package com.musicPlayer;
 
-public class AudioPlayer {
-    package com.musicplayer;
-
 public class AudioPlayer implements Player {
     private Playlist playlist;
     private int currentIndex = 0;
@@ -160,4 +157,4 @@ public class AudioPlayer implements Player {
         return this.playlist;
     }
 }
-}
+

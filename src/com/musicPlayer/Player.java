@@ -1,4 +1,4 @@
-package com.musicplayer;
+package com.musicPlayer;
 
 public interface Player {
     void play(); // bat dau hoac tiep tuc
