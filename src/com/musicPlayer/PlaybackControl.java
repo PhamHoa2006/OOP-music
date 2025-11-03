@@ -63,7 +63,7 @@
         return playbackSpeed;
     }
 
-    // Đặt tốc độ phát trong khoảng 0.5x – 2.0x, tự động giới hạn nếu vượt ngoài biên
+    // Đặt tốc độ phát trong khoảng x0.5 – x2.0, tự động giới hạn nếu vượt ngoài biên
     public double setSpeed(double speed) {
         if (speed < 0.5) {
             this.playbackSpeed = 0.5;
@@ -89,7 +89,7 @@
         }
     }
 
-    // Đặt lại tốc độ phát về mặc định (1.0x)
+    // Đặt lại tốc độ phát về mặc định (x1.0)
     public double resetSpeed() {
         return setSpeed(1.0);
     }
@@ -147,7 +147,7 @@
     @Override
     public String toString() {
         return String.format(
-                "PlaybackControl[volume=%d, speed=%.1fx, shuffle=%s, repeat=%s, muted=%s]",
+                "PlaybackControl[volume=%d, speed=%.1f, shuffle=%s, repeat=%s, muted=%s]",
                 volume, playbackSpeed, isShuffle, isRepeat, isMuted
         );
     }
