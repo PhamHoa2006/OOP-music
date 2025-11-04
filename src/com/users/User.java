@@ -1,6 +1,10 @@
 package com.users;
 
 import com.musicPlayer.*;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -10,18 +14,18 @@ public class User {
     private String name;
     private String age;
     private String email;
-    private String decripsion;
+    private String descripsion;
     private ArrayList<Playlist> playLists = new ArrayList<>();
 
 
     private String username;
-    private String password;
+    private String passwordHash;
 
 
 
     private User(String username, String password) {
         this.username = username;
-        this.password = password;
+        this.passwordHash = hashPassword(password);
         this.id = UUID.randomUUID().toString();
     }
     static User create(String username, String password){
@@ -55,11 +59,11 @@ public class User {
 
 
 
-    public String getDecripsion() {
-        return decripsion;
+    public String getDescripsion() {
+        return descripsion;
     }
-    public void setDecripsion(String decripsion) {
-        this.decripsion = decripsion;
+    public void setDescripsion(String descripsion) {
+        this.descripsion = descripsion;
     }
 
     public ArrayList<Playlist> getPlayLists() {
@@ -74,12 +78,23 @@ public class User {
         return username;
     }
     public String getPassword() {
-        return password;
+        return passwordHash;
     }
     public void setPassword(String password){
-        this.password = password;
+        this.passwordHash = hashPassword(password);
     }
     
 
-    
+    public static String hashPassword(String password) {
+    if (password == null) throw new IllegalArgumentException("password is null");
+    try {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hashBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+        StringBuilder sb = new StringBuilder(hashBytes.length * 2);
+        for (byte b : hashBytes) sb.append(String.format("%02x", b));
+        return sb.toString();
+    } catch (NoSuchAlgorithmException e) {
+        throw new RuntimeException("SHA-256 not supported", e);
+    }
+}
 }

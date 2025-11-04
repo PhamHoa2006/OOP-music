@@ -1,4 +1,4 @@
-package com.musicplayer;
+package com.musicPlayer;
 
 public interface Player {
     void play(); // bat dau hoac tiep tuc
@@ -21,17 +21,13 @@ public interface Player {
 
     double getCurrentTime();
 
-    // double getDuration();
+    double getVolume(); // lay am thanh
 
-    void setVolume(double volume);
+    boolean isPlaying(); // check tt
 
-    double getVolume();
+    boolean isStopped(); // check tt
 
-    boolean isPlaying();
+    boolean isPaused(); // check trang thai
 
-    boolean isStopped();
-
-    boolean isPaused();
-
-    void setOnSongEnd(Runnable callback);
+    void setOnSongEnd(Runnable callback); // de sau tim hieu them
 }

@@ -1,19 +1,19 @@
 package com.users;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UserManager {
-    private static ArrayList<User> users = new ArrayList<>();
+    // key: username (chuyển về chữ thường để tránh trùng lặp)
+    private static HashMap<String, User> users = new HashMap<>();
 
-
-    public User findUser(String username){
-        for (User u : users){
-            if (((u.getUsername()).toLowerCase()).equals(username.toLowerCase())) return u;
-        }
-        return null;
+    // Tìm kiếm user
+    public User findUser(String username) {
+        if (username == null) return null;
+        return users.get(username.toLowerCase());
     }
 
-    public boolean register(String username, String password){
-        if (username == null || (username.trim()).isEmpty()){
+    // Đăng ký (register)
+    public boolean register(String username, String password) {
+        if (username == null || username.trim().isEmpty()) {
             System.out.println("Username khong hop le");
             return false;
         }
@@ -21,64 +21,72 @@ public class UserManager {
             System.out.println("Password không hợp lệ (>= 6 ký tự và <= 30)");
             return false;
         }
-        if (findUser(username) != null) {
+        String key = username.toLowerCase();
+        if (users.containsKey(key)) {
             System.out.println("Ten nguoi dung da ton tai");
-            return false;        
+            return false;
         }
-        users.add(User.create(username,password));
+        users.put(key, User.create(username, password));
         System.out.println("Dang ky thanh cong");
         return true;
     }
 
+    // Đăng nhập (login)
     public boolean login(String username, String password) {
-        if (username == null || password == null){
+        if (username == null || password == null) {
             System.out.println("Ten dang nhap hoac mat khau khong hop le");
             return false;
         }
         User tmp = findUser(username);
-        if (tmp == null || !tmp.getPassword().equals(password)) {
+        if (tmp == null || !tmp.getPassword().equals(User.hashPassword(password))) {
             System.out.println("Ten dang nhap hoac mat khau khong hop le");
             return false;
         }
-        System.out.println("Dang nhap thanh cong"); 
-        
-        return true;    
+        System.out.println("Dang nhap thanh cong");
+        return true;
     }
 
-    public boolean changePassword(String username, String oldPwd, String newPwd){
+    // Thay đổi mật khẩu
+    public boolean changePassword(String username, String oldPwd, String newPwd) {
         User tmp = findUser(username);
         if (tmp == null) {
             System.out.println("Nham tai khoan r");
             return false;
         }
-        if (!tmp.getPassword().equals(oldPwd)){
+        if (!tmp.getPassword().equals(User.hashPassword(oldPwd))) {
             System.out.println("Nham mat khau r");
             return false;
         }
-        System.out.println("Doi mat khau thanh cong");
         tmp.setPassword(newPwd);
+        System.out.println("Doi mat khau thanh cong");
         return true;
     }
 
-    public boolean delete(String username, String password){
-        User tmpUser = findUser(username);
-        if (tmpUser == null || !tmpUser.getPassword().equals(password)) return false;
-        users.remove(tmpUser);
+    // Xóa user
+    public boolean delete(String username, String password) {
+        User tmp = findUser(username);
+        if (tmp == null || !tmp.getPassword().equals(User.hashPassword(password))) {
+            return false;
+        }
+        users.remove(username.toLowerCase());
+        System.out.println("Xoa thanh cong");
         return true;
     }
 
-    public int size(){
+    // Số lượng user
+    public int size() {
         return users.size();
     }
 
-    public void listUsers(){
-        if (users.isEmpty()){
+    // In danh sách user
+    public void listUsers() {
+        if (users.isEmpty()) {
             System.out.println("Chua co nguoi dung nao");
             return;
         }
-        System.out.println("Danh sach User: ");
-        for (User tmp : users) System.out.println("- " + tmp.getUsername());
-        return;
-    }   
-}   
-
+        System.out.println("Danh sach User:");
+        for (User u : users.values()) {
+            System.out.println("- " + u.getUsername());
+        }
+    }
+}

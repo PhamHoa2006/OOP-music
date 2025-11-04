@@ -2,10 +2,13 @@ package com.musicPlayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 public class Song implements Comparable<Song> {
     // I. Thuộc tính
+    private final String songID;
     private String title;
     private String artist;
     private String album;
@@ -13,15 +16,16 @@ public class Song implements Comparable<Song> {
     private String url;
     private List<String> genres; // thể loại
     private int playCount; // lượt nghe // có thể suggest bằng rating và playCount
-    private double rating;
-    private List<Integer> ratingList; // 1,2,3,4,5: sl dg, 0: tong dg, 6: tong sao
+    
+    private List<Integer> ratingList;
     private List<String> lyricLines; // lưu từng dọc lời bài hát
     private List<Integer> timeStamps; // thời gian đến từng lời bài hát, đơn vị mili giây. 5000 = 5s.
-    private boolean like;
+    private Long totalLike;
 
     // 1.Constructor basic
     
     public Song(String title, String artist, String album, int duration, String url) {
+        this.songID = UUID.randomUUID().toString();
         this.title = title;
         this.artist = artist;
         this.album = album;
@@ -29,15 +33,16 @@ public class Song implements Comparable<Song> {
         this.url = url;
         this.playCount = 0;
         this.genres = new ArrayList<>();
-        this.rating = 0;
-        this.ratingList = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0, 0, 0));
+        ratingList = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0));
         this.lyricLines = new ArrayList<>();
         this.timeStamps = new ArrayList<>();
+        this.totalLike = 0L;
     }
     
     // 2.Constructor có phần TimeStamps
 
     public Song(String title, String artist, String album, int duration, String url, List<String> genres, List<String> lyricLines, List<Integer> timeStamps) {
+        this.songID = UUID.randomUUID().toString();
         this.title = title;
         this.artist = artist;
         this.album = album;
@@ -45,16 +50,16 @@ public class Song implements Comparable<Song> {
         this.url = url;
         this.genres = genres;
         this.playCount = 0;
-        this.rating = 0;
-        this.ratingList = new ArrayList<>(Arrays.asList(0,0,0,0,0,0,0));
+        ratingList = new ArrayList<>(Arrays.asList(0,0,0,0,0));
         this.lyricLines = lyricLines;
         this.timeStamps = timeStamps;
-        this.like = false;
+        this.totalLike = 0L;
     }
 
     // 3. Constructor không có TimeStamp
 
     public Song(String title, String artist, String album, int duration, String url, List<String> genres, List<String> lyricLines) {
+        this.songID = UUID.randomUUID().toString();
         this.title = title;
         this.artist = artist;
         this.album = album;
@@ -62,14 +67,15 @@ public class Song implements Comparable<Song> {
         this.url = url;
         this.genres = genres;
         this.playCount = 0;
-        this.rating = 0;
-        this.ratingList = new ArrayList<>(Arrays.asList(0,0,0,0,0,0,0));
+        ratingList = new ArrayList<>(Arrays.asList(0,0,0,0,0));
         this.lyricLines = lyricLines;
         this.timeStamps = new ArrayList<> (); // bỏ qua
-        this.like = false;
+        this.totalLike = 0L;
     }
 
     // II.Getter và Setter
+
+    public String getSongID() {return this.songID;}
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -92,20 +98,16 @@ public class Song implements Comparable<Song> {
     public int getPlayCount() {return playCount;}
     public void setPlayCount(int playCount) {this.playCount = playCount;}
 
-    public double getRating() {return this.rating;}
-    public void setRating(float rating) {this.rating = rating;}
-
+    public Long getTotalLike() {return totalLike;}
+    public void setTotalLike(Long totalLike) {this.totalLike = totalLike;}
+ 
+    
     public List<Integer> getRatingList() {return this.ratingList;}
-    public void setRatingList(List<Integer> lis) {
-        int luot = 0, tong = 0;
-        for (int i=1; i<=5; i++) {
-            this.ratingList.set(i, lis.get(i));
-            luot += lis.get(i);
-            tong += lis.get(i)*i;
-        }
-        this.ratingList.set(0, luot);
-        this.ratingList.set(6, tong);
-        this.rating = (tong*1.0)/luot;
+    public void setRatingList(List<Integer> ratingList) {
+        if (ratingList == null) {throw new IllegalArgumentException("Empty list.");}
+        if (ratingList.size() != 5) {throw new IllegalArgumentException("Wrong size.");}
+        for (int rating : ratingList) {if (rating < 0) {throw new IllegalArgumentException("Negative value");}}
+        this.ratingList = new ArrayList<>(ratingList);
     }
 
     public List<String> getLyrics() {return this.lyricLines;}
@@ -114,108 +116,56 @@ public class Song implements Comparable<Song> {
     public List<Integer> getTimeStamps() {return this.timeStamps;}
     public void setTimeStamps(List<Integer> timeStamps) {this.timeStamps = timeStamps;}
 
-    public int getIndexAtTime(int currentTime) {          // getter để lấy lời bài hát tại một khoảng thời gian (lấy Index bằng Time)
-        int i; // i là LyricIndex, là thứ tự dòng của câu hiện tại
-        if (timeStamps.isEmpty() || lyricLines.isEmpty()) {return -1;}
-        if (currentTime < 0 || currentTime > duration) {return -1;}
-        for (i = 0; i < timeStamps.size(); i++) {
-            int startLyricLine = timeStamps.get(i);
-            int endLyricLine = (i < timeStamps.size() -1) ? timeStamps.get(i+1) : duration;
-            if (currentTime >= startLyricLine && currentTime < endLyricLine) break;
+    public int getIndexAtTime(int currentTime) { // nhập thời gian lấy dòng bài hát tại đó
+        if (timeStamps == null || lyricLines == null || timeStamps.isEmpty() || lyricLines.isEmpty()) return -1;
+        if (currentTime < 0 || currentTime > duration * 1000) return -1;
+        for (int i = 0; i < timeStamps.size(); i++) {
+            int start = timeStamps.get(i);
+            int end = (i + 1 < timeStamps.size()) ? timeStamps.get(i + 1) : duration;
+            if (currentTime >= start && currentTime < end)
+            return i;
         }
-        return i;
+    return -1; // nếu không khớp với khoảng nào
     }
     
     public void setLyricLine(String s, int i) {  // setter lời bài hát tại một dòng (lấy Line bằng Index)
-        if (i >= 0 && i < lyricLines.size()) {
-            lyricLines.set(i, s);
-        }
-    }
+        if (i >= 0 && i < lyricLines.size()) {lyricLines.set(i, s);}}
     public String getLyricLine(int i) {   // getter lời bài hát tại một dòng (lấy Line bằng Index)
-        if (i >= 0 && i < lyricLines.size()) { 
-        return lyricLines.get(i);
-        }
-    return ""; // trả về "" để tránh null
+        if (i >= 0 && i < lyricLines.size()) return lyricLines.get(i);
+        else return ""; // trả về "" để tránh null
     }
-
-    public boolean getLike() {return this.like;}
-    public void setlike(boolean TF) {this.like = TF;}
     
     /// III. Phương thức
 
-    //1. In ra một dòng lời bài hát (chỉ số thứ tự)
-
-    public void displayLyricLine(int index) {
-        if (index >= 0 && index < lyricLines.size()) {
-        System.out.println(lyricLines.get(index));
-        }
-    }
-
-    //2. In toàn bộ lời bài hát
-
-    public void displayAllLyrics() {
-        if (lyricLines == null || lyricLines.isEmpty()) {
-            System.out.println("Chua co loi bai hat.");
-            return;
-        }
-        System.out.println("Loi bai hat: " + title);
-        for (int i = 0; i < lyricLines.size(); i++) {
-        // Nếu có timeStamp thì in kèm
-            if (i < timeStamps.size()) {
-            System.out.printf("[%ds] %s%n", timeStamps.get(i), lyricLines.get(i));
-            } else {
-            System.out.println(lyricLines.get(i));
-            }
-        }
-    }
-
-    //3. Hiển thị thông tin bài hát
+    //1. Trả về thông tin cơ bản của bài hát
 
     @Override
     public String toString() {
         return title + " - " + artist;
     }
        
-    //4. So sánh và sắp thứ tự bài hát theo chuỗi tên
+    //2. So sánh và sắp thứ tự bài hát theo chuỗi tên, nghệ sĩ, thời lượng.
 
     @Override
     public int compareTo(Song other) {
-        return this.title.compareToIgnoreCase(other.title);
+    return Comparator
+        .comparing(Song::getTitle, String.CASE_INSENSITIVE_ORDER)
+        .thenComparing(Song::getArtist, String.CASE_INSENSITIVE_ORDER)
+        .thenComparingInt(Song::getDuration)
+        .compare(this, other);
+    }
+    
+    //3. Sắp theo ID
+
+    public static void sortById(List<Song> songs) {
+    songs.sort(Comparator.comparing(Song::getSongID));
     }
 
-    //5. Tăng số lần nghe
+    //3. Tăng số lần nghe.
 
     public void increasePlayCount() {this.playCount++;}
 
-    //6. Rating cho bài hát
+    //4. Tăng số lượt thích.
 
-    public void rateThisSong(int score) {
-        if (score < 1 || score > 5) System.out.println("Rating khong hop le");
-        else {
-            this.ratingList.set(score, this.ratingList.get(score) + 1); // tăng thêm 1 lượt điểm x (1-5)
-            this.ratingList.set(0, this.ratingList.get(0) + 1); // tăng tổng đánh giá thêm 1
-            this.ratingList.set(6, this.ratingList.get(6) + score); // tăng tổng điểm thêm x
-            this.rating = this.ratingList.get(6) * 1.0 / this.ratingList.get(0); // chỉnh overall rating
-        }
-    }
-
-    //7. Hiện danh sách Rating
-    
-    public void displayRating() {
-        for (int i=1; i<=5; i++) {
-            System.out.println(i + " sao: " + this.ratingList.get(i));
-        }
-        System.out.println("Overall: " + this.rating);
-    }
-
-    //8. Thêm ưa thích
-
-    public void likeSong() {this.setlike(true);}
-    public void unlikeSong() {this.setlike(false);}
-
-    //9. Thêm thể loại
-
-    public void addGenre(String G) {this.genres.add(G);}
-    public void deleteGenre(String G) {this.genres.remove(G);}
-
+    public void increaseTotalLike() {this.totalLike++;}
 }
