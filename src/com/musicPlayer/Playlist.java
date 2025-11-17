@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class Playlist {
 	private final String id;
-    private final String name;
+    private String name;
     private final List<Song> songs;
     private final Set<String> likedByUsers;
     private final List<Comment> comments;	// All comments
@@ -57,6 +57,10 @@ public class Playlist {
     	return this.songs;
     }
     
+    public void setName(String newName) {
+    	this.name = newName;
+    }
+    
     // Add a song to the end of list.
     public void addSong(Song s) {
         if (s != null) songs.add(s);	
@@ -80,7 +84,7 @@ public class Playlist {
 
     // Remove a song
     public boolean removeSong(Song s) {
-    	if (s == null) return false;
+    	if (s == null) return false; 
         return songs.remove(s);
     }
     
@@ -137,13 +141,21 @@ public class Playlist {
     
     public boolean removeComment(String commentId) {
         if (commentId == null) return false;
-        for (Comment c : comments) {
-            if (c.getId().equals(commentId)) {	// Found the target comment
-            	// Comment list by specific user
+
+        java.util.Iterator<Comment> it = comments.iterator();
+        while (it.hasNext()) {
+            Comment c = it.next();
+            if (c.getId().equals(commentId)) { // Found the target comment
+                
+            	it.remove(); 
+            	
+            	//Remove from the userCommentList
                 List<Comment> userCommentList = commentsByUser.get(c.getUserId());
                 if (userCommentList != null) {
                     userCommentList.removeIf(x -> x.getId().equals(commentId));
-                    if (userCommentList.isEmpty()) commentsByUser.remove(c.getUserId());
+                    if (userCommentList.isEmpty()) {
+                        commentsByUser.remove(c.getUserId());
+                    }
                 }
                 return true;
             }

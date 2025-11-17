@@ -25,3 +25,8 @@ NOTE:{
 	Một số tính năng chỉ demo hoặc chưa hoạt động đúng, sẽ cần hoàn thiện thêm.
 
 }
+
+UPDATE 4/11/2025:{
+	- fix lỗi Comment: đã thêm lệnh xoá comment khỏi danh sách bài hát.
+	- thêm setter name.
+}
