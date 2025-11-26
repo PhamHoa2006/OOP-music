@@ -1,0 +1,9 @@
+*.class
+bin/
+out/
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
+*.zip
+*.rar
