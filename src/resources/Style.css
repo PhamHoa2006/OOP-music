@@ -1,0 +1,217 @@
+/* 1. Cấu hình chung cho toàn bộ App (Nền đen) */
+.root {
+    -fx-background-color: #030303; /* Màu đen sâu thẳm của YTM */
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+/* 2. Cấu hình cho TẤT CẢ các nút (Button) */
+.button {
+    -fx-background-color: transparent; /* Trong suốt */
+    -fx-text-fill: #aaaaaa; /* Chữ màu xám nhạt */
+    -fx-font-size: 14px;
+    -fx-cursor: hand; /* Di chuột vào hiện bàn tay */
+    -fx-background-radius: 5;
+}
+
+/* Khi di chuột vào nút (Hover) */
+.button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1); /* Sáng lên một chút */
+    -fx-text-fill: white;
+}
+
+/* Khi bấm nút xuống (Pressed) */
+.button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 3. Nút chức năng đặc biệt (Ví dụ nút Play tròn to) */
+.play-button {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-background-radius: 50; /* Tròn xoe */
+}
+.play-button:hover {
+    -fx-background-color: #dddddd;
+    -fx-text-fill: black;
+}
+
+/* 4. Thanh tìm kiếm (TextField) */
+.text-field {
+    -fx-background-color: #262626; /* Xám đậm */
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #888888;
+    -fx-background-radius: 8;
+    -fx-border-width: 0;
+}
+.text-field:focused {
+    -fx-background-color: #333333;
+    -fx-border-color: #aaaaaa; /* Viền sáng khi gõ */
+    -fx-border-width: 1;
+}
+
+/* 5. Nhãn (Label) */
+.label {
+    -fx-text-fill: #f1f1f1; /* Mặc định chữ trắng */
+}
+
+/* 6. Danh sách nhạc (ListView) - Cái này quan trọng để nó không bị trắng */
+.list-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-padding: 5px;
+}
+.list-cell:filled:selected, .list-cell:filled:hover {
+    -fx-background-color: #262626; /* Màu khi chọn dòng */
+}
+
+/* 7. Thanh trượt (Slider) */
+.slider .track {
+    -fx-background-color: #444444; /* Đường ray màu tối */
+}
+.slider .thumb {
+    -fx-background-color: #aaaaaa; /* Cục trượt màu xám */
+}
+.slider:hover .thumb {
+    -fx-background-color: white; /* Di chuột vào thì cục trượt trắng lên */
+}
+
+/* 1. Đường kẻ ngăn cách các khu vực (Dùng cho HBox/VBox) */
+.border-bottom {
+    -fx-border-color: rgba(255, 255, 255, 0.1); /* Màu trắng độ mờ 10% */
+    -fx-border-width: 0 0 1 0; /* Chỉ kẻ viền dưới 1px */
+}
+
+.border-top {
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 1 0 0 0; /* Chỉ kẻ viền trên */
+}
+
+.border-right {
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 0 1 0 0; /* Chỉ kẻ viền phải */
+}
+
+/* 2. Style cho Tab (Tiếp theo / Lời nhạc) */
+/* 1. Hộp chứa các Tab (HBox bên ngoài) */
+.tab-container {
+    /* Kẻ viền dưới màu xám mờ chạy dài */
+    -fx-border-color: transparent transparent rgba(255, 255, 255, 0.1) transparent;
+    -fx-border-width: 0 0 1 0; /* Dày 1px */
+    -fx-padding: 0; /* Quan trọng: Để nút nằm sát xuống đường kẻ */
+}
+
+/* 2. Các nút Tab (Con bên trong) */
+.tab-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #aaaaaa;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    
+    /* Mẹo: Tạo viền tàng hình 3px để giữ chỗ. 
+       Nếu không có dòng này, khi nút active hiện viền lên, chữ sẽ bị nhảy giật 1 cái */
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 3 0; 
+}
+
+.tab-btn:hover {
+    -fx-text-fill: white;
+}
+
+/* 3. Nút đang Active (Gạch chân trắng đè lên) */
+.tab-active {
+    -fx-text-fill: white !important;
+    /* Viền trắng dày 3px để đè lên cái viền xám 1px của thằng cha */
+    -fx-border-color: transparent transparent white transparent !important;
+    -fx-border-width: 0 0 3 0;
+}
+
+.tab-btn:hover {
+    -fx-text-fill: white;
+    -fx-border-color: transparent transparent #666666 transparent; /* Sáng hơn tí khi di chuột */
+}
+
+/* Khi được chọn (Active) */
+/* Dán cái này xuống cuối cùng file style.css */
+.tab-active {
+    -fx-text-fill: white !important;
+    -fx-border-color: transparent transparent white transparent !important;
+    -fx-border-width: 0 0 3 0 !important;
+    -fx-border-style: solid !important; /* Thêm dòng này cho chắc cốp */
+    -fx-background-insets: 0;
+}
+
+/* --- SPOTIFY SLIDER STYLE --- */
+
+/* 1. Đường ray (Track) - Làm cho nó mỏng dính */
+.slider .track {
+    -fx-background-color: #535353; /* Màu xám tối */
+    -fx-pref-height: 4px; /* Độ dày 4px (Rất mảnh) */
+    -fx-background-radius: 2px; /* Bo tròn đầu */
+    -fx-background-insets: 0;
+}
+
+/* 2. Cục trượt (Thumb) - Tròn và trắng */
+.slider .thumb {
+    -fx-background-color: white; /* Màu trắng */
+    -fx-pref-width: 12px; /* Kích thước nhỏ */
+    -fx-pref-height: 12px;
+    -fx-background-radius: 50%; /* Tròn xoe */
+    -fx-background-insets: 0;
+    /* Mẹo: Spotify bình thường ẩn cục này, di chuột mới hiện. 
+       Nhưng ta cứ để hiện cho dễ dùng đã. */
+}
+
+/* 3. Hiệu ứng khi di chuột vào (Hover) */
+.slider:hover .track {
+    -fx-background-color: #b3b3b3; /* Đường ray sáng lên chút */
+}
+
+.slider:hover .thumb {
+    -fx-scale-x: 1; /* Cục trượt to lên */
+    -fx-scale-y: 1;
+    -fx-cursor: hand;
+}
+
+/* 4. Style cho 2 cái số thời gian */
+.time-label {
+    -fx-text-fill: #b3b3b3; /* Màu xám nhạt chuẩn Spotify */
+    -fx-font-size: 11px;
+    -fx-font-family: sans-serif;
+}
+
+.create-playlist-btn {
+    -fx-background-color: #262626; /* Màu nền xám đậm (nhạt hơn nền đen) */
+    -fx-text-fill: white;          /* Chữ trắng */
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    
+    /* QUAN TRỌNG: Tạo hình viên thuốc */
+    -fx-background-radius: 50; 
+    -fx-border-radius: 50;
+    
+    /* Chỉnh kích thước nút */
+    -fx-cursor: hand;
+}
+
+/* Hiệu ứng khi di chuột vào */
+.create-playlist-btn:hover {
+    -fx-background-color: #3e3e3e; /* Sáng hơn chút */
+}
+
+.menu-button {
+    -fx-text-fill: white; /* Chuyển chữ thành màu trắng */
+    -fx-background-color: transparent; /* Nền trong suốt */
+    -fx-font-weight: bold; /* In đậm cho rõ (tùy chọn) */
+    -fx-cursor: hand;
+}
+
+/* Thêm hiệu ứng khi di chuột vào cho đẹp */
+.menu-button:hover {
+    -fx-background-color: #262626; /* Nền xám khi hover */
+    -fx-text-fill: white; /* Đảm bảo chữ vẫn trắng khi hover */
+}
