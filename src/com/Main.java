@@ -1,35 +1,43 @@
 package com;
 
-import javafx.application.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
-import javafx.stage.*;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class Main extends Application {
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    Button button;
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Hello World");
-        button = new Button();
-        button.setText("Say Hello World");
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello OOP");
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/resources/MainLayout.fxml")));
+
+            Scene scene = new Scene(root);
+
+            primaryStage.setTitle("OOP MUSIC - Project IT3100");
+
+            try {
+                Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources/icons/logo.png")));
+                primaryStage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.out.println("Không tìm thấy icon logo, bỏ qua.");
             }
-        });
-        StackPane layout = new StackPane();
-        layout.getChildren().add(button);
-        Scene scene = new Scene(layout, 300, 250);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+
+        } catch (Exception e) {
+            System.err.println("LỖI KHỞI ĐỘNG: Kiểm tra lại tên file hoặc đường dẫn!");
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

@@ -101,85 +101,69 @@
     /* Kẻ viền dưới màu xám mờ chạy dài */
     -fx-border-color: transparent transparent rgba(255, 255, 255, 0.1) transparent;
     -fx-border-width: 0 0 1 0; /* Dày 1px */
-    -fx-padding: 0; /* Quan trọng: Để nút nằm sát xuống đường kẻ */
+    
 }
 
 /* 2. Các nút Tab (Con bên trong) */
+/* 1. Trạng thái bình thường (Chưa chọn) */
 .tab-btn {
-    -fx-background-color: transparent;
-    -fx-text-fill: #aaaaaa;
+    -fx-background-color: transparent; /* Nền trong suốt */
+    -fx-text-fill: #b3b3b3;            /* Chữ màu xám */
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-cursor: hand;
     
-    /* Mẹo: Tạo viền tàng hình 3px để giữ chỗ. 
-       Nếu không có dòng này, khi nút active hiện viền lên, chữ sẽ bị nhảy giật 1 cái */
+    /* Viền ẩn đi */
     -fx-border-color: transparent;
-    -fx-border-width: 0 0 3 0; 
+    -fx-border-width: 0 0 1 0;         /* Dành chỗ cho gạch chân (3px) ở dưới đáy */
+    -fx-padding: 5 10;                 /* Căn lề cho thoáng */
 }
 
+/* Hover vào thì chữ sáng lên tí cho người dùng biết */
 .tab-btn:hover {
-    -fx-text-fill: white;
+    -fx-text-fill: #ffffff;
 }
 
-/* 3. Nút đang Active (Gạch chân trắng đè lên) */
-.tab-active {
-    -fx-text-fill: white !important;
-    /* Viền trắng dày 3px để đè lên cái viền xám 1px của thằng cha */
-    -fx-border-color: transparent transparent white transparent !important;
-    -fx-border-width: 0 0 3 0;
-}
-
-.tab-btn:hover {
-    -fx-text-fill: white;
-    -fx-border-color: transparent transparent #666666 transparent; /* Sáng hơn tí khi di chuột */
-}
-
-/* Khi được chọn (Active) */
-/* Dán cái này xuống cuối cùng file style.css */
-.tab-active {
-    -fx-text-fill: white !important;
-    -fx-border-color: transparent transparent white transparent !important;
-    -fx-border-width: 0 0 3 0 !important;
-    -fx-border-style: solid !important; /* Thêm dòng này cho chắc cốp */
-    -fx-background-insets: 0;
+/* 2. Trạng thái ĐƯỢC CHỌN (:selected) - Ma thuật ở đây */
+/* Khi nút được click, JavaFX tự thêm class này vào */
+.tab-btn:selected {
+    -fx-text-fill: #ffffff;        /* Chữ trắng tinh */
+    -fx-border-color: #ffffff;     /* Viền đáy hiện màu trắng -> Thành gạch chân */
 }
 
 /* --- SPOTIFY SLIDER STYLE --- */
 
-/* 1. Đường ray (Track) - Làm cho nó mỏng dính */
+/* 1. Đường ray (Track) - Định hình khung sườn */
 .slider .track {
-    -fx-background-color: #535353; /* Màu xám tối */
-    -fx-pref-height: 4px; /* Độ dày 4px (Rất mảnh) */
-    -fx-background-radius: 2px; /* Bo tròn đầu */
+    -fx-background-color: #535353; /* Màu nền mặc định khi chưa chạy nhạc */
+    -fx-pref-height: 4px;          /* Độ dày 4px */
+    -fx-background-radius: 5px;    /* Bo tròn 2 đầu */
     -fx-background-insets: 0;
 }
 
-/* 2. Cục trượt (Thumb) - Tròn và trắng */
+/* 2. Cục trượt (Thumb) - Logic ẩn hiện như cũ */
 .slider .thumb {
-    -fx-background-color: white; /* Màu trắng */
-    -fx-pref-width: 12px; /* Kích thước nhỏ */
+    -fx-background-color: transparent; /* Mặc định tàng hình */
+    -fx-pref-width: 12px;
     -fx-pref-height: 12px;
-    -fx-background-radius: 50%; /* Tròn xoe */
+    -fx-background-radius: 50%;
     -fx-background-insets: 0;
-    /* Mẹo: Spotify bình thường ẩn cục này, di chuột mới hiện. 
-       Nhưng ta cứ để hiện cho dễ dùng đã. */
 }
 
-/* 3. Hiệu ứng khi di chuột vào (Hover) */
-.slider:hover .track {
-    -fx-background-color: #b3b3b3; /* Đường ray sáng lên chút */
-}
-
+/* 3. Khi di chuột vào Slider: Hiện cục Thumb */
 .slider:hover .thumb {
-    -fx-scale-x: 1; /* Cục trượt to lên */
-    -fx-scale-y: 1;
+    -fx-background-color: white; 
+    /* Có thể thêm: -fx-scale-x: 1.2; -fx-scale-y: 1.2; để nó to lên tí cho đẹp */
+}
+
+/* 4. Con trỏ chuột */
+.slider {
     -fx-cursor: hand;
 }
 
-/* 4. Style cho 2 cái số thời gian */
+/* 5. Label thời gian (Giữ nguyên của ông) */
 .time-label {
-    -fx-text-fill: #b3b3b3; /* Màu xám nhạt chuẩn Spotify */
+    -fx-text-fill: #b3b3b3; 
     -fx-font-size: 11px;
     -fx-font-family: sans-serif;
 }
@@ -214,4 +198,48 @@
 .menu-button:hover {
     -fx-background-color: #262626; /* Nền xám khi hover */
     -fx-text-fill: white; /* Đảm bảo chữ vẫn trắng khi hover */
+}
+
+/* Style cho cái vỏ ngoài (HBox) */
+.search-container {
+    -fx-background-color: #242424; /* Màu nền tối */
+    -fx-background-radius: 30;     /* Bo tròn mạnh */
+    -fx-border-radius: 30;         /* Bo tròn viền */
+    -fx-border-width: 1;           /* Độ dày viền */
+    -fx-border-color: transparent; /* Mặc định không hiện viền */
+    -fx-padding: 5 15 5 10;        /* Căn chỉnh khoảng cách bên trong (Trên Phải Dưới Trái) */
+}
+
+/* Hiệu ứng cho HBox khi chuột di vào HOẶC khi bấm vào nhập liệu */
+.search-container:hover,
+.search-container:focused-within {
+    /* :focused-within là chìa khóa! Nó kích hoạt khi TextField bên trong được focus */
+    -fx-border-color: #ffffff;     /* Viền chuyển sang màu trắng */
+    -fx-background-color: #2a2a2a; /* Nền sáng lên một chút */
+}
+
+/* Style cho TextField bên trong - Tàng hình hoàn toàn */
+.search-input {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-text-fill: white;
+    /* HAI DÒNG QUAN TRỌNG NÀY ĐỂ TẮT VIỀN FOCUS MẶC ĐỊNH */
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Đảm bảo khi focus nó vẫn tàng hình */
+.search-input:focused {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    /* Nhắc lại cho chắc */
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Màu chữ placeholder (ví dụ: "Tìm kiếm...") */
+.search-input .text-field {
+    -fx-prompt-text-fill: #888888;
 }

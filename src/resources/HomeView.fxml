@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="mainRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
+
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="15.0" styleClass="border-bottom" BorderPane.alignment="CENTER">
+         <padding><Insets bottom="15.0" left="20.0" right="20.0" top="15.0" /></padding>
+         <children>
+            <ImageView fitHeight="45.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icons/logo.png" />
+               </image>
+            </ImageView>
+            <Button contentDisplay="GRAPHIC_ONLY" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="icon-button">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/home.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="icon-button">
+               <graphic>
+                  <ImageView fitHeight="65.0" fitWidth="118.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/back.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="icon-button">
+               <graphic>
+                  <ImageView fitHeight="66.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/next+.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            
+            <Region HBox.hgrow="ALWAYS" />
+            <TextField fx:id="searchBar" prefWidth="300.0" promptText="Tìm kiếm bài hát, nghệ sĩ..." styleClass="search-bar">
+               <font>
+                  <Font size="15.0" />
+               </font></TextField>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+               <graphic>
+                  <ImageView fitHeight="87.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/clock.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            
+            <Button fx:id="uploadButton" minHeight="25.0" minWidth="25.0" prefHeight="25.0" prefWidth="25.0" styleClass="upload-btn">
+               <graphic>
+                  <ImageView fitHeight="64.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/upload.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="icon-button">
+               <graphic>
+                  <ImageView fitHeight="63.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/settings.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+         </children>
+      </HBox>
+   </top>
+
+   <left>
+      <VBox prefHeight="447.0" prefWidth="247.0" spacing="8.0" styleClass="border-right" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <children>
+            <Label styleClass="section-title" text="THƯ VIỆN" textFill="#b3b3b3">
+               <font>
+                  <Font name="SansSerif Bold" size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="-5.0" />
+               </VBox.margin>
+            </Label>
+            <Button alignment="BASELINE_LEFT" graphicTextGap="5.0" maxWidth="1.7976931348623157E308" minHeight="30.0" minWidth="130.0" prefHeight="50.0" prefWidth="197.0" styleClass="menu-button" text="Bài hát yêu thích">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/heart.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D height="680.0" minX="700.0" minY="250.0" width="720.0" />
+                     </viewport>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button alignment="BASELINE_LEFT" graphicTextGap="5.0" maxWidth="1.7976931348623157E308" minHeight="30.0" prefHeight="50.0" prefWidth="197.0" styleClass="menu-button" text="Nghe gần đây">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/history.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D height="1060.0" minX="254.0" minY="226.0" width="1065.0" />
+                     </viewport>
+                  </ImageView>
+               </graphic>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Button>
+            <Button alignment="BASELINE_LEFT" graphicTextGap="5.0" maxWidth="1.7976931348623157E308" minHeight="30.0" prefHeight="50.0" prefWidth="197.0" styleClass="menu-button" text="Top 100">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/trending.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D height="1072.0" minX="271.0" minY="241.0" width="1066.0" />
+                     </viewport>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <HBox alignment="CENTER" fillHeight="false" maxHeight="1.7976931348623157E308" styleClass="border-top">
+               <children>
+                  <Button alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="35.0" prefHeight="60.0" prefWidth="200.0" styleClass="create-playlist-btn" text="+ Danh sách phát mới">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" top="20.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+            
+                  <ListView fx:id="playlistView" styleClass="playlist-list" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+   </left>
+
+   <center>
+      <StackPane fx:id="mainContentArea" styleClass="main-content" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets top="15.0" />
+         </padding>
+         <children>
+            <Circle fx:id="outerCircle" fill="#e2e6e9" radius="164.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="#121212" radius="54.0" stroke="BLACK" strokeType="INSIDE" />
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icons/musicalNote.png" />
+               </image>
+            </ImageView>
+         </children>
+      </StackPane>
+   </center>
+
+   <right>
+      <VBox prefWidth="220.0" spacing="10.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+         <padding><Insets bottom="10.0" left="5.0" right="5.0" top="10.0" /></padding>
+         <children>
+            <HBox alignment="BOTTOM_CENTER" prefHeight="50.0" spacing="20.0" styleClass="tab-container">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="50.0" styleClass="tab-btn tab-active" text="Tiếp theo" textFill="#fff9f9">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" prefHeight="50.0" styleClass="tab-btn" text="Lời nhạc">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <StackPane alignment="CENTER_LEFT" prefHeight="60.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0" styleClass="tab-container" visible="false">
+                     <children>
+                        <Button alignment="CENTER" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+                           <graphic>
+                              <ImageView fitHeight="59.0" fitWidth="83.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/shuffle.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <Button minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+                           <graphic>
+                              <ImageView fitHeight="56.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/heart.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <Button minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+                           <graphic>
+                              <ImageView fitHeight="52.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/plus.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <Button minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+                           <graphic>
+                              <ImageView fitHeight="64.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/repeat.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <Button minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+                           <graphic>
+                              <ImageView fitHeight="70.0" fitWidth="83.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/share.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" styleClass="tab-container" StackPane.alignment="CENTER_LEFT">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="77.0">
+                           <children>
+                              <Label text="Đang phát từ" textFill="#aaaaaa" />
+                              <Label text="Âm nhạc" textFill="#fdfafa">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font></Label>
+                           </children>
+                        </VBox>
+                        <Region prefHeight="43.0" prefWidth="45.0" HBox.hgrow="ALWAYS" />
+                        <Button alignment="BASELINE_LEFT" graphicTextGap="1.0" styleClass="menu-button" text="Lưu">
+                           <graphic>
+                              <ImageView fitHeight="15.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/playlistAdd.png" />
+                                 </image>
+                                 <viewport>
+                                    <Rectangle2D height="231.0" minX="860.0" minY="463.0" width="432.0" />
+                                 </viewport>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </StackPane>
+            <ListView fx:id="queueListView" styleClass="queue-list" />
+         </children>
+      </VBox>
+   </right>
+
+   <bottom>
+      
+            <HBox alignment="CENTER" prefHeight="75.0" prefWidth="900.0" styleClass="border-top">
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="275.0">
+               <children>
+                  <ImageView fitHeight="63.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/logo.png" />
+                     </image>
+                  </ImageView>
+                  <VBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="130.0" spacing="5.0" HBox.hgrow="NEVER">
+                     <Label fx:id="currentSongLabel" styleClass="song-title-small" text="Tên bài hát">
+                        <font>
+                           <Font size="14.0" />
+                        </font>
+                     </Label>
+                     <Label fx:id="currentArtistLabel" styleClass="artist-small" text="Nghệ sĩ">
+                        <font>
+                           <Font size="14.0" />
+                        </font>
+                     </Label>
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="125.0" spacing="5.0" HBox.hgrow="NEVER">
+                     <children>
+                        <Button alignment="CENTER" minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
+                           <graphic>
+                              <ImageView fitHeight="14.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/heart.png" />
+                                 </image>
+                                 <viewport>
+                                    <Rectangle2D height="680.0" minX="700.0" minY="250.0" width="720.0" />
+                                 </viewport>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button alignment="CENTER" minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/share.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <HBox.margin>
+                              <Insets right="2.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button alignment="CENTER" minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
+                           <graphic>
+                              <ImageView fitHeight="23.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/plus.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <padding>
+                              <Insets left="1.0" />
+                           </padding>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </HBox>
+            <Region prefHeight="74.0" prefWidth="91.0" HBox.hgrow="ALWAYS" />
+            <VBox alignment="CENTER" maxWidth="-Infinity" minHeight="25.0" minWidth="-Infinity" prefHeight="74.0" prefWidth="350.0" spacing="5.0" HBox.hgrow="NEVER">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="31.0" prefWidth="365.0" spacing="20.0">
+                     <children>
+                        
+                              <Button fx:id="shuffleButton" minHeight="25.0" minWidth="24.0" prefHeight="25.0" prefWidth="24.0" styleClass="control-icon">
+                           <graphic>
+                              <ImageView fitHeight="47.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/shuffle.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <padding>
+                              <Insets right="1.0" />
+                           </padding>
+                        </Button>
+                        <Button fx:id="prevButton" minHeight="25.0" minWidth="25.0" prefHeight="25.0" prefWidth="25.0" styleClass="control-icon">
+                           <graphic>
+                              <ImageView fitHeight="56.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/forward.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <Button fx:id="playButton" minHeight="30.0" minWidth="30.0" prefHeight="30.0" prefWidth="30.0" styleClass="play-pause-btn">
+                           <graphic>
+                              <ImageView fitHeight="74.0" fitWidth="153.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/play.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <padding>
+                              <Insets right="2.0" />
+                           </padding>
+                        </Button>
+                        <Button fx:id="nextButton" minHeight="25.0" minWidth="25.0" prefHeight="25.0" prefWidth="25.0" styleClass="control-icon">
+                           <graphic>
+                              <ImageView fitHeight="67.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/next.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="repeatButton" minHeight="25.0" minWidth="25.0" prefHeight="25.0" prefWidth="25.0" styleClass="control-icon">
+                           <graphic>
+                              <ImageView fitHeight="43.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/repeat.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="14.0" prefWidth="350.0">
+                     <children>
+                        <Label styleClass="time-label" text="00:00" />
+                        <Slider maxWidth="-Infinity" prefWidth="290.0" HBox.hgrow="SOMETIMES" />
+                        <Label styleClass="time-label" text="04:30" />
+                     </children>
+                  </HBox>
+                  </children>
+            </VBox>
+            <Region prefHeight="74.0" prefWidth="76.0" HBox.hgrow="ALWAYS" />
+            
+                  <HBox alignment="CENTER_RIGHT" prefWidth="275.0" spacing="5.0" HBox.hgrow="NEVER">
+               <Button minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
+                  <graphic>
+                     <ImageView fitHeight="34.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@icons/MV.png" />
+                        </image>
+                     </ImageView>
+                  </graphic>
+                  <padding>
+                     <Insets left="1.0" />
+                  </padding>
+                  <HBox.margin>
+                     <Insets right="10.0" />
+                  </HBox.margin>
+               </Button>
+               <Button minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
+                  <graphic>
+                     <ImageView fitHeight="26.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@icons/lyrics.png" />
+                        </image>
+                     </ImageView>
+                  </graphic>
+                  <HBox.margin>
+                     <Insets right="5.0" />
+                  </HBox.margin>
+               </Button>
+               <Button minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
+                  <graphic>
+                     <ImageView fitHeight="28.0" fitWidth="118.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@icons/volume.png" />
+                        </image>
+                     </ImageView>
+                  </graphic>
+               </Button>
+               <Slider fx:id="volumeSlider" value="50.0" />
+               <Button minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
+                  <graphic>
+                     <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  </graphic>
+               </Button>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </HBox>
+   </bottom>
+
+</BorderPane>
