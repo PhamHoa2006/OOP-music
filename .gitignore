@@ -9,3 +9,6 @@ Thumbs.db
 *.rar
 *.xml
 target/
+favourite.json
+history.json
+playlist.json

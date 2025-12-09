@@ -3,9 +3,8 @@ import java.util.HashMap;
 
 public class UserManager {
     // key: username (chuyển về chữ thường để tránh trùng lặp)
-    private HashMap<String, User> users = new HashMap<>();
+    private static HashMap<String, User> users = new HashMap<>();
 
-    private User currentUser = null;
     // Tìm kiếm user
     public User findUser(String username) {
         if (username == null) return null;
@@ -41,10 +40,8 @@ public class UserManager {
         User tmp = findUser(username);
         if (tmp == null || !tmp.getPassword().equals(User.hashPassword(password))) {
             System.out.println("Ten dang nhap hoac mat khau khong hop le");
-            currentUser = null;
             return false;
         }
-        currentUser = tmp;
         System.out.println("Dang nhap thanh cong");
         return true;
     }
@@ -91,13 +88,5 @@ public class UserManager {
         for (User u : users.values()) {
             System.out.println("- " + u.getUsername());
         }
-    }
-
-    public void logout(){
-        System.out.println("Log out");
-        currentUser = null;
-    }
-    public User getCurrentUser(){
-        return currentUser;
     }
 }

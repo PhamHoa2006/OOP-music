@@ -1,0 +1,122 @@
+[
+    {
+    "id": "1",
+    "title": "Hips Don't Lie",
+    "artist": ["Shakira", "Wyclef"],
+    "filePath": "data/Music/song1.mp3",
+    "duration": 217,
+    "playCount": 32
+    },
+    {
+    "id": "2",
+    "title": "Whenever, Wherever",
+    "artist": ["Shakira"],
+    "filePath": "data/Music/song2.mp3",
+    "duration": 196,
+    "playCount": 86
+    },
+    {
+    "id": "3",
+    "title": "Nơi Này Có Anh",
+    "artist": ["Sơn Tùng M-TP"],
+    "filePath": "data/Music/song3.mp3",
+    "duration": 260,
+    "playCount": 45
+    },
+    {
+    "id": "4",
+    "title": "Cắt Đôi Nỗi Sầu",
+    "artist": ["Tăng Duy Tân"],
+    "filePath": "data/Music/song4.mp3",
+    "duration": 203,
+    "playCount": 120
+    },
+    {
+    "id": "5",
+    "title": "Hãy Trao Cho Anh",
+    "artist": ["Sơn Tùng M-TP", "Snoop Dogg"],
+    "filePath": "data/Music/song5.mp3",
+    "duration": 262,
+    "playCount": 61
+    },
+    {
+    "id": "6",
+    "title": "Tình Đầu",
+    "artist": ["Tăng Duy Tân"],
+    "filePath": "data/Music/song6.mp3",
+    "duration": 296,
+    "playCount": 2
+    },
+    {
+    "id": "7",
+    "title": "Rời Bỏ",
+    "artist": ["Hoà Minzy"],
+    "filePath": "data/Music/song7.mp3",
+    "duration": 277,
+    "playCount": 50
+    },
+    {
+    "id": "8",
+    "title": "Không Thể Cùng Nhau Suốt Kiếp",
+    "artist": ["Hoà Minzy", "Đức Phúc", "Erik"],
+    "filePath": "data/Music/song8.mp3",
+    "duration": 300,
+    "playCount": 74
+    },
+    {
+    "id": "9",
+    "title": "Một Bước Yêu, Vạn Dặm Đau",
+    "artist": ["Mr. Siro"],
+    "filePath": "data/Music/song9.mp3",
+    "duration": 299,
+    "playCount": 12
+    },
+    {
+    "id": "10",
+    "title": "Em Gái Mưa",
+    "artist": ["Hương Tràm"],
+    "filePath": "data/Music/song10.mp3",
+    "duration": 347,
+    "playCount": 50
+    },
+    {
+    "id": "11",
+    "title": "Gặp Nhưng Không Ở Lại",
+    "artist": ["Hiền Hồ"],
+    "filePath": "data/Music/song11.mp3",
+    "duration": 281,
+    "playCount": 63
+    },
+    {
+    "id": "12",
+    "title": "Phía Sau Một Cô Gái",
+    "artist": ["Soobin Hoàng Sơn"],
+    "filePath": "data/Music/song12.mp3",
+    "duration": 272,
+    "playCount": 55
+    },
+    {
+    "id": "13",
+    "title": "Thằng Điên",
+    "artist": ["Justatee", "Phương Ly"],
+    "filePath": "data/Music/song13.mp3",
+    "duration": 286,
+    "playCount": 63
+    },
+    {
+    "id": "14",
+    "title": "Màu Nước Mắt",
+    "artist": ["Nguyễn Trần Trung Quân"],
+    "filePath": "data/Music/song14.mp3",
+    "duration": 360,
+    "playCount": 23
+    },
+    {
+    "id": "15",
+    "title": "Giá Như Mình Đừng Yêu Nhau",
+    "artist": ["Quang Trung"],
+    "filePath": "data/Music/song15.mp3",
+    "duration": 301,
+    "playCount": 41
+    }
+]

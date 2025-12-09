@@ -1,11 +1,8 @@
-package com.musicPlayer;
+    package com.musicPlayer;
 
-// Lớp PlaybackControl quản lý trạng thái và thao tác điều khiển phát nhạc (âm lượng, tốc độ, shuffle, repeat, mute)
+    // Lớp PlaybackControl quản lý trạng thái và thao tác điều khiển phát nhạc (âm lượng, tốc độ, shuffle, repeat, mute)
 
-public class PlaybackControl {
-
-    // Tham chiếu đến Player
-    private Player targetPlayer; // Tham chiếu đến trình phát nhạc thực tế
+    public class PlaybackControl {
 
     private int volume;                  // Từ 0 đến 100
     private boolean isMuted;
@@ -13,31 +10,8 @@ public class PlaybackControl {
     private boolean isShuffle;
     private boolean isRepeat;
 
-    // Constructor không tham số
     public PlaybackControl() {
-        this.targetPlayer = null;
         resetAll();
-    }
-
-    // Constructor nhận Player
-    public PlaybackControl(Player targetPlayer) {
-        this.targetPlayer = targetPlayer;
-        resetAll();
-    }
-
-    // Hàm set Player dự phòng
-    public void setTargetPlayer(Player targetPlayer) {
-        this.targetPlayer = targetPlayer;
-        // Đồng bộ trạng thái hiện tại với Player mới
-        syncToPlayer();
-    }
-
-    // Đồng bộ toàn bộ trạng thái với Player
-    private void syncToPlayer() {
-        if (targetPlayer != null) {
-            targetPlayer.setVolume(this.volume / 100.0);
-            // Các phương thức khác sẽ được gọi trong các setter tương ứng
-        }
     }
 
     // Cho phép các hàm khác và UI đọc giá trị volume hiện tại
@@ -54,18 +28,15 @@ public class PlaybackControl {
         } else {
             this.volume = volume;
         }
-        
-        // **GỌI PLAYER:** Chuyển đổi (0-100) -> (0.0-1.0)
-        if (targetPlayer != null && !isMuted) {
-            targetPlayer.setVolume(this.volume / 100.0);
-        }
-        
         return this.volume;
     }
 
-    // Hàm tăng hoặc giảm âm lượng theo giá trị amount
+    // Hàm tăng hoặc giảm âm lượng theo giá trị amount, amount có thể âm hoặc dương
     public int changeVolume(int amount) {
-        return setVolume(this.volume + amount); // Dùng logic của setVolume
+        this.volume += amount;
+        if (this.volume > 100) this.volume = 100;
+        if (this.volume < 0) this.volume = 0;
+        return this.volume;
     }
 
     // Kiểm tra xem hiện tại có đang tắt tiếng hay không
@@ -73,25 +44,16 @@ public class PlaybackControl {
         return isMuted;
     }
 
-    // Cập nhật trạng thái tắt tiếng
+    // Cập nhật trạng thái tắt tiếng theo giá trị truyền vào (true = mute, false = unmute)
     public boolean setMuted(boolean muted) {
         this.isMuted = muted;
-        
-        // **GỌI PLAYER:** Điều chỉnh volume thực tế
-        if (targetPlayer != null) {
-            if (this.isMuted) {
-                targetPlayer.setVolume(0.0);
-            } else {
-                targetPlayer.setVolume(this.volume / 100.0);
-            }
-        }
-        
         return this.isMuted;
     }
 
     // Đảo trạng thái mute
     public boolean toggleMute() {
-        return setMuted(!isMuted); // Dùng logic của setMuted
+        isMuted = !isMuted;
+        return isMuted;
     }
 
     // Tốc độ phát
@@ -110,12 +72,6 @@ public class PlaybackControl {
         } else {
             this.playbackSpeed = speed;
         }
-        
-        // **GỌI PLAYER:**
-        if (targetPlayer != null) {
-            // targetPlayer.setSpeed(this.playbackSpeed);
-        }
-        
         return this.playbackSpeed;
     }
 
@@ -145,21 +101,16 @@ public class PlaybackControl {
         return isShuffle;
     }
 
-    // Cập nhật trạng thái phát ngẫu nhiên
+    // Cập nhật trạng thái phát ngẫu nhiên theo giá trị truyền vào
     public boolean setShuffle(boolean shuffle) {
         this.isShuffle = shuffle;
-        
-        // **GỌI PLAYER:**
-        if (targetPlayer != null) {
-            // targetPlayer.setShuffle(this.isShuffle);
-        }
-        
         return this.isShuffle;
     }
 
     // Đảo trạng thái phát ngẫu nhiên
     public boolean toggleShuffle() {
-        return setShuffle(!isShuffle); // Dùng logic của setShuffle
+        isShuffle = !isShuffle;
+        return isShuffle;
     }
 
     // Phát lại
@@ -169,21 +120,16 @@ public class PlaybackControl {
         return isRepeat;
     }
 
-    // Ép trạng thái repeat
+    // Ép trạng thái repeat theo giá trị truyền vào
     public boolean setRepeat(boolean repeat) {
         this.isRepeat = repeat;
-        
-        // **GỌI PLAYER:**
-        if (targetPlayer != null) {
-            // targetPlayer.setRepeat(this.isRepeat);
-        }
-        
         return this.isRepeat;
     }
 
     // Đảo trạng thái Repeat
     public boolean toggleRepeat() {
-        return setRepeat(!isRepeat); // Dùng logic của setRepeat
+        isRepeat = !isRepeat;
+        return isRepeat;
     }
 
     // Hàm tiện ích
@@ -195,12 +141,6 @@ public class PlaybackControl {
         this.playbackSpeed = 1.0;
         this.isShuffle = false;
         this.isRepeat = false;
-        
-        // Đồng bộ với Player nếu có
-        if (targetPlayer != null) {
-            targetPlayer.setVolume(this.volume / 100.0);
-            // Các method khác sẽ được uncomment khi Player interface đầy đủ
-        }
     }
 
     // Trả về chuỗi mô tả đầy đủ trạng thái hiện tại của PlaybackControl

@@ -12,16 +12,14 @@ public class User {
 
     private String id;
     private String name;
-    private int age;
+    private String age;
     private String email;
-    private String description;
+    private String descripsion;
     private ArrayList<Playlist> playLists = new ArrayList<>();
 
 
     private String username;
     private String passwordHash;
-
-    private History history = new History();
 
 
 
@@ -43,10 +41,10 @@ public class User {
 
 
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
@@ -62,10 +60,10 @@ public class User {
 
 
     public String getDescripsion() {
-        return description;
+        return descripsion;
     }
-    public void setDescripsion(String description) {
-        this.description = description;
+    public void setDescripsion(String descripsion) {
+        this.descripsion = descripsion;
     }
 
     public ArrayList<Playlist> getPlayLists() {
@@ -97,12 +95,6 @@ public class User {
         return sb.toString();
     } catch (NoSuchAlgorithmException e) {
         throw new RuntimeException("SHA-256 not supported", e);
-        }
     }
-
-    public History getHistory() {
-        return history;
-    }
-
-
+}
 }
