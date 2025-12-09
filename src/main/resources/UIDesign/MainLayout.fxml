@@ -20,7 +20,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
+<fx:root fx:id="mainRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@Style.css" type="BorderPane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
 
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="15.0" styleClass="border-bottom" BorderPane.alignment="CENTER">
@@ -327,7 +327,7 @@
                         <ListView fx:id="queueListView" styleClass="queue-list" />
                      </children>
                   </VBox>
-                  <ListView fx:id="relatedListView" prefHeight="200.0" prefWidth="200.0" />
+                  <ListView fx:id="relatedListView" prefHeight="385.0" prefWidth="210.0" />
                </children>
             </StackPane>
          </children>
@@ -545,10 +545,10 @@
                      </Button>
                   </children>
                </StackPane>
-               <Slider fx:id="volumeSlider" prefHeight="12.0" prefWidth="70.0" value="50.0" />
+               <Slider fx:id="volumeSlider" onSwipeLeft="#handleVolumeDown" onSwipeRight="#handleVolumeUp" prefHeight="12.0" prefWidth="70.0" value="50.0" />
             </HBox>
          </children>
       </HBox>
    </bottom>
 
-</BorderPane>
+</fx:root>

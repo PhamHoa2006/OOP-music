@@ -7,3 +7,5 @@ out/
 Thumbs.db
 *.zip
 *.rar
+*.xml
+target/

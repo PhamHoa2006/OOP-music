@@ -170,4 +170,19 @@ public class Song implements Comparable<Song> {
     //4. Tăng số lượt thích.
 
     public void increaseTotalLike() {this.totalLike++;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true; // Nếu là cùng 1 đối tượng
+        if (o == null || getClass() != o.getClass()) return false; // Nếu khác kiểu
+        Song song = (Song) o;
+        // Coi 2 bài hát là một nếu ID giống nhau (đây là cách tốt nhất)
+        return java.util.Objects.equals(songID, song.songID); 
+    }
+
+    @Override
+    public int hashCode() {
+    // Chỉ hash dựa trên ID
+    return java.util.Objects.hash(songID);
+    }
 }

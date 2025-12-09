@@ -1,0 +1,16 @@
+{
+  "history": [
+    {
+      "title": "Hips Don't Lie",
+      "artist": "Shakira ft. Wyclef Jean",
+      "filePath": "src/main/data/MusicData/AllSongList/Hips Don'T Lie.mp3", 
+      "duration": 218
+    },
+    {
+      "title": "Whenever, Wherever",
+      "artist": "Shakira",
+      "filePath": "D:/Music/Whenever, Wherever.mp3",
+      "duration": 204
+    }
+  ]
+}

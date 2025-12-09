@@ -1,5 +1,8 @@
 package com;
 
+import com.musicPlayer.Playlist;
+import com.users.History;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,9 +16,53 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Circle;
 
 public class MainController {
+
+    private MediaPlayer mediaPlayer; // MediaPlayer nhận từ Main
+    private History userHistory; // History nhận từ Main
+    private Playlist currentPlaylist;
+    private Playlist favourite;
+
+    // Setter để Main truyền MediaPlayer vào
+    public void setMediaPlayer(MediaPlayer mediaPlayer) {
+        this.mediaPlayer = mediaPlayer;
+
+        // Khởi tạo volume slider khi có MediaPlayer
+        if (volumeSlider != null && mediaPlayer != null) {
+            volumeSlider.setMin(0);
+            volumeSlider.setMax(100);
+            volumeSlider.setValue(mediaPlayer.getVolume() * 100);
+
+            // Khi kéo slider, cập nhật MediaPlayer volume
+            volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+                if (mediaPlayer != null) {
+                    double vol = newVal.doubleValue() / 100.0;
+                    mediaPlayer.setVolume(vol);
+                    updateVolumeLabel(vol);
+                }
+            });
+
+            updateVolumeLabel(mediaPlayer.getVolume());
+        }
+    }
+
+    // Setter để Main truyền History vào
+    public void setUserHistory(History userHistory) {
+        this.userHistory = userHistory;
+    }
+
+
+    // Cập nhật nhãn % âm lượng
+    private void updateVolumeLabel(double vol) {
+        if (volumeLabel != null) {
+            int percent = (int) (vol * 100);
+            volumeLabel.setText(percent + "%");
+        }
+    } // Thêm biến volumeLabel (biến volumaLabel là giá trị âm lượng dùng để trượt trái phải để tăng giảm)
+
 
     @FXML
     private Button addToPlaylistBtn;
@@ -182,4 +229,33 @@ public class MainController {
     @FXML
     private Slider volumeSlider;
 
+    @FXML
+    private Button volumeLabel; // *****Còn thiếu để bổ sung thêm******
+
+    @FXML // Xử lý tăng âm lượng bằng cách trượt slider
+    private void handleVolumeUp() {
+        if (mediaPlayer != null) {
+            double vol = mediaPlayer.getVolume() + 0.1;
+            if (vol > 1) vol = 1;
+            mediaPlayer.setVolume(vol);
+            volumeSlider.setValue(vol * 100);
+            updateVolumeLabel(vol);
+        }
+    }
+
+    @FXML // Xử lý giảm âm lượng bằng cách trượt slider
+    private void handleVolumeDown() {
+        if (mediaPlayer != null) {
+            double vol = mediaPlayer.getVolume() - 0.1;
+            if (vol < 0) vol = 0;
+            mediaPlayer.setVolume(vol);
+            volumeSlider.setValue(vol * 100);
+            updateVolumeLabel(vol);
+        }
+    }
+
+    /*
+    1. Tạo public void setMediaPlayer(MediaPlayer mediaPlayer) để nhận MediaPlayer từ Main.java
+    2. Tạo public void setUserHistory(History userHistory) để nhận History
+     */
 }
