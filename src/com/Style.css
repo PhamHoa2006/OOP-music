@@ -68,17 +68,6 @@
     -fx-background-color: #262626; /* Màu khi chọn dòng */
 }
 
-/* 7. Thanh trượt (Slider) */
-.slider .track {
-    -fx-background-color: #444444; /* Đường ray màu tối */
-}
-.slider .thumb {
-    -fx-background-color: #aaaaaa; /* Cục trượt màu xám */
-}
-.slider:hover .thumb {
-    -fx-background-color: white; /* Di chuột vào thì cục trượt trắng lên */
-}
-
 /* 1. Đường kẻ ngăn cách các khu vực (Dùng cho HBox/VBox) */
 .border-bottom {
     -fx-border-color: rgba(255, 255, 255, 0.1); /* Màu trắng độ mờ 10% */

@@ -6,21 +6,20 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<fx:root fx:id="mainRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@Style.css" type="BorderPane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
+<fx:root fx:id="mainRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@Style.css" type="BorderPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
 
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="15.0" styleClass="border-bottom" BorderPane.alignment="CENTER">
@@ -195,144 +194,6 @@
          </children>
       </VBox>
    </left>
-
-   <center>
-      <StackPane fx:id="discContainer" styleClass="main-content" BorderPane.alignment="CENTER">
-         <padding>
-            <Insets top="15.0" />
-         </padding>
-         <children>
-            <Circle fx:id="outerDiscCircle" fill="#e2e6e9" radius="164.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fx:id="innerDiscCircle" fill="#121212" radius="54.0" stroke="BLACK" strokeType="INSIDE" />
-            <ImageView fx:id="discIconView" fitHeight="111.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@icons/musicalNote.png" />
-               </image>
-            </ImageView>
-         </children>
-      </StackPane>
-   </center>
-
-   <right>
-      <VBox prefWidth="220.0" spacing="10.0" styleClass="sidebar" BorderPane.alignment="CENTER">
-         <padding><Insets bottom="10.0" left="5.0" right="5.0" top="10.0" /></padding>
-         <children>
-            <HBox alignment="BOTTOM_CENTER" prefHeight="50.0" spacing="20.0" styleClass="tab-container">
-               <children>
-                  <ToggleButton fx:id="nextTabBtn" mnemonicParsing="false" selected="true" styleClass="tab-btn" text="Tiếp theo">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                     <toggleGroup>
-                        <ToggleGroup fx:id="tabGroup" />
-                     </toggleGroup></ToggleButton>
-                  <ToggleButton fx:id="relatedTabBtn" mnemonicParsing="false" styleClass="tab-btn" text="Liên quan" toggleGroup="$tabGroup">
-                     <font>
-                        <Font size="15.0" />
-                     </font></ToggleButton>
-               </children>
-            </HBox>
-            <StackPane fx:id="sidebarContentStack" maxHeight="1.7976931348623157E308" prefHeight="463.0" prefWidth="200.0">
-               <children>
-                  <VBox fx:id="queueContainerVBox" prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <StackPane fx:id="queueHeaderStack" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" prefHeight="30.0">
-                           <children>
-                              <HBox fx:id="queueActionsBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0" styleClass="tab-container" visible="false">
-                                 <children>
-                                    <Button fx:id="queueShuffleBtn" alignment="CENTER" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0">
-                                       <graphic>
-                                          <ImageView fitHeight="34.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@icons/shuffle.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="queueLikeBtn" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0">
-                                       <graphic>
-                                          <ImageView fitHeight="31.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@icons/heart.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="queueAddBtn" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0">
-                                       <graphic>
-                                          <ImageView fitHeight="52.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@icons/plus.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="queueRepeatBtn" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0">
-                                       <graphic>
-                                          <ImageView fitHeight="34.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@icons/repeat.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="queueShareBtn" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0">
-                                       <graphic>
-                                          <ImageView fitHeight="35.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@icons/share.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                                 <StackPane.margin>
-                                    <Insets />
-                                 </StackPane.margin>
-                                 <padding>
-                                    <Insets bottom="5.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox fx:id="queueInfoBox" alignment="CENTER" styleClass="tab-container" StackPane.alignment="CENTER_LEFT">
-                                 <children>
-                                    <VBox spacing="2.0">
-                                       <children>
-                                          <Label text="Đang phát từ" textFill="#aaaaaa" />
-            <Label fx:id="sourceNameLbl" style="-fx-font-weight: bold; -fx-font-size: 16px;" text="Âm nhạc" textFill="#fdfafa" />
-                                       </children>
-                                    </VBox>
-                                    <Region prefHeight="43.0" prefWidth="45.0" HBox.hgrow="ALWAYS" />
-                                    <Button fx:id="saveQueueBtn" alignment="BASELINE_LEFT" graphicTextGap="1.0" styleClass="menu-button" text="Lưu">
-                                       <graphic>
-                                          <ImageView fitHeight="15.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@icons/playlistAdd.png" />
-                                             </image>
-                                             <viewport>
-                                                <Rectangle2D height="231.0" minX="860.0" minY="463.0" width="432.0" />
-                                             </viewport>
-                                          </ImageView>
-                                       </graphic>
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="5.0" />
-                                 </padding>
-                              </HBox>
-                           </children>
-                        </StackPane>
-                        <ListView fx:id="queueListView" styleClass="queue-list" />
-                     </children>
-                  </VBox>
-                  <ListView fx:id="relatedListView" prefHeight="385.0" prefWidth="210.0" />
-               </children>
-            </StackPane>
-         </children>
-      </VBox>
-   </right>
 
    <bottom>
       
@@ -550,5 +411,29 @@
          </children>
       </HBox>
    </bottom>
+   
+   <center>
+      <ScrollPane fx:id="mainScrollPane" fitToWidth="true" hbarPolicy="NEVER" styleClass="main-scroll-pane" BorderPane.alignment="CENTER">
+         <content>
+            <VBox styleClass="main-content">
+               <padding>
+                  <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+               </padding>
+               <children>
+                  <Label fx:id="greetingLabel" text="Dành cho Phạm Văn Quyết" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="15.0" />
+                     </VBox.margin>
+                  </Label>
+                  
+                  <javafx.scene.layout.FlowPane fx:id="musicContainer" hgap="20.0" vgap="20.0" prefWrapLength="800.0" styleClass="card-container" />
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
 
 </fx:root>

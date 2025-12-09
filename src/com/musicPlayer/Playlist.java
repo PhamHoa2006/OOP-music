@@ -17,6 +17,15 @@ public class Playlist {
     private final List<Comment> comments;	// All comments
     private final Map<String, List<Comment>> commentsByUser;	// All comment with the key: user id
     
+    // Constructor mặc định cho Jackson
+    public Playlist() {
+        this.id = UUID.randomUUID().toString();
+        this.songs = new ArrayList<>();
+        this.likedByUsers = new HashSet<>();
+        this.comments = new ArrayList<>();
+        this.commentsByUser = new HashMap<>();
+    }
+
     public Playlist(String name) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
@@ -170,17 +179,16 @@ public class Playlist {
         private final String text;
         private final Instant createdAt;
 
-        private Comment(String userId, String text) {
+        public Comment(String userId, String text) {
             this.id = UUID.randomUUID().toString();
             this.userId = userId;
             this.text = text;
             this.createdAt = Instant.now();
         }
 
-        private String getId() { return id; }
-        private String getUserId() { return userId; }
-        private String getText() { return text; }
-        private Instant getCreatedAt() { return createdAt; }
+        public String getId() { return id; }
+        public String getUserId() { return userId; }
+        public String getText() { return text; }
+        public Instant getCreatedAt() { return createdAt; }
     }
-
 }

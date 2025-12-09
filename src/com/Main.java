@@ -6,56 +6,59 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-
-import java.io.File;
-import java.util.Objects;
-import com.users.History;
+import java.net.URL;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
         try {
-            // 1. Load FXML và lấy controller
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UIDesign/MainLayout.fxml"));
-            Parent root = loader.load();
-            MainController controller = loader.getController();
+            // 1. CẬP NHẬT: Vì file FXML nằm ngay cạnh file Main.java, chỉ cần gọi tên file
+            String fxmlPath = "MainLayout.fxml"; 
+            URL fxmlUrl = getClass().getResource(fxmlPath);
 
-            // 2.1. Tạo History và truyền vào controller
-            History userHistory = new History();
-            controller.setUserHistory(userHistory);
-
-            // 2.2. Tạo MediaPlayer và truyền vào controller
-            Media media = new Media(new File("MusicResource/AllSongList").toURI().toString()); // ví dụ file nhạc là "music.mp3"
-            MediaPlayer mediaPlayer = new MediaPlayer(media);
-            controller.setMediaPlayer(mediaPlayer); // controller lưu biến MediaPlayer
-
-            // 3. Tạo Scene
-            Scene scene = new Scene(root);
-
-            // 4. Stage setup
-            primaryStage.setTitle("OOP MUSIC - Project IT3100");
-
-            // 5. Thêm icon nếu có
-            try {
-                Image icon = new Image(
-                    Objects.requireNonNull(getClass().getResourceAsStream("/resources/icons/logo.png"))
-                );
-                primaryStage.getIcons().add(icon);
-            } catch (Exception e) {
-                System.out.println("Không tìm thấy icon logo, bỏ qua.");
+            // Đoạn debug để chắc chắn file đã được tìm thấy
+            if (fxmlUrl == null) {
+                System.out.println("❌ LỖI: Không tìm thấy file MainLayout.fxml!");
+                System.out.println("👉 Code đang tìm file này ngay trong thư mục 'com'");
+                System.out.println("👉 BẠN CẦN 'CLEAN WORKSPACE' ĐỂ VS CODE CẬP NHẬT FILE MỚI.");
+                System.exit(1);
+            } else {
+                System.out.println("✅ Đã tìm thấy FXML: " + fxmlUrl);
             }
 
+            FXMLLoader loader = new FXMLLoader(fxmlUrl);
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root);
+            
+            // 2. CẬP NHẬT: Load CSS (Nằm cùng thư mục -> chỉ cần tên file)
+            URL cssUrl = getClass().getResource("Style.css");
+            if (cssUrl != null) {
+                scene.getStylesheets().add(cssUrl.toExternalForm());
+            } else {
+                System.out.println("⚠️ Cảnh báo: Không tìm thấy Style.css trong thư mục com");
+            }
+
+            primaryStage.setTitle("MUSEEK - Music Player");
+            
+            // 3. CẬP NHẬT: Load Icon (Thư mục icons nằm cùng thư mục com -> icons/logo.png)
+            try {
+                URL iconUrl = getClass().getResource("icons/logo.png");
+                if (iconUrl != null) {
+                    primaryStage.getIcons().add(new Image(iconUrl.toString()));
+                } else {
+                    System.out.println("⚠️ Cảnh báo: Không tìm thấy icon tại com/icons/logo.png");
+                }
+            } catch (Exception ignored) {}
+
             primaryStage.setScene(scene);
-            primaryStage.setResizable(false);
             primaryStage.show();
 
+            primaryStage.setOnCloseRequest(e -> System.exit(0));
 
         } catch (Exception e) {
-            System.err.println("LỖI KHỞI ĐỘNG: Kiểm tra lại tên file hoặc đường dẫn!");
-            e.printStackTrace();
+            e.printStackTrace(); 
         }
     }
 

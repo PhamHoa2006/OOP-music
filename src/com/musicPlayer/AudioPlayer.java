@@ -1,17 +1,22 @@
 package com.musicPlayer;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
+
 public class AudioPlayer implements Player {
     private Playlist playlist;
     private int currentIndex = 0;
-    private volatile double volume = 1.0;
-    private volatile boolean playing = false;
-    private volatile boolean paused = false;
-    private volatile boolean timerRunning = false;
-    private Runnable onSongEnd; // interface co san trong java.lang -> callback
-    private double currentTime = 0.0;
-    private Thread timerThread;
-
-    // volatile giup dong bo giua cac Thread
+    
+    // MediaPlayer thực tế của JavaFX
+    private MediaPlayer mediaPlayer;
+    
+    private double volume = 1.0;
+    private boolean playing = false;
+    private boolean paused = false;
+    
+    // Callback để giao diện biết khi nào bài hát kết thúc hoặc thay đổi
+    private Runnable onSongEnd; 
 
     public AudioPlayer() {
         this.playlist = null;
@@ -23,136 +28,179 @@ public class AudioPlayer implements Player {
 
     @Override
     public void play() {
-        if (playlist == null || playlist.getSongs().isEmpty())
-            return;
-        else {
-            Song s = playlist.getSongs().get(currentIndex);
+        // 1. Nếu danh sách rỗng thì nghỉ
+        if (playlist == null || playlist.getSongs().isEmpty()) return;
+
+        // 2. Nếu đang pause và player vẫn còn đó -> Resume lại
+        if (paused && mediaPlayer != null) {
+            mediaPlayer.play();
             playing = true;
             paused = false;
-            // System.out.println("▶ Playing: " + s);
-            startTimer();
+            return;
+        }
+
+        // 3. Nếu là play mới hoàn toàn (hoặc chuyển bài)
+        stop(); // Dọn dẹp player cũ trước
+
+        Song currentSong = playlist.getSongs().get(currentIndex);
+        
+        // Lấy đường dẫn URI chuẩn từ hàm ông đã viết trong Song.java
+        String source = currentSong.getPlayableUrl(); 
+
+        if (source == null) {
+            System.err.println("Không tìm thấy file nhạc: " + currentSong.getTitle());
+            return;
+        }
+
+        try {
+            Media media = new Media(source);
+            mediaPlayer = new MediaPlayer(media);
+
+            // Set volume hiện tại
+            mediaPlayer.setVolume(volume);
+
+            // Xử lý sự kiện: Khi bài hát chạy xong
+            mediaPlayer.setOnEndOfMedia(() -> {
+                // Tự động next bài
+                next(); 
+                
+                // Gọi callback nếu bên ngoài cần biết
+                if (onSongEnd != null) {
+                    onSongEnd.run();
+                }
+            });
+
+            mediaPlayer.play();
+            playing = true;
+            paused = false;
+
+            System.out.println("▶ Playing: " + currentSong.getTitle());
+
+        } catch (Exception e) {
+            System.err.println("Lỗi khởi tạo Media: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @Override
     public void pause() {
-        if (playing) {
-            paused = true;
+        if (mediaPlayer != null && playing) {
+            mediaPlayer.pause();
             playing = false;
-            // System.out.println("⏸Paused.");
+            paused = true;
+            System.out.println("⏸ Paused.");
         }
     }
 
     @Override
     public void stop() {
-        if (playing || paused) {
-            playing = false;
-            paused = false;
-            // System.out.println("⏹ Stopped.");
-            currentTime = 0;
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.dispose(); // Quan trọng: Giải phóng tài nguyên hệ thống
+            mediaPlayer = null;
         }
+        playing = false;
+        paused = false;
+        // Reset về đầu bài hiện tại (nếu muốn) nhưng không reset currentIndex
     }
 
     @Override
     public void next() {
-        if (playlist == null || playlist.getSongs.isEmpty())
-            return;
-        // if (!playlist.getSongs().isEmpty() && playlist != null) {
-        else {
-            currentIndex = (currentIndex + 1) % playlist.getSongs().size();
-            // System.out.println("⏭ Next song.");
-            currentTime = 0;
-            play();
-        }
+        if (playlist == null || playlist.getSongs().isEmpty()) return;
+        
+        // Logic xoay vòng index
+        currentIndex = (currentIndex + 1) % playlist.getSongs().size();
+        
+        // Stop bài cũ và Play bài mới
+        // Lưu ý: play() đã có logic gọi stop() ở đầu nên gọi thẳng play() cũng được,
+        // nhưng gọi stop() ở đây cho rõ ràng.
+        stop(); 
+        play();
     }
 
     @Override
     public void previous() {
-        if (playlist.getSongs().isEmpty() || playlist == null)
-            return;
-        // if (!playlist.getSongs().isEmpty()) {
-        else {
-            currentIndex = (currentIndex - 1 + playlist.getSongs().size()) % playlist.getSongs().size();
-            currentTime = 0;
-            // System.out.println("⏮ Previous song.");
-            play();
-        }
+        if (playlist == null || playlist.getSongs().isEmpty()) return;
+
+        // Logic xoay vòng lùi
+        currentIndex = (currentIndex - 1 + playlist.getSongs().size()) % playlist.getSongs().size();
+        
+        stop();
+        play();
     }
 
     @Override
     public void seekForward(int seconds) {
-        currentTime += seconds;
-        Song s = playlist.getSongs().get(currentIndex);
-        if (s == null)
-            return;
-        double duration = s.getDuration();
-        if (currentTime > duration) {
-            currentTime = duration;
-            if (onSongEnd != null)
-                onSongEnd.run(); // callback khi hết bài
+        if (mediaPlayer != null) {
+            seek((int) mediaPlayer.getCurrentTime().toSeconds() + seconds);
         }
-        // System.out.println("⏩ Seeked forward " + seconds + "s. Current: " +
-        // currentTime + " / " + duration);
     }
 
     @Override
     public void seekBackward(int seconds) {
-        Song s = playlist.getSongs().get(currentIndex);
-        if (s == null)
-            return;
-        double duration = s.getDuration();
-        currentTime -= seconds;
-        if (currentTime < 0)
-            currentTime = 0;
-        // System.out.println("⏪ Seeked backward " + seconds + "s. Current: " +
-        // currentTime + " / " + duration);
+        if (mediaPlayer != null) {
+            seek((int) mediaPlayer.getCurrentTime().toSeconds() - seconds);
+        }
     }
 
     @Override
     public void seek(int seconds) {
-        currentTime = seconds;
-        Song s = playlist.getSongs().get(currentIndex);
-        if (s == null)
-            return;
-        double duration = s.getDuration();
-        if (currentTime > duration)
-            currentTime = duration;
-        if (currentTime < 0)
-            currentTime = 0;
-        // System.out.println("Current: " + currentTime + " / " + duration);
-    }
-
-    @Override
-    public double getVolume() {
-        return this.volume;
-    }
-
-    @Override
-    public boolean isPlaying() {
-        return this.playing;
-    }
-
-    @Override
-    public boolean isPaused() {
-        return this.paused;
-    }
-
-    @Override
-    public boolean isStopped() {
-        return !this.paused && !this.playing;
+        if (mediaPlayer != null) {
+            // MediaPlayer dùng Duration, không dùng int giây thuần
+            mediaPlayer.seek(Duration.seconds(seconds));
+        }
     }
 
     @Override
     public Song getCurrentSong() {
-        if (playlist == null || playlist.getSongs().isEmpty()) {
-            return null;
-        }
+        if (playlist == null || playlist.getSongs().isEmpty()) return null;
         return playlist.getSongs().get(currentIndex);
     }
 
     @Override
     public double getCurrentTime() {
-        return this.currentTime;
+        // Lấy thời gian thực từ MediaPlayer
+        if (mediaPlayer != null) {
+            return mediaPlayer.getCurrentTime().toSeconds();
+        }
+        return 0.0;
+    }
+    
+    // Hàm mới bổ sung: Lấy duration thực tế từ file (chính xác hơn Song object lưu)
+    public double getTotalDuration() {
+         if (mediaPlayer != null && mediaPlayer.getTotalDuration() != null) {
+             return mediaPlayer.getTotalDuration().toSeconds();
+         }
+         return 0.0;
+    }
+
+    @Override
+    public double getVolume() {
+        return volume;
+    }
+    
+    // Setter volume cập nhật trực tiếp vào player đang chạy
+    public void setVolume(double vol) {
+        this.volume = vol;
+        if (mediaPlayer != null) {
+            mediaPlayer.setVolume(vol);
+        }
+    }
+
+    @Override
+    public boolean isPlaying() {
+        // Có thể check thêm trạng thái của mediaPlayer status
+        return playing;
+    }
+
+    @Override
+    public boolean isPaused() {
+        return paused;
+    }
+
+    @Override
+    public boolean isStopped() {
+        return !playing && !paused;
     }
 
     @Override
@@ -160,48 +208,18 @@ public class AudioPlayer implements Player {
         this.onSongEnd = callback;
     }
 
-    private void startTimer() {
-        if (timerRunning)
-            return;
-        timerRunning = true;
-        timerThread = new Thread(() -> {
-            long lastTime = System.currentTimeMillis();
-            while (timerRunning) {
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    break;
-                } // sleep de tranh luong chay lien tuc -> dung 200 mls
-                if (playing && !paused) {
-                    long now = System.currentTimeMillis();
-                    double deltaSec = (now - lastTime) / 1000.0;
-                    lastTime = now;
-                    currentTime += deltaSec;
-
-                    Song s = getCurrentSong();
-                    if (s != null && currentTime >= s.getDuration()) {
-                        currentTime = s.getDuration();
-                        finishSong();
-                    }
-                }
-            }
-        });
-        timerThread.setDaemon(true);
-        timerThread.start();
-    }
-
-    private void finishSong() {
-        playing = false;
-        if (onSongEnd != null)
-            onSongEnd.run();
-    }
-
     public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
         this.currentIndex = 0;
+        stop(); // Reset player khi đổi playlist
     }
 
     public Playlist getPlaylist() {
         return this.playlist;
+    }
+    
+    // Getter cho MediaPlayer để Controller có thể bind slider (Thanh chạy)
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
     }
 }
