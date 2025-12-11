@@ -17,6 +17,7 @@ import java.util.UUID;
 public class Song implements Comparable<Song>, Serializable {
     private static final long serialVersionUID = 1L;
 
+    @JsonProperty("id")
     private String songID;
     private String title;
     

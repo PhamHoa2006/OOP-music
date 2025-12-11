@@ -10,65 +10,68 @@ import java.util.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class History {
 
-    // 1. SỬA: Đổi thành public static để Jackson có thể truy cập và khởi tạo
+    // Class con để lưu bản ghi (Giữ nguyên)
     public static class SongRecord {
         private Song song;
-        private LocalDate datePlayed; // Jackson xử lý LocalDate cần module JSR310, nhưng tạm thời cứ để đây
-        
-        // Constructor rỗng (Bắt buộc cho Jackson)
+        private String datePlayed; // Lưu String cho dễ xử lý JSON (YYYY-MM-DD)
+
         public SongRecord() {}
 
-        public SongRecord(Song song, LocalDate datePlayed) {
+        public SongRecord(Song song, LocalDate date) {
             this.song = song;
-            this.datePlayed = datePlayed;
+            this.datePlayed = date.toString();
         }
 
         public Song getSong() { return song; }
-        public void setSong(Song song) { this.song = song; } // Cần Setter
+        public void setSong(Song song) { this.song = song; }
 
-        public LocalDate getDatePlayed() { return datePlayed; }
-        public void setDatePlayed(LocalDate datePlayed) { this.datePlayed = datePlayed; } // Cần Setter
+        public LocalDate getDatePlayed() { 
+            return datePlayed != null ? LocalDate.parse(datePlayed) : LocalDate.now(); 
+        }
+        // Setter nhận String cho Jackson
+        public void setDatePlayed(String datePlayed) { this.datePlayed = datePlayed; }
     }
 
-    private Map<Song, Integer> userPlayCount;
+    // --- SỬA ĐỔI QUAN TRỌNG TẠI ĐÂY ---
+    // Key là String (songID) thay vì object Song để tránh lỗi JSON
+    private Map<String, Integer> userPlayCount; 
+    
     private LinkedList<SongRecord> userHistory;
 
-    // Biến static này không lưu vào file JSON của từng user -> @JsonIgnore
+    // Biến static toàn cục (Giữ nguyên Song làm key vì biến này không lưu vào file JSON)
     @JsonIgnore
     private static final Map<Song, Integer> globalPlayCount = new HashMap<>();
     
     @JsonIgnore
     private static final int MAX_HISTORY_SIZE = 100;
 
-    // 2. SỬA: Thêm Constructor mặc định cho Jackson
     public History() {
         this.userPlayCount = new HashMap<>();
         this.userHistory = new LinkedList<>();
     }
 
-    // Logic thêm bài hát (Giữ nguyên logic của bạn, chỉ chỉnh format code)
     public void addSong(Song song) {
         if (song == null) return;
 
+        // 1. Thêm vào lịch sử (List)
         SongRecord record = new SongRecord(song, LocalDate.now());
-
         if (userHistory.size() >= MAX_HISTORY_SIZE) {
             userHistory.removeFirst();
         }
         userHistory.addLast(record);
 
-        // Update count cá nhân
-        userPlayCount.put(song, userPlayCount.getOrDefault(song, 0) + 1);
+        // 2. Update count cá nhân (Lưu theo ID)
+        String id = song.getSongID();
+        userPlayCount.put(id, userPlayCount.getOrDefault(id, 0) + 1);
 
-        // Update count toàn cục
+        // 3. Update count toàn cục (Giữ nguyên)
         globalPlayCount.put(song, globalPlayCount.getOrDefault(song, 0) + 1);
     }
 
-    // --- Các hàm Get logic giữ nguyên ---
+    // --- Các hàm Get History ---
 
     public Map<LocalDate, List<Song>> getUserHistoryByDate() {
         Map<LocalDate, List<Song>> historyByDate = new LinkedHashMap<>();
-        // Đảo ngược để xem mới nhất trước
         Iterator<SongRecord> it = userHistory.descendingIterator(); 
         
         while(it.hasNext()){
@@ -78,27 +81,40 @@ public class History {
         return historyByDate;
     }
 
+    @JsonIgnore
     public List<Song> getPlayedSongs() {
         List<Song> playedSongs = new ArrayList<>();
-        // Lấy từ mới nhất đến cũ nhất
         Iterator<SongRecord> it = userHistory.descendingIterator();
         while(it.hasNext()){
              playedSongs.add(it.next().getSong());
         }
-
         return playedSongs;
     }
 
-    // Getter cho Jackson
+    // Getter/Setter chuẩn cho Jackson
     public LinkedList<SongRecord> getUserHistory() { return userHistory; }
     public void setUserHistory(LinkedList<SongRecord> userHistory) { this.userHistory = userHistory; }
 
-    public Map<Song, Integer> getUserPlayCount() { return userPlayCount; }
-    public void setUserPlayCount(Map<Song, Integer> userPlayCount) { this.userPlayCount = userPlayCount; }
+    public Map<String, Integer> getUserPlayCount() { return userPlayCount; }
+    public void setUserPlayCount(Map<String, Integer> userPlayCount) { this.userPlayCount = userPlayCount; }
 
-    // --- Logic Trending & Suggestion (Giữ nguyên logic tốt của bạn) ---
+    // --- Logic Trending & Suggestion ---
     
-    @JsonIgnore // Không lưu kết quả tính toán vào file
+    // Hàm phụ trợ: Tìm object Song từ ID (Lấy từ lịch sử có sẵn)
+    private Song findSongByIdInHistory(String songId) {
+        if (songId == null) return null;
+        // Duyệt ngược từ mới nhất để lấy thông tin cập nhật nhất
+        Iterator<SongRecord> it = userHistory.descendingIterator();
+        while(it.hasNext()) {
+            Song s = it.next().getSong();
+            if (s.getSongID().equals(songId)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    @JsonIgnore
     public static List<Song> getGlobalTrending(int topN) {
         if (topN <= 0) return new ArrayList<>();
         List<Map.Entry<Song, Integer>> entry = new ArrayList<>(globalPlayCount.entrySet());
@@ -110,28 +126,37 @@ public class History {
         for (int i = 0; i < limit; i++) {
             topTrending.add(entry.get(i).getKey());
         }
-
         return topTrending;
     }
 
     @JsonIgnore
     public Song getMostPlayedByUser() {
         if (userPlayCount.isEmpty()) return null;
-        return Collections.max(userPlayCount.entrySet(), Map.Entry.comparingByValue()).getKey();
+        // Tìm Entry có value (lượt nghe) lớn nhất
+        Map.Entry<String, Integer> maxEntry = Collections.max(userPlayCount.entrySet(), Map.Entry.comparingByValue());
+        // Map ngược từ ID ra Song
+        return findSongByIdInHistory(maxEntry.getKey());
     }
 
     @JsonIgnore
     public List<Song> suggestMostPlayed(int topN) {
         if (topN <= 0) return new ArrayList<>();
-        List<Map.Entry<Song, Integer>> entries = new ArrayList<>(userPlayCount.entrySet());
+        
+        // Sắp xếp Map theo Value giảm dần
+        List<Map.Entry<String, Integer>> entries = new ArrayList<>(userPlayCount.entrySet());
         entries.sort((a, b) -> b.getValue().compareTo(a.getValue()));
 
         List<Song> suggestions = new ArrayList<>();
         int limit = Math.min(topN, entries.size());
+        
         for (int i = 0; i < limit; i++) {
-            suggestions.add(entries.get(i).getKey());
+            // Lấy ID từ Map -> Tìm Song object tương ứng
+            String songId = entries.get(i).getKey();
+            Song s = findSongByIdInHistory(songId);
+            if (s != null) {
+                suggestions.add(s);
+            }
         }
-
         return suggestions;
     }
 }

@@ -356,3 +356,73 @@
 .main-scroll-pane .corner {
     -fx-background-color: transparent;
 }
+
+/* --- STYLE CHO THANH CUỘN NGANG (HORIZONTAL LIST) --- */
+
+/* 1. Ẩn thanh cuộn nhưng vẫn cho phép cuộn */
+.horizontal-scroll .scroll-bar:horizontal {
+    -fx-pref-height: 8px; /* Cho nó bé tẹo thôi */
+    -fx-background-color: transparent;
+    -fx-opacity: 0; /* Tàng hình luôn nếu muốn giống hệt Spotify Web */
+}
+
+/* Hoặc nếu ông muốn nó hiện lên mờ mờ khi di chuột vào (Giống Spotify App) */
+.horizontal-scroll:hover .scroll-bar:horizontal {
+    -fx-opacity: 1;
+}
+
+.horizontal-scroll .scroll-bar:horizontal .track {
+    -fx-background-color: transparent;
+}
+
+.horizontal-scroll .scroll-bar:horizontal .thumb {
+    -fx-background-color: #535353;
+    -fx-background-radius: 10px;
+}
+
+.horizontal-scroll .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #b3b3b3;
+}
+
+/* Tắt nút mũi tên 2 đầu thanh cuộn */
+.horizontal-scroll .increment-button, 
+.horizontal-scroll .decrement-button {
+    -fx-pref-width: 0;
+    -fx-opacity: 0;
+}
+
+/* --- STYLE CHO DÒNG BÀI HÁT (SIDEBAR) --- */
+.song-row {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-border-color: transparent transparent #2a2a2a transparent; /* Kẻ mờ bên dưới */
+    -fx-border-width: 0 0 1 0;
+    -fx-transition: all 0.2s ease;
+}
+
+.song-row:hover {
+    -fx-background-color: #2a2a2a; /* Sáng lên khi di chuột */
+}
+
+/* Ảnh nhỏ trong dòng */
+.row-image {
+    -fx-background-radius: 4;
+    -fx-effect: null;
+}
+
+/* ScrollPane của Sidebar - Ẩn thanh cuộn cho đẹp */
+.sidebar-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+.sidebar-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+.sidebar-scroll .scroll-bar:vertical {
+    -fx-pref-width: 8px;
+    -fx-background-color: transparent;
+}
+.sidebar-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #535353;
+    -fx-background-radius: 4px;
+}
