@@ -55,7 +55,7 @@ public class AudioPlayer implements Player {
 
     @Override
     public void next() {
-        if (playlist == null || playlist.getSongs.isEmpty())
+        if (playlist == null || playlist.getSongs().isEmpty())
             return;
         // if (!playlist.getSongs().isEmpty() && playlist != null) {
         else {
