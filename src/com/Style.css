@@ -68,17 +68,6 @@
     -fx-background-color: #262626; /* Màu khi chọn dòng */
 }
 
-/* 7. Thanh trượt (Slider) */
-.slider .track {
-    -fx-background-color: #444444; /* Đường ray màu tối */
-}
-.slider .thumb {
-    -fx-background-color: #aaaaaa; /* Cục trượt màu xám */
-}
-.slider:hover .thumb {
-    -fx-background-color: white; /* Di chuột vào thì cục trượt trắng lên */
-}
-
 /* 1. Đường kẻ ngăn cách các khu vực (Dùng cho HBox/VBox) */
 .border-bottom {
     -fx-border-color: rgba(255, 255, 255, 0.1); /* Màu trắng độ mờ 10% */
@@ -242,4 +231,198 @@
 /* Màu chữ placeholder (ví dụ: "Tìm kiếm...") */
 .search-input .text-field {
     -fx-prompt-text-fill: #888888;
+}
+
+/* --- CARD STYLE (Giao diện thẻ nhạc) --- */
+
+.music-card {
+    -fx-background-color: #181818; /* Màu nền thẻ tối */
+    -fx-background-radius: 8;
+    -fx-effect: null; /* Tắt bóng mặc định cho nhẹ */
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease; /* Hiệu ứng mượt */
+}
+
+.music-card:hover {
+    -fx-background-color: #282828; /* Sáng hơn chút khi di chuột vào */
+}
+
+/* Ảnh bìa: Bo tròn nhẹ */
+.card-image {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 5);
+    -fx-background-radius: 6; 
+    /* Lưu ý: ImageView khó bo tròn viền bằng CSS thuần, 
+       nhưng cứ để background-radius cho container khớp */
+}
+
+/* Text style */
+.card-title {
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 15px;
+}
+
+.card-artist {
+    -fx-text-fill: #B3B3B3;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-weight: 600;
+    -fx-font-size: 13px;
+}
+.card-artist:hover {
+    -fx-text-fill: white;
+    -fx-underline: true;
+}
+
+/* --- NÚT PLAY XANH (OVERLAY) --- */
+.play-overlay-btn {
+    -fx-background-color: #1DB954; /* Màu xanh Spotify */
+    -fx-background-radius: 50%; /* Tròn xoe */
+    -fx-min-width: 45px;
+    -fx-min-height: 45px;
+    -fx-padding: 0;
+    
+    /* Ẩn đi mặc định */
+    -fx-opacity: 0;
+    -fx-translate-y: 10; /* Đẩy xuống dưới 1 tí */
+    -fx-transition: all 0.3s ease; 
+}
+
+.play-overlay-btn:hover {
+    -fx-background-color: #1ed760; /* Sáng hơn khi hover vào nút */
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* Kích hoạt hiệu ứng: Khi hover vào cả cái Card, thì nút Play hiện lên */
+.music-card:hover .play-overlay-btn {
+    -fx-opacity: 1;      /* Hiện hình */
+    -fx-translate-y: -5; /* Trượt lên vị trí chuẩn */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 5, 0, 0, 3);
+}
+
+/* Container chứa các card nhạc (FlowPane) */
+.card-container {
+    -fx-background-color: transparent; /* BẮT BUỘC: Nền trong suốt để lộ màu đen #121212 bên dưới */
+    -fx-padding: 0;
+}
+
+/* 1. Nền chính của vùng nội dung giữa */
+.main-content {
+    -fx-background-color: #121212; /* Màu đen xám chuẩn Spotify */
+}
+
+/* 2. Xử lý cái khung ScrollPane để nó không bị viền trắng/xám */
+.main-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.main-scroll-pane > .viewport {
+    -fx-background-color: transparent; /* Quan trọng: để lộ màu nền #121212 bên dưới */
+}
+
+/* 3. Tùy biến thanh cuộn (Scrollbar) */
+
+/* Ẩn rãnh trượt (track) */
+.main-scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 12px; /* Độ rộng thanh cuộn */
+}
+
+.main-scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Chỉnh cục kéo (thumb) cho giống Spotify */
+.main-scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: #535353; /* Màu xám tối */
+    -fx-background-insets: 2;
+    -fx-background-radius: 10em; /* Bo tròn tuyệt đối */
+}
+
+/* Khi di chuột vào thanh cuộn thì nó sáng lên chút */
+.main-scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #B3B3B3;
+}
+
+/* Ẩn hẳn thanh cuộn ngang và góc giao nhau */
+.main-scroll-pane .scroll-bar:horizontal {
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
+}
+
+.main-scroll-pane .corner {
+    -fx-background-color: transparent;
+}
+
+/* --- STYLE CHO THANH CUỘN NGANG (HORIZONTAL LIST) --- */
+
+/* 1. Ẩn thanh cuộn nhưng vẫn cho phép cuộn */
+.horizontal-scroll .scroll-bar:horizontal {
+    -fx-pref-height: 8px; /* Cho nó bé tẹo thôi */
+    -fx-background-color: transparent;
+    -fx-opacity: 0; /* Tàng hình luôn nếu muốn giống hệt Spotify Web */
+}
+
+/* Hoặc nếu ông muốn nó hiện lên mờ mờ khi di chuột vào (Giống Spotify App) */
+.horizontal-scroll:hover .scroll-bar:horizontal {
+    -fx-opacity: 1;
+}
+
+.horizontal-scroll .scroll-bar:horizontal .track {
+    -fx-background-color: transparent;
+}
+
+.horizontal-scroll .scroll-bar:horizontal .thumb {
+    -fx-background-color: #535353;
+    -fx-background-radius: 10px;
+}
+
+.horizontal-scroll .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #b3b3b3;
+}
+
+/* Tắt nút mũi tên 2 đầu thanh cuộn */
+.horizontal-scroll .increment-button, 
+.horizontal-scroll .decrement-button {
+    -fx-pref-width: 0;
+    -fx-opacity: 0;
+}
+
+/* --- STYLE CHO DÒNG BÀI HÁT (SIDEBAR) --- */
+.song-row {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-border-color: transparent transparent #2a2a2a transparent; /* Kẻ mờ bên dưới */
+    -fx-border-width: 0 0 1 0;
+    -fx-transition: all 0.2s ease;
+}
+
+.song-row:hover {
+    -fx-background-color: #2a2a2a; /* Sáng lên khi di chuột */
+}
+
+/* Ảnh nhỏ trong dòng */
+.row-image {
+    -fx-background-radius: 4;
+    -fx-effect: null;
+}
+
+/* ScrollPane của Sidebar - Ẩn thanh cuộn cho đẹp */
+.sidebar-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+.sidebar-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+.sidebar-scroll .scroll-bar:vertical {
+    -fx-pref-width: 8px;
+    -fx-background-color: transparent;
+}
+.sidebar-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #535353;
+    -fx-background-radius: 4px;
 }

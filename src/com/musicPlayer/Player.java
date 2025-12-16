@@ -30,4 +30,8 @@ public interface Player {
     boolean isPaused(); // check trang thai
 
     void setOnSongEnd(Runnable callback); // de sau tim hieu them
+
+    void setVolume(double volume);
+    
+    double getTotalDuration();
 }

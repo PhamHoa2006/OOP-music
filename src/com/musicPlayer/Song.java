@@ -1,95 +1,125 @@
 package com.musicPlayer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty; // Import cái này để map tên JSON
 
-//Test nha Dung
+import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-public class Song implements Comparable<Song> {
-    // I. Thuộc tính
-    private final String songID;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Song implements Comparable<Song>, Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @JsonProperty("id")
+    private String songID;
     private String title;
-    private String artist;
+    
+    // 1. SỬA: Đổi sang List để hứng được mảng ["Artist1", "Artist2"] từ JSON
+    private List<String> artist; 
+    
     private String album;
-    private int duration;   // đơn vị: giây
-    private String url;
-    private List<String> genres; // thể loại
-    private int playCount; // lượt nghe // có thể suggest bằng rating và playCount
+    private double duration;
+    
+    // 2. SỬA: Map key "filePath" trong JSON vào biến "url" của Java
+    @JsonProperty("filePath") 
+    private String url; 
+    
+    private List<String> genres;
+    private int playCount;
     
     private List<Integer> ratingList;
-    private List<String> lyricLines; // lưu từng dọc lời bài hát
-    private List<Integer> timeStamps; // thời gian đến từng lời bài hát, đơn vị mili giây. 5000 = 5s.
+    private List<String> lyricLines;
+    private List<Integer> timeStamps;
     private Long totalLike;
 
-    // 1.Constructor basic
-    
-    public Song(String title, String artist, String album, int duration, String url) {
+    public Song() {
         this.songID = UUID.randomUUID().toString();
-        this.title = title;
-        this.artist = artist;
-        this.album = album;
-        this.duration = duration;
-        this.url = url;
-        this.playCount = 0;
+        this.artist = new ArrayList<>(); // Khởi tạo list
         this.genres = new ArrayList<>();
-        ratingList = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0));
+        this.ratingList = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0));
         this.lyricLines = new ArrayList<>();
         this.timeStamps = new ArrayList<>();
         this.totalLike = 0L;
     }
-    
-    // 2.Constructor có phần TimeStamps
 
-    public Song(String title, String artist, String album, int duration, String url, List<String> genres, List<String> lyricLines, List<Integer> timeStamps) {
+    // Constructor dùng khi tạo tay (nếu cần)
+    public Song(String title, String artist, String album, double duration, String url) {
         this.songID = UUID.randomUUID().toString();
         this.title = title;
-        this.artist = artist;
+        this.artist = new ArrayList<>();
+        this.artist.add(artist); // Add artist đơn lẻ vào list
         this.album = album;
         this.duration = duration;
         this.url = url;
-        this.genres = genres;
+        
         this.playCount = 0;
-        ratingList = new ArrayList<>(Arrays.asList(0,0,0,0,0));
-        this.lyricLines = lyricLines;
-        this.timeStamps = timeStamps;
+        this.genres = new ArrayList<>();
+        this.ratingList = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0));
+        this.lyricLines = new ArrayList<>();
+        this.timeStamps = new ArrayList<>();
         this.totalLike = 0L;
     }
 
-    // 3. Constructor không có TimeStamp
+    @JsonIgnore
+    public String getPlayableUrl() {
+        try {
+            if (url != null && (url.startsWith("http") || url.startsWith("file:"))) {
+                return url;
+            }
+            
+            String projectDir = System.getProperty("user.dir");
+            // Fix: Đảm bảo đường dẫn dùng dấu / xuôi
+            String normalizedPath = url.replace("\\", "/");
+            
+            File file = new File(projectDir, normalizedPath);
+            
+            // --- ĐOẠN DEBUG (In ra terminal) ---
+            System.out.println("------------------------------------------------");
+            System.out.println("Đang tìm file nhạc tại: " + file.getAbsolutePath());
+            if (!file.exists()) {
+                System.err.println("❌ LỖI: File không tồn tại! Hãy kiểm tra lại thư mục 'data'");
+                return null;
+            } else {
+                System.out.println("✅ File TỒN TẠI. Đang nạp vào player...");
+            }
+            // ------------------------------------
 
-    public Song(String title, String artist, String album, int duration, String url, List<String> genres, List<String> lyricLines) {
-        this.songID = UUID.randomUUID().toString();
-        this.title = title;
-        this.artist = artist;
-        this.album = album;
-        this.duration = duration;
-        this.url = url;
-        this.genres = genres;
-        this.playCount = 0;
-        ratingList = new ArrayList<>(Arrays.asList(0,0,0,0,0));
-        this.lyricLines = lyricLines;
-        this.timeStamps = new ArrayList<> (); // bỏ qua
-        this.totalLike = 0L;
+            return file.toURI().toString();
+        } catch (Exception e) {
+            System.err.println("Lỗi tạo đường dẫn: " + e.getMessage());
+            return null;
+        }
     }
 
-    // II.Getter và Setter
+    // --- Getters & Setters ---
 
-    public String getSongID() {return this.songID;}
+    public String getSongID() { return songID; }
+    public void setSongID(String songID) { this.songID = songID; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
-    public String getArtist() { return artist; }
-    public void setArtist(String artist) { this.artist = artist; }
+    // 3. SỬA: Getter trả về String (nối các ca sĩ bằng dấu phẩy) để hiển thị lên UI không bị lỗi
+    public String getArtist() { 
+        if (artist == null || artist.isEmpty()) return "Unknown Artist";
+        return String.join(", ", artist); 
+    }
+    
+    // Setter nhận List (để Jackson dùng)
+    public void setArtist(List<String> artist) { this.artist = artist; }
 
     public String getAlbum() { return album; }
     public void setAlbum(String album) { this.album = album; }
 
-    public int getDuration() { return duration; }
-    public void setDuration(int duration) { this.duration = duration; }
+    public double getDuration() { return duration; }
+    public void setDuration(double duration) { this.duration = duration; }
 
     public String getUrl() { return url; }
     public void setUrl(String url) { this.url = url; }
@@ -97,77 +127,57 @@ public class Song implements Comparable<Song> {
     public List<String> getGenres() { return genres; }
     public void setGenres(List<String> genres) { this.genres = genres; }
 
-    public int getPlayCount() {return playCount;}
-    public void setPlayCount(int playCount) {this.playCount = playCount;}
+    public int getPlayCount() { return playCount; }
+    public void setPlayCount(int playCount) { this.playCount = playCount; }
 
-    public Long getTotalLike() {return totalLike;}
-    public void setTotalLike(Long totalLike) {this.totalLike = totalLike;}
- 
-    
-    public List<Integer> getRatingList() {return this.ratingList;}
-    public void setRatingList(List<Integer> ratingList) {
-        if (ratingList == null) {throw new IllegalArgumentException("Empty list.");}
-        if (ratingList.size() != 5) {throw new IllegalArgumentException("Wrong size.");}
-        for (int rating : ratingList) {if (rating < 0) {throw new IllegalArgumentException("Negative value");}}
-        this.ratingList = new ArrayList<>(ratingList);
-    }
+    public Long getTotalLike() { return totalLike; }
+    public void setTotalLike(Long totalLike) { this.totalLike = totalLike; }
 
-    public List<String> getLyrics() {return this.lyricLines;}
-    public void setLyrics(List<String> lyrics) {this.lyricLines = lyrics;}
+    public List<Integer> getRatingList() { return ratingList; }
+    public void setRatingList(List<Integer> ratingList) { this.ratingList = ratingList; }
 
-    public List<Integer> getTimeStamps() {return this.timeStamps;}
-    public void setTimeStamps(List<Integer> timeStamps) {this.timeStamps = timeStamps;}
+    public List<String> getLyrics() { return lyricLines; }
+    public void setLyrics(List<String> lyrics) { this.lyricLines = lyrics; }
 
-    public int getIndexAtTime(int currentTime) { // nhập thời gian lấy dòng bài hát tại đó
-        if (timeStamps == null || lyricLines == null || timeStamps.isEmpty() || lyricLines.isEmpty()) return -1;
-        if (currentTime < 0 || currentTime > duration * 1000) return -1;
+    public List<Integer> getTimeStamps() { return timeStamps; }
+    public void setTimeStamps(List<Integer> timeStamps) { this.timeStamps = timeStamps; }
+
+    // Giữ nguyên logic lấy lời bài hát
+    public int getIndexAtTime(double currentTimeInSeconds) {
+        if (timeStamps == null || lyricLines == null || timeStamps.isEmpty()) return -1;
+        int currentTimeMs = (int) (currentTimeInSeconds * 1000);
+        if (currentTimeMs < 0 || currentTimeMs > (duration * 1000)) return -1;
+
         for (int i = 0; i < timeStamps.size(); i++) {
             int start = timeStamps.get(i);
-            int end = (i + 1 < timeStamps.size()) ? timeStamps.get(i + 1) : duration;
-            if (currentTime >= start && currentTime < end)
-            return i;
+            int end = (i + 1 < timeStamps.size()) ? timeStamps.get(i + 1) : (int)(duration * 1000);
+            if (currentTimeMs >= start && currentTimeMs < end) return i;
         }
-    return -1; // nếu không khớp với khoảng nào
+        return -1;
     }
-    
-    public void setLyricLine(String s, int i) {  // setter lời bài hát tại một dòng (lấy Line bằng Index)
-        if (i >= 0 && i < lyricLines.size()) {lyricLines.set(i, s);}}
-    public String getLyricLine(int i) {   // getter lời bài hát tại một dòng (lấy Line bằng Index)
-        if (i >= 0 && i < lyricLines.size()) return lyricLines.get(i);
-        else return ""; // trả về "" để tránh null
-    }
-    
-    /// III. Phương thức
-
-    //1. Trả về thông tin cơ bản của bài hát
 
     @Override
     public String toString() {
-        return title + " - " + artist;
+        return title + " - " + getArtist();
     }
-       
-    //2. So sánh và sắp thứ tự bài hát theo chuỗi tên, nghệ sĩ, thời lượng.
 
     @Override
     public int compareTo(Song other) {
-    return Comparator
-        .comparing(Song::getTitle, String.CASE_INSENSITIVE_ORDER)
-        .thenComparing(Song::getArtist, String.CASE_INSENSITIVE_ORDER)
-        .thenComparingInt(Song::getDuration)
-        .compare(this, other);
+        return Comparator.comparing(Song::getTitle, String.CASE_INSENSITIVE_ORDER)
+                .thenComparing(Song::getArtist, String.CASE_INSENSITIVE_ORDER)
+                .compare(this, other);
     }
     
-    //3. Sắp theo ID
-
-    public static void sortById(List<Song> songs) {
-    songs.sort(Comparator.comparing(Song::getSongID));
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Song song = (Song) o;
+        return Objects.equals(songID, song.songID);
     }
 
-    //3. Tăng số lần nghe.
-
-    public void increasePlayCount() {this.playCount++;}
-
-    //4. Tăng số lượt thích.
-
-    public void increaseTotalLike() {this.totalLike++;}
+    @Override
+    public int hashCode() {
+        return Objects.hash(songID);
+    }
 }
