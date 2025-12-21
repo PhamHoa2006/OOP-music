@@ -21,6 +21,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.shape.Circle; 
 import javafx.scene.paint.ImagePattern; 
 import javafx.animation.RotateTransition;
@@ -51,6 +52,9 @@ public class MainController {
     @FXML private Button prevButton;
     @FXML private Button shuffleButton;
     @FXML private Button repeatButton;
+    @FXML private Button forwardBtn;
+    @FXML private Button backBtn;
+    private boolean isRepeat = false;
     
     @FXML private Slider progressSlider;
     @FXML private Slider volumeSlider;
@@ -66,7 +70,8 @@ public class MainController {
     @FXML private Button homeBtn;
     @FXML private Button favoritesBtn;
     @FXML private Button historyBtn;
-
+    @FXML private Button top100Btn;
+    
     @FXML private Circle outerDiscCircle; // Vòng tròn lớn (sẽ chứa ảnh)
     @FXML private Circle innerDiscCircle; // Vòng tròn đen (giữ nguyên)
     @FXML private ImageView discIconView; // Hình nốt nhạc (giữ nguyên)
@@ -80,6 +85,8 @@ public class MainController {
     @FXML private ScrollPane relatedScrollPane;
     @FXML private VBox relatedContainerVBox;
     @FXML private VBox queueTabContent;
+    
+    @FXML private TextField searchField;
 
     // --- BIẾN LOGIC ---
     private AudioPlayer player;
@@ -112,6 +119,10 @@ public class MainController {
 
         nextTabBtn.setOnAction(e -> switchSidebarTab(true));
         relatedTabBtn.setOnAction(e -> switchSidebarTab(false));
+        
+        
+        player.setOnSongEnd(this::handleSongEnd);
+        
     }
 
     private void switchSidebarTab(boolean isNextTab) {
@@ -154,7 +165,10 @@ public class MainController {
         }
 
         player = new AudioPlayer(danhSachTong);
-        player.setOnSongEnd(() -> Platform.runLater(this::capNhatGiaoDienDuoiCung));
+        // Sửa dòng này để chạy repeat;
+        //player.setOnSongEnd(() -> Platform.runLater(this::capNhatGiaoDienDuoiCung));
+        
+        
         daoTrangThaiNutPlay(false);
     }
 
@@ -184,8 +198,9 @@ public class MainController {
 
         // Bấm Home -> Về giao diện danh sách, ẨN CỘT PHẢI
         homeBtn.setOnAction(e -> hienThiManHinhHome());
+        
+        repeatButton.setOnAction(e -> xulyRepeat());
     }
-
     // --- LOGIC CHUYỂN MÀN HÌNH ---
 
     // Chế độ 1: Home View (Chỉ có danh sách nhạc, KHÔNG CÓ CỘT PHẢI)
@@ -328,6 +343,23 @@ public class MainController {
             xyLyHieuUngXoay(false); // <--- DỪNG QUAY
         }
     }
+    
+    // After clicking to the Repeatbutton
+    private void xulyRepeat() {
+        // 1. Đảo ngược trạng thái
+        isRepeat = !isRepeat;
+
+        // 2. Cập nhật giao diện (CSS) để người dùng biết trạng thái
+        if (isRepeat) {
+            // Nếu BẬT: Đổi màu nút để làm nổi bật
+            repeatButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;"); 
+            System.out.println("🔁 Chế độ Lặp lại: BẬT");
+        } else {
+            // Nếu TẮT: Xóa style, về mặc định
+            repeatButton.setStyle(null); 
+            System.out.println("➡️ Chế độ Lặp lại: TẮT");
+        }
+    }
 
     private void choiBaiHatCuThe(int index) {
         // 1. Chuyển sang giao diện Player (Có cột phải)
@@ -341,8 +373,10 @@ public class MainController {
         for (Song s : dsBaiHat) danhSachMoi.addSong(s);
         
         player = new AudioPlayer(danhSachMoi);
-        player.setOnSongEnd(() -> Platform.runLater(this::capNhatGiaoDienDuoiCung));
-
+        
+        // Fix: Sửa lại dòng này để chạy được chế độ repeat; 
+        //player.setOnSongEnd(() -> Platform.runLater(this::handleSongEnd));
+        player.setOnSongEnd(this::handleSongEnd);
         for (int i = 0; i < index; i++) player.next();
         
         xuLyPlay();
@@ -567,4 +601,33 @@ public class MainController {
         // Cập nhật lại list Next/Related
         updateQueueView();
     }
+    
+    private void handleSongEnd() {
+        // LUÔN LUÔN đảm bảo việc cập nhật UI chạy trên JavaFX Application Thread
+        Platform.runLater(() -> { // Sửa cấu trúc lambda cho gọn: (Runnable)() -> {} --> () -> {}
+            if (isRepeat) {
+                // TÌNH HUỐNG 1: Chế độ Repeat đang BẬT
+                player.seek(0);
+                player.play();
+                
+                // DÒNG BỔ SUNG QUAN TRỌNG: Cập nhật lại UI để reset thanh trượt, thời gian và tên bài hát.
+                capNhatGiaoDienDuoiCung(); 
+                
+                if (player.getCurrentSong() != null) {
+                    System.out.println("🎵 Phát lại bài hát: " + player.getCurrentSong().getTitle());
+                }
+
+            } else {
+                // TÌNH HUỐNG 2: Chế độ Repeat đang TẮT -> Chuyển bài tiếp theo
+                nextSong();
+            }
+        });
+    }
+    
+    public void nextSong() {
+        player.next(); // Dùng player.next() từ AudioPlayer để chuyển index trong Playlist
+        capNhatGiaoDienDuoiCung(); // Cập nhật tên bài hát, v.v.
+        player.play(); // Bắt đầu phát bài mới
+    }
+
 }

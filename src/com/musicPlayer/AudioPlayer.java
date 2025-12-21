@@ -62,7 +62,7 @@ public class AudioPlayer implements Player {
             // Xử lý sự kiện: Khi bài hát chạy xong
             mediaPlayer.setOnEndOfMedia(() -> {
                 // Tự động next bài
-                next(); 
+                //next(); // Không nên để dòng này để chạy tính năng Repeat.
                 
                 // Gọi callback nếu bên ngoài cần biết
                 if (onSongEnd != null) {
