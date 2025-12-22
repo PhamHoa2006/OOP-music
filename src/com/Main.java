@@ -1,5 +1,7 @@
 package com;
 
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,7 +42,7 @@ public class Main extends Application {
                 System.out.println("⚠️ Cảnh báo: Không tìm thấy Style.css trong thư mục com");
             }
 
-            primaryStage.setTitle("MUSEEK - Music Player");
+            primaryStage.setTitle("OOP-Music - Project môn IT3100");
             
             // 3. CẬP NHẬT: Load Icon (Thư mục icons nằm cùng thư mục com -> icons/logo.png)
             try {

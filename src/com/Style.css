@@ -426,3 +426,32 @@
     -fx-background-color: #535353;
     -fx-background-radius: 4px;
 }
+
+/* --- TIMER DIALOG STYLE --- */
+.custom-dialog {
+    -fx-background-color: #262626; /* Nền xám đậm */
+    -fx-border-color: #333333;
+    -fx-border-width: 1px;
+}
+
+.dialog-title {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+}
+
+.dialog-input {
+    -fx-background-color: #121212;
+    -fx-text-fill: white;
+    -fx-border-color: #333333;
+    -fx-background-radius: 4;
+    -fx-padding: 5;
+}
+
+/* Text hiển thị đếm ngược trên nút Timer */
+.timer-countdown-text {
+    -fx-text-fill: #1DB954; /* Màu xanh Spotify */
+    -fx-font-weight: bold;
+    -fx-font-size: 10px;
+}

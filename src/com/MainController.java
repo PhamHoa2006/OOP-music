@@ -4,304 +4,214 @@ import com.users.SongLibrary;
 import com.musicPlayer.AudioPlayer;
 import com.musicPlayer.Playlist;
 import com.musicPlayer.Song;
+import com.extra.Timer;
+import com.extra.TimerListener;
+import com.extra.TimerDialogController;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.shape.Circle; 
 import javafx.scene.paint.ImagePattern; 
 import javafx.animation.RotateTransition;
 import javafx.animation.Interpolator;
-import javafx.util.Duration;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.ScrollPane;
 import javafx.animation.FadeTransition;
-import javafx.scene.Node;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.FileChooser; 
 
 import java.util.Collections;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.util.List;
+import java.util.Stack;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class MainController {
 
-    // --- KHAI BÁO GIAO DIỆN ---
+    // --- KHAI BÁO FXML (Đảm bảo ID khớp với MainLayout.fxml) ---
     @FXML private BorderPane mainRoot;
-    
-    // THÊM: Biến này để quản lý cột bên phải
     @FXML private VBox rightSidebar; 
 
-    @FXML private Button playButton;
-    @FXML private Button pauseButton;
-    @FXML private Button nextButton;
-    @FXML private Button prevButton;
-    @FXML private Button shuffleButton;
-    @FXML private Button repeatButton;
-    @FXML private Button forwardBtn;
-    @FXML private Button backBtn;
-    private boolean isRepeat = false;
-    
-    @FXML private Slider progressSlider;
-    @FXML private Slider volumeSlider;
-    @FXML private Label currentTimeLbl;
-    @FXML private Label totalTimeLbl;
-
-    @FXML private Label currentSongLabel;
-    @FXML private Label currentArtistLabel;
+    // Player Controls
+    @FXML private Button playButton, pauseButton, nextButton, prevButton;
+    @FXML private Button shuffleButton, repeatButton, likeBtn;
+    @FXML private Slider progressSlider, volumeSlider;
+    @FXML private Label currentTimeLbl, totalTimeLbl;
+    @FXML private Label currentSongLabel, currentArtistLabel;
     @FXML private ImageView miniThumbView;
 
+    // Disc View
     @FXML private StackPane discContainer; 
+    @FXML private Circle outerDiscCircle, innerDiscCircle;
+    @FXML private ImageView discIconView;
 
-    @FXML private Button homeBtn;
-    @FXML private Button favoritesBtn;
-    @FXML private Button historyBtn;
-    @FXML private Button top100Btn;
-    
-    @FXML private Circle outerDiscCircle; // Vòng tròn lớn (sẽ chứa ảnh)
-    @FXML private Circle innerDiscCircle; // Vòng tròn đen (giữ nguyên)
-    @FXML private ImageView discIconView; // Hình nốt nhạc (giữ nguyên)
-
-    @FXML private ToggleButton nextTabBtn;
-    @FXML private ToggleButton relatedTabBtn;
-    @FXML private ToggleGroup tabGroup;
-
-    @FXML private ScrollPane queueScrollPane;
-    @FXML private VBox queueContainerVBox;
-    @FXML private ScrollPane relatedScrollPane;
-    @FXML private VBox relatedContainerVBox;
-    @FXML private VBox queueTabContent;
-    
+    // Navigation
+    @FXML private Button homeBtn, favoritesBtn, historyBtn, top100Btn;
+    @FXML private Button logoBtn, backBtn, forwardBtn;
     @FXML private TextField searchField;
 
-    // --- BIẾN LOGIC ---
+    // Right Sidebar
+    @FXML private ToggleButton nextTabBtn, relatedTabBtn;
+    @FXML private ToggleGroup tabGroup;
+    @FXML private ScrollPane queueScrollPane, relatedScrollPane;
+    @FXML private VBox queueContainerVBox, relatedContainerVBox, queueTabContent;
+
+    // Top Bar Actions
+    @FXML private Button timerBtn;
+    @FXML private Button uploadBtn;
+
+    // --- LOGIC VARIABLES ---
     private AudioPlayer player;
     private SongLibrary library;
+    private boolean isRepeat = false;
     private boolean dangKeoThanhTruot = false;
+    private List<Song> favoriteSongs = new ArrayList<>();
 
-    // Biến lưu giữ giao diện để tráo đổi
-    private ScrollPane libraryView; // Màn hình Home (DS bài hát)
-    private Node savedRightSidebar; // Lưu cái cột bên phải để dùng lại
+    // UI State
+    private ScrollPane libraryView;
+    private Node savedRightSidebar;
+    private RotateTransition discRotation;
+    
+    // Navigation History
+    private Stack<Runnable> backStack = new Stack<>();
+    private Stack<Runnable> forwardStack = new Stack<>();
+    private Runnable currentViewAction; 
 
-    private RotateTransition discRotation; // Biến để quản lý việc xoay
+    // Timer
+    private Timer sleepTimer;
+    private Timeline uiUpdateTimeline; 
 
     public void initialize() {
-        // 0. Lưu lại cái Sidebar bên phải vào bộ nhớ trước khi ẩn nó đi
-        savedRightSidebar = rightSidebar;
+        System.out.println("🚀 [DEBUG] Bắt đầu khởi tạo MainController...");
 
-        // 1. Cài đặt Backend
-        caiDatBackend();
+        // 1. Setup Logic & Data
+        savedRightSidebar = rightSidebar; 
+        caiDatBackend();                  
+        setupDiscAnimation();             
 
-        // 2. Chuẩn bị giao diện danh sách nhạc
-        chuanBiGiaoDienLibrary();
+        // 2. Setup Timer System
+        setupTimerSystem();
 
-        // 3. Gắn sự kiện
+        // 3. Setup Events
         ganSuKienChoNut();
+        if (uploadBtn != null) uploadBtn.setOnAction(e -> handleUpload());
 
-        // 4. Mặc định mở lên là Home (Ẩn cột phải)
+        // 4. CHẮC CHẮN MỞ MÀN HÌNH HOME
+        // Reset lại view để đảm bảo nó được vẽ mới
+        libraryView = null; 
         hienThiManHinhHome();
-
-        setupDiscAnimation();
-
-        nextTabBtn.setOnAction(e -> switchSidebarTab(true));
-        relatedTabBtn.setOnAction(e -> switchSidebarTab(false));
         
+        // Lưu trạng thái history
+        currentViewAction = this::hienThiManHinhHome;
+        updateNavigationButtons();
         
-        player.setOnSongEnd(this::handleSongEnd);
-        
-    }
-
-    private void switchSidebarTab(boolean isNextTab) {
-        // Check null để tránh lỗi
-        if (queueTabContent == null || relatedScrollPane == null) return;
-
-        // 1. Xác định cái nào cần hiện (toShow), cái nào cần ẩn (toHide)
-        Node toShow = isNextTab ? queueTabContent : relatedScrollPane;
-        Node toHide = isNextTab ? relatedScrollPane : queueTabContent;
-
-        // 2. Ẩn cái cũ đi ngay lập tức
-        toHide.setVisible(false);
-        toHide.setManaged(false); // Gỡ khỏi layout để không chiếm chỗ
-
-        // 3. Load dữ liệu cho cái mới (Làm lúc này để khi hiện lên là có dữ liệu luôn)
-        if (!isNextTab) {
-            loadRelatedSongs(); 
-        } else {
-            updateQueueView();
-        }
-
-        // 4. Chuẩn bị hiệu ứng cho cái mới
-        toShow.setVisible(true);
-        toShow.setManaged(true);
-        toShow.setOpacity(0); // Đặt về trong suốt trước khi diễn
-
-        // 5. Chạy hiệu ứng Fade In (Hiện dần trong 200 mili giây)
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(200), toShow);
-        fadeIn.setFromValue(0.0);
-        fadeIn.setToValue(1.0);
-        fadeIn.play();
+        System.out.println("✅ [DEBUG] Khởi tạo hoàn tất. Màn hình Home đã được gọi.");
     }
 
     private void caiDatBackend() {
         library = SongLibrary.getInstance();
         Playlist danhSachTong = new Playlist("ThuVienCuaToi");
         List<Song> tatCaBaiHat = library.getAllSongs();
+        
+        System.out.println("📚 [DEBUG] Số lượng bài hát trong thư viện: " + tatCaBaiHat.size());
+
         for (Song s : tatCaBaiHat) {
             danhSachTong.addSong(s);
         }
 
         player = new AudioPlayer(danhSachTong);
-        // Sửa dòng này để chạy repeat;
-        //player.setOnSongEnd(() -> Platform.runLater(this::capNhatGiaoDienDuoiCung));
-        
-        
+        player.setOnSongEnd(this::handleSongEnd); 
         daoTrangThaiNutPlay(false);
     }
 
-    private void ganSuKienChoNut() {
-        playButton.setOnAction(e -> xuLyPlay());
-        pauseButton.setOnAction(e -> xuLyPause());
-
-        nextButton.setOnAction(e -> {
-            player.next();
-            capNhatGiaoDienDuoiCung();
-        });
-        
-        prevButton.setOnAction(e -> {
-            player.previous();
-            capNhatGiaoDienDuoiCung();
-        });
-
-        volumeSlider.valueProperty().addListener((obs, cu, moi) -> {
-            if (player != null) player.setVolume(moi.doubleValue() / 100.0);
-        });
-
-        progressSlider.setOnMousePressed(e -> dangKeoThanhTruot = true);
-        progressSlider.setOnMouseReleased(e -> {
-            if (player != null) player.seek((int) progressSlider.getValue());
-            dangKeoThanhTruot = false;
-        });
-
-        // Bấm Home -> Về giao diện danh sách, ẨN CỘT PHẢI
-        homeBtn.setOnAction(e -> hienThiManHinhHome());
-        
-        repeatButton.setOnAction(e -> xulyRepeat());
-    }
-    // --- LOGIC CHUYỂN MÀN HÌNH ---
-
-    // Chế độ 1: Home View (Chỉ có danh sách nhạc, KHÔNG CÓ CỘT PHẢI)
-    private void hienThiManHinhHome() {
-        if (libraryView == null) chuanBiGiaoDienLibrary();
-        
-        mainRoot.setCenter(libraryView); // Giữa là list nhạc
-        mainRoot.setRight(null);         // Phải là NULL (Ẩn đi) -> BorderPane tự dãn Center ra
-    }
-
-    // Chế độ 2: Player View (Có đĩa nhạc + CÓ CỘT PHẢI)
-    private void hienThiManHinhPlayer() {
-        if (discContainer != null) {
-            mainRoot.setCenter(discContainer); // Giữa là đĩa nhạc
-            mainRoot.setRight(savedRightSidebar); // Lắp lại cột phải vào
-        }
-    }
-
+    // --- SETUP GIAO DIỆN HOME (QUAN TRỌNG) ---
     private void chuanBiGiaoDienLibrary() {
-        // VBox chính chứa tất cả các hàng ngang (xếp dọc từ trên xuống)
         VBox mainContent = new VBox();
-        mainContent.setSpacing(30); // Khoảng cách giữa các mục lớn
-        mainContent.setPadding(new Insets(20, 20, 50, 20)); // Căn lề
+        mainContent.setSpacing(30);
+        mainContent.setPadding(new Insets(20, 20, 50, 20));
+        // Đặt màu nền rõ ràng để tránh bị trong suốt
         mainContent.setStyle("-fx-background-color: #121212;"); 
 
-        // Lấy toàn bộ bài hát
         List<Song> allSongs = library.getAllSongs();
 
-        // MỤC 1: Dành cho User (Lấy 5 bài đầu)
-        if (allSongs.size() > 0) {
-            List<Song> section1 = allSongs.subList(0, Math.min(allSongs.size(), 5));
-            mainContent.getChildren().add(taoMotHangNgang("Dành cho bạn", section1));
+        if (allSongs == null || allSongs.isEmpty()) {
+            Label emptyLbl = new Label("Thư viện trống. Hãy kiểm tra folder data/Music hoặc nhấn Upload!");
+            emptyLbl.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+            mainContent.getChildren().add(emptyLbl);
+        } else {
+            // Chia section
+            if (allSongs.size() > 0) {
+                List<Song> section1 = allSongs.subList(0, Math.min(allSongs.size(), 5));
+                mainContent.getChildren().add(taoMotHangNgang("Dành cho bạn", section1));
+            }
+            if (allSongs.size() > 5) {
+                List<Song> section2 = allSongs.subList(5, Math.min(allSongs.size(), 10));
+                mainContent.getChildren().add(taoMotHangNgang("Được nghe nhiều nhất", section2));
+            }
+            mainContent.getChildren().add(taoMotHangNgang("Nghe lại", allSongs));
         }
 
-        // MỤC 2: Gợi ý hôm nay (Lấy các bài tiếp theo nếu có)
-        if (allSongs.size() > 5) {
-            List<Song> section2 = allSongs.subList(5, Math.min(allSongs.size(), 10));
-            mainContent.getChildren().add(taoMotHangNgang("Những ca khúc được nghe nhiều nhất", section2));
-        }
-
-        // MỤC 3: Tất cả bài hát (Xếp ngang hết)
-        mainContent.getChildren().add(taoMotHangNgang("Nghe lại", allSongs));
-
-        // Bọc VBox chính vào trong ScrollPane dọc (để cuộn toàn trang)
         libraryView = new ScrollPane(mainContent);
-        libraryView.setFitToWidth(true); // Để nó dãn full chiều ngang
-        libraryView.setPannable(true);   // Cho phép dùng chuột kéo
-        
-        // Style cho ScrollPane chính (trong suốt, ẩn viền)
-        libraryView.setStyle("-fx-background: #121212; -fx-background-color: transparent; -fx-border-color: transparent;");
+        libraryView.setFitToWidth(true);
+        libraryView.setPannable(true);
+        // Style trong suốt cho ScrollPane để lộ màu nền VBox
+        libraryView.setStyle("-fx-background: #121212; -fx-background-color: transparent;");
         libraryView.getStyleClass().add("main-scroll-pane");
     }
 
-    // Hàm phụ trợ: Tạo ra 1 Block giao diện gồm: Label Tiêu đề + ScrollPane Ngang
     private VBox taoMotHangNgang(String tieuDe, List<Song> danhSachBai) {
         VBox sectionBox = new VBox();
-        sectionBox.setSpacing(15); // Khoảng cách giữa Tiêu đề và Hàng thẻ
+        sectionBox.setSpacing(15);
 
-        // 1. Tạo Tiêu đề (Label)
         Label lblTitle = new Label(tieuDe);
-        lblTitle.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white; -fx-font-family: 'Segoe UI';");
+        lblTitle.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
         
-        // 2. Tạo Hàng ngang chứa các thẻ (HBox)
-        javafx.scene.layout.HBox cardRow = new javafx.scene.layout.HBox();
-        cardRow.setSpacing(20); // Khoảng cách giữa các thẻ
-        cardRow.setPadding(new Insets(5)); // Chừa chút lề để bóng đổ không bị cắt
+        HBox cardRow = new HBox();
+        cardRow.setSpacing(20);
+        cardRow.setPadding(new Insets(5));
 
-        // Tạo thẻ cho từng bài hát
-        for (int i = 0; i < danhSachBai.size(); i++) {
-            // Lưu ý: index thực tế cần tính toán lại nếu ông muốn logic Play đúng bài trong list tổng
-            // Nhưng để đơn giản demo giao diện, ta cứ truyền index tạm hoặc tìm index thực trong library
-            Song s = danhSachBai.get(i);
+        for (Song s : danhSachBai) {
             int realIndex = library.getAllSongs().indexOf(s); 
-            
             Node card = taoTheBaiHat(s, realIndex);
-            if (card != null) {
-                cardRow.getChildren().add(card);
-            }
+            if (card != null) cardRow.getChildren().add(card);
         }
 
-        // 3. Bọc Hàng ngang vào ScrollPane (để cuộn ngang được)
         ScrollPane rowScroller = new ScrollPane(cardRow);
-        rowScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Tắt thanh cuộn dọc
-        rowScroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED); // Hiện thanh ngang khi cần
-        rowScroller.setFitToHeight(true); // Ôm sát chiều cao
-        rowScroller.setPannable(true);    // Kéo chuột được
-        
-        // CSS Style trực tiếp để ẩn nền xám
-        rowScroller.setStyle("-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;");
-        
-        // Thêm class để lát nữa chỉnh CSS cho thanh cuộn ngang nó đẹp (hoặc ẩn đi)
+        rowScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        rowScroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        rowScroller.setFitToHeight(true);
+        rowScroller.setPannable(true);
+        rowScroller.setStyle("-fx-background-color: transparent;");
         rowScroller.getStyleClass().add("horizontal-scroll");
 
-        // Gép lại: Tiêu đề trên, Scroller dưới
         sectionBox.getChildren().addAll(lblTitle, rowScroller);
-        
         return sectionBox;
     }
 
     private Node taoTheBaiHat(Song baiHat, int viTriIndex) {
         try {
+            // Kiểm tra đường dẫn FXML
+            if (getClass().getResource("MusicCard.fxml") == null) {
+                System.err.println("❌ [LỖI] Không tìm thấy file MusicCard.fxml tại cùng thư mục MainController!");
+                return null;
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MusicCard.fxml"));
             VBox theGoc = loader.load();
 
@@ -314,19 +224,284 @@ public class MainController {
             if (lbCaSi != null) lbCaSi.setText(baiHat.getArtist());
             
             try {
+                // Thử load ảnh, nếu lỗi thì bỏ qua
                 anhBia.setImage(new Image(getClass().getResourceAsStream("icons/logo.png")));
             } catch (Exception e) {}
 
             nutPlayTrenThe.setOnAction(e -> choiBaiHatCuThe(viTriIndex));
             theGoc.setOnMouseClicked(e -> choiBaiHatCuThe(viTriIndex));
-
             return theGoc;
         } catch (IOException e) {
+            System.err.println("❌ [LỖI] Không thể load thẻ bài hát: " + baiHat.getTitle());
             e.printStackTrace();
             return null;
         }
     }
 
+    // --- SETUP TIMER SYSTEM ---
+    private void setupTimerSystem() {
+        sleepTimer = new Timer();
+        
+        sleepTimer.addListener(new TimerListener() {
+            @Override
+            public void onTimerFinished() {
+                Platform.runLater(() -> {
+                    if (player != null && player.isPlaying()) xuLyPause();
+                    stopCountdownUI();
+                    System.out.println("⏰ Hết giờ! Đã tắt nhạc.");
+                });
+            }
+            @Override
+            public void onTimerCancelled() {
+                Platform.runLater(() -> stopCountdownUI());
+            }
+        });
+
+        timerBtn.setOnAction(e -> showTimerDialog());
+    }
+
+    private void showTimerDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/TimerDialog.fxml"));
+            Parent root = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Hẹn giờ");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(timerBtn.getScene().getWindow());
+            dialogStage.initStyle(StageStyle.UTILITY);
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/com/Style.css").toExternalForm());
+            dialogStage.setScene(scene);
+
+            TimerDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage, sleepTimer.isActive(), (selectedMinutes) -> {
+                if (selectedMinutes == -1) {
+                    stopCountdownUI();
+                    sleepTimer.cancelTimer();
+                } else if (selectedMinutes > 0) {
+                    startCountdownUI(selectedMinutes);
+                }
+            });
+            dialogStage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void startCountdownUI(int minutes) {
+        sleepTimer.setTimer(minutes * 60);
+        if (uiUpdateTimeline != null) uiUpdateTimeline.stop();
+        
+        uiUpdateTimeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
+            int remaining = sleepTimer.getTimeRemaining();
+            if (remaining <= 0) {
+                stopCountdownUI();
+                return;
+            }
+            String timeText = String.format("%02d:%02d", remaining / 60, remaining % 60);
+            timerBtn.setText(timeText);
+            
+            // Style: Text màu xanh, Chữ đậm
+            timerBtn.setStyle("-fx-text-fill: #1DB954; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-color: transparent;"); 
+            timerBtn.setContentDisplay(ContentDisplay.RIGHT);
+            timerBtn.setGraphicTextGap(5);
+        }));
+        
+        uiUpdateTimeline.setCycleCount(Timeline.INDEFINITE);
+        uiUpdateTimeline.play();
+    }
+
+    private void stopCountdownUI() {
+        if (uiUpdateTimeline != null) uiUpdateTimeline.stop();
+        timerBtn.setText(""); 
+        timerBtn.setStyle("-fx-background-color: transparent;"); 
+        timerBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); 
+    }
+
+    // --- UPLOAD LOGIC ---
+    private void handleUpload() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Chọn bài hát để tải lên");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.wav", "*.m4a"));
+        
+        File selectedFile = fileChooser.showOpenDialog(uploadBtn.getScene().getWindow());
+
+        if (selectedFile != null) {
+            try {
+                File desDir = new File("data/Music");
+                if (!desDir.exists()) desDir.mkdirs();
+
+                String newFileName = System.currentTimeMillis() + "_" + selectedFile.getName().replaceAll("\\s+", "_");
+                File destFile = new File(desDir, newFileName);
+                Files.copy(selectedFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                String title = selectedFile.getName().replace(".mp3", ""); 
+                Song newSong = new Song(title, "Unknown Artist", "Local Upload", 0, "data/Music/" + newFileName);
+
+                library.addSong(newSong);
+                
+                // Refresh UI
+                chuanBiGiaoDienLibrary(); 
+                hienThiManHinhHome(); 
+                
+                System.out.println("✅ Upload thành công: " + title);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // --- NAVIGATION & VIEW ---
+    private void chuyenManHinh(Runnable viewMethod) {
+        if (currentViewAction == viewMethod) return;
+        if (currentViewAction != null) backStack.push(currentViewAction);
+        forwardStack.clear(); 
+        currentViewAction = viewMethod;
+        viewMethod.run();
+        updateNavigationButtons();
+    }
+
+    private void handleBackNav() {
+        if (!backStack.isEmpty()) {
+            Runnable prevView = backStack.pop();
+            forwardStack.push(currentViewAction);
+            currentViewAction = prevView;
+            prevView.run();
+            updateNavigationButtons();
+        }
+    }
+
+    private void handleForwardNav() {
+        if (!forwardStack.isEmpty()) {
+            Runnable nextView = forwardStack.pop();
+            backStack.push(currentViewAction);
+            currentViewAction = nextView;
+            nextView.run();
+            updateNavigationButtons();
+        }
+    }
+
+    private void updateNavigationButtons() {
+        backBtn.setDisable(backStack.isEmpty());
+        forwardBtn.setDisable(forwardStack.isEmpty());
+        backBtn.setOpacity(backStack.isEmpty() ? 0.3 : 1.0);
+        forwardBtn.setOpacity(forwardStack.isEmpty() ? 0.3 : 1.0);
+    }
+
+    private void hienThiManHinhHome() {
+        if (libraryView == null) chuanBiGiaoDienLibrary();
+        mainRoot.setCenter(libraryView);
+        mainRoot.setRight(null); 
+    }
+
+    private void hienThiManHinhPlayer() {
+        if (discContainer != null) {
+            mainRoot.setCenter(discContainer);
+            mainRoot.setRight(savedRightSidebar); 
+        }
+    }
+    
+    private void hienThiManHinhFavorites() {
+        VBox mainContent = new VBox();
+        mainContent.setSpacing(20);
+        mainContent.setPadding(new Insets(20));
+        mainContent.setStyle("-fx-background-color: #121212;"); 
+
+        Label title = new Label("Bài Hát Yêu Thích");
+        title.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white;");
+        
+        ImageView heartIcon = new ImageView(new Image(getClass().getResourceAsStream("icons/heart.png")));
+        heartIcon.setFitHeight(30); 
+        heartIcon.setFitWidth(30);
+        
+        HBox header = new HBox(15, heartIcon, title);
+        header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+        FlowPane gridPane = new FlowPane();
+        gridPane.setHgap(20); 
+        gridPane.setVgap(20); 
+        gridPane.setPadding(new Insets(10, 0, 0, 0));
+
+        if (favoriteSongs.isEmpty()) {
+            Label emptyMsg = new Label("Chưa có bài hát nào được thả tim.");
+            emptyMsg.setStyle("-fx-text-fill: #b3b3b3; -fx-font-size: 16px;");
+            mainContent.getChildren().addAll(header, emptyMsg);
+        } else {
+            for (Song s : favoriteSongs) {
+                int realIndex = library.getAllSongs().indexOf(s);
+                Node card = taoTheBaiHat(s, realIndex); 
+                if (card != null) gridPane.getChildren().add(card);
+            }
+            mainContent.getChildren().addAll(header, gridPane);
+        }
+
+        ScrollPane scrollPane = new ScrollPane(mainContent);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPannable(true);
+        scrollPane.setStyle("-fx-background: #121212; -fx-background-color: transparent;");
+        scrollPane.getStyleClass().add("main-scroll-pane");
+
+        mainRoot.setCenter(scrollPane);
+        mainRoot.setRight(null);
+    }
+
+    // --- OTHER UI ELEMENTS ---
+    private void ganSuKienChoNut() {
+        playButton.setOnAction(e -> xuLyPlay());
+        pauseButton.setOnAction(e -> xuLyPause());
+        nextButton.setOnAction(e -> nextSong());
+        prevButton.setOnAction(e -> {
+            player.previous();
+            capNhatGiaoDienDuoiCung();
+        });
+        repeatButton.setOnAction(e -> xulyRepeat());
+        if (likeBtn != null) likeBtn.setOnAction(e -> toggleLike());
+
+        volumeSlider.valueProperty().addListener((obs, cu, moi) -> {
+            if (player != null) player.setVolume(moi.doubleValue() / 100.0);
+        });
+
+        progressSlider.setOnMousePressed(e -> dangKeoThanhTruot = true);
+        progressSlider.setOnMouseReleased(e -> {
+            if (player != null) player.seek((int) progressSlider.getValue());
+            dangKeoThanhTruot = false;
+        });
+
+        homeBtn.setOnAction(e -> chuyenManHinh(this::hienThiManHinhHome));
+        logoBtn.setOnAction(e -> chuyenManHinh(this::hienThiManHinhHome));
+        favoritesBtn.setOnAction(e -> chuyenManHinh(this::hienThiManHinhFavorites));
+        
+        backBtn.setOnAction(e -> handleBackNav());
+        forwardBtn.setOnAction(e -> handleForwardNav());
+
+        nextTabBtn.setOnAction(e -> switchSidebarTab(true));
+        relatedTabBtn.setOnAction(e -> switchSidebarTab(false));
+    }
+
+    private void switchSidebarTab(boolean isNextTab) {
+        if (queueTabContent == null || relatedScrollPane == null) return;
+        Node toShow = isNextTab ? queueTabContent : relatedScrollPane;
+        Node toHide = isNextTab ? relatedScrollPane : queueTabContent;
+
+        toHide.setVisible(false);
+        toHide.setManaged(false);
+
+        if (!isNextTab) loadRelatedSongs(); 
+        else updateQueueView();
+
+        toShow.setVisible(true);
+        toShow.setManaged(true);
+        toShow.setOpacity(0);
+
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(200), toShow);
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(1.0);
+        fadeIn.play();
+    }
+
+    // --- PLAYER LOGIC ---
     private void xuLyPlay() {
         if (player != null) {
             player.play();
@@ -340,32 +515,60 @@ public class MainController {
         if (player != null) {
             player.pause();
             daoTrangThaiNutPlay(false);
-            xyLyHieuUngXoay(false); // <--- DỪNG QUAY
+            xyLyHieuUngXoay(false);
         }
     }
     
-    // After clicking to the Repeatbutton
-    private void xulyRepeat() {
-        // 1. Đảo ngược trạng thái
-        isRepeat = !isRepeat;
+    public void nextSong() {
+        player.next();
+        capNhatGiaoDienDuoiCung();
+        player.play();
+    }
 
-        // 2. Cập nhật giao diện (CSS) để người dùng biết trạng thái
-        if (isRepeat) {
-            // Nếu BẬT: Đổi màu nút để làm nổi bật
-            repeatButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;"); 
-            System.out.println("🔁 Chế độ Lặp lại: BẬT");
+    private void handleSongEnd() {
+        Platform.runLater(() -> {
+            if (isRepeat) {
+                player.seek(0);
+                player.play();
+                capNhatGiaoDienDuoiCung();
+            } else {
+                nextSong();
+            }
+        });
+    }
+
+    private void xulyRepeat() {
+        isRepeat = !isRepeat;
+        if (isRepeat) repeatButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;"); 
+        else repeatButton.setStyle(null); 
+    }
+    
+    private void toggleLike() {
+        Song currentSong = player.getCurrentSong();
+        if (currentSong == null) return;
+        if (favoriteSongs.contains(currentSong)) {
+            favoriteSongs.remove(currentSong);
         } else {
-            // Nếu TẮT: Xóa style, về mặc định
-            repeatButton.setStyle(null); 
-            System.out.println("➡️ Chế độ Lặp lại: TẮT");
+            favoriteSongs.add(currentSong);
+        }
+        updateLikeButtonState();
+        if (currentViewAction != null && currentViewAction.toString().contains("hienThiManHinhFavorites")) {
+            hienThiManHinhFavorites();
+        }
+    }
+    
+    private void updateLikeButtonState() {
+        if (likeBtn == null) return;
+        Song s = player.getCurrentSong();
+        if (s != null && favoriteSongs.contains(s)) {
+            likeBtn.setStyle("-fx-opacity: 1.0; -fx-effect: dropshadow(three-pass-box, rgba(29,185,84,0.8), 10, 0, 0, 0);");
+        } else {
+            likeBtn.setStyle("-fx-opacity: 0.5;");
         }
     }
 
     private void choiBaiHatCuThe(int index) {
-        // 1. Chuyển sang giao diện Player (Có cột phải)
-        hienThiManHinhPlayer();
-
-        // 2. Logic phát nhạc
+        chuyenManHinh(this::hienThiManHinhPlayer); 
         if (player.getMediaPlayer() != null) player.stop();
 
         Playlist danhSachMoi = new Playlist("CurrentQueue");
@@ -373,12 +576,9 @@ public class MainController {
         for (Song s : dsBaiHat) danhSachMoi.addSong(s);
         
         player = new AudioPlayer(danhSachMoi);
-        
-        // Fix: Sửa lại dòng này để chạy được chế độ repeat; 
-        //player.setOnSongEnd(() -> Platform.runLater(this::handleSongEnd));
         player.setOnSongEnd(this::handleSongEnd);
-        for (int i = 0; i < index; i++) player.next();
         
+        for (int i = 0; i < index; i++) player.next();
         xuLyPlay();
         capNhatGiaoDienDuoiCung();
 
@@ -390,7 +590,6 @@ public class MainController {
                 toMauThanhTruot(newVal.toSeconds(), mp.getTotalDuration().toSeconds());
             });
         }
-
         updateQueueView();
     }
 
@@ -410,26 +609,97 @@ public class MainController {
         }
         daoTrangThaiNutPlay(player.isPlaying());
         batDauDongBoThoiGian();
-
         xyLyHieuUngXoay(player.isPlaying());
+        updateLikeButtonState(); 
         if (nextTabBtn.isSelected()) updateQueueView();
     }
 
     private void capNhatAnhDiaNhac(Song s) {
         if (outerDiscCircle == null) return;
-        
         try {
-            // Logic lấy ảnh (Tạm thời dùng logo mặc định, sau này bạn thay bằng s.getImagePath())
-            // Nếu bạn có ảnh bài hát thật thì dùng: new Image(s.getImagePath())
             Image img = new Image(getClass().getResourceAsStream("icons/logo.png")); 
-            
-            // Dùng ImagePattern để tô ảnh vào hình tròn
             outerDiscCircle.setFill(new ImagePattern(img));
-            
         } catch (Exception e) {
-            // Nếu lỗi thì để màu xám như cũ
             outerDiscCircle.setStyle("-fx-fill: #e2e6e9;");
         }
+    }
+
+    private void updateQueueView() {
+        if (queueContainerVBox == null || player == null) return;
+        queueContainerVBox.getChildren().clear();
+        List<Song> upcomingSongs = new ArrayList<>();
+        Playlist currentPlaylist = player.getPlaylist();
+        Song currentSong = player.getCurrentSong();
+
+        if (currentPlaylist != null && currentSong != null) {
+            List<Song> all = currentPlaylist.getSongs();
+            int currentIndex = all.indexOf(currentSong);
+            if (currentIndex >= 0 && currentIndex < all.size() - 1) {
+                upcomingSongs.addAll(all.subList(currentIndex + 1, all.size()));
+            }
+        }
+        if (upcomingSongs.size() < 10) {
+            List<Song> randomSongs = library.getAllSongs();
+            Collections.shuffle(randomSongs);
+            for (Song s : randomSongs) {
+                if (!upcomingSongs.contains(s) && !s.equals(currentSong)) {
+                    upcomingSongs.add(s);
+                    if (upcomingSongs.size() >= 15) break;
+                }
+            }
+        }
+        for (Song s : upcomingSongs) {
+            Node row = taoDongBaiHat(s);
+            if (row != null) queueContainerVBox.getChildren().add(row);
+        }
+    }
+
+    private void loadRelatedSongs() {
+        if (relatedContainerVBox == null) return;
+        relatedContainerVBox.getChildren().clear();
+        List<Song> randomSongs = new ArrayList<>(library.getAllSongs());
+        Collections.shuffle(randomSongs);
+        int count = 0;
+        for (Song s : randomSongs) {
+            if (player.getCurrentSong() != null && s.equals(player.getCurrentSong())) continue;
+            Node row = taoDongBaiHat(s);
+            if (row != null) {
+                relatedContainerVBox.getChildren().add(row);
+                count++;
+            }
+            if (count >= 20) break;
+        }
+    }
+
+    private Node taoDongBaiHat(Song s) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SongRow.fxml"));
+            Node row = loader.load();
+            Label lbTitle = (Label) row.lookup("#rowTitle");
+            Label lbArtist = (Label) row.lookup("#rowArtist");
+            Label lbDuration = (Label) row.lookup("#rowDuration");
+            ImageView img = (ImageView) row.lookup("#rowImg");
+
+            if (lbTitle != null) lbTitle.setText(s.getTitle());
+            if (lbArtist != null) lbArtist.setText(s.getArtist());
+            if (lbDuration != null) lbDuration.setText(doiGiaySangPhut(s.getDuration()));
+            try {
+                if (img != null) img.setImage(new Image(getClass().getResourceAsStream("icons/logo.png")));
+            } catch (Exception e) {}
+
+            row.setOnMouseClicked(e -> choiBaiHatMoi(s));
+            return row;
+        } catch (IOException e) { return null; }
+    }
+
+    private void choiBaiHatMoi(Song s) {
+        Playlist p = new Playlist("Temp");
+        p.addSong(s);
+        player.setPlaylist(p);
+        player.play();
+        capNhatGiaoDienDuoiCung();
+        chuyenManHinh(this::hienThiManHinhPlayer);
+        updateQueueView();
     }
 
     private void batDauDongBoThoiGian() {
@@ -449,16 +719,6 @@ public class MainController {
         return String.format("%02d:%02d", phut, soGiayLe);
     }
 
-    @FXML public void handleVolumeUp(javafx.scene.input.SwipeEvent event) {
-        double current = volumeSlider.getValue();
-        volumeSlider.setValue(Math.min(100, current + 10));
-    }
-
-    @FXML public void handleVolumeDown(javafx.scene.input.SwipeEvent event) {
-        double current = volumeSlider.getValue();
-        volumeSlider.setValue(Math.max(0, current - 10));
-    }
-
     private void toMauThanhTruot(double currentSeconds, double totalSeconds) {
         if (totalSeconds > 0) {
             double percentage = (currentSeconds / totalSeconds) * 100;
@@ -469,165 +729,28 @@ public class MainController {
     }
 
     private void setupDiscAnimation() {
-        // Tạo hiệu ứng xoay cho cả cái StackPane chứa đĩa (discContainer)
-        // Xoay 1 vòng (360 độ) trong 10 giây
         discRotation = new RotateTransition(Duration.seconds(20), outerDiscCircle);
-        
-        discRotation.setByAngle(360); // Quay 360 độ
-        discRotation.setCycleCount(RotateTransition.INDEFINITE); // Quay mãi mãi
-        discRotation.setInterpolator(Interpolator.LINEAR); // Quay đều (không nhanh chậm)
+        discRotation.setByAngle(360); 
+        discRotation.setCycleCount(RotateTransition.INDEFINITE); 
+        discRotation.setInterpolator(Interpolator.LINEAR); 
     }
 
-    // Hàm điều khiển quay/dừng
     private void xyLyHieuUngXoay(boolean isPlaying) {
         if (discRotation == null) return;
-
         if (isPlaying) {
-            // Nếu đang quay dở thì chạy tiếp, nếu chưa thì bắt đầu
-            if (discRotation.getStatus() != javafx.animation.Animation.Status.RUNNING) {
-                discRotation.play();
-            }
+            if (discRotation.getStatus() != javafx.animation.Animation.Status.RUNNING) discRotation.play();
         } else {
-            discRotation.pause(); // Dừng lại ở góc hiện tại
+            discRotation.pause();
         }
-    }
-
-    private void updateQueueView() {
-        if (queueContainerVBox == null || player == null) return;
-        queueContainerVBox.getChildren().clear();
-
-        List<Song> upcomingSongs = new ArrayList<>();
-        Playlist currentPlaylist = player.getPlaylist();
-        Song currentSong = player.getCurrentSong();
-
-        // 1. Lấy các bài còn lại trong Playlist hiện tại
-        if (currentPlaylist != null && currentSong != null) {
-            List<Song> all = currentPlaylist.getSongs();
-            int currentIndex = all.indexOf(currentSong);
-            
-            // Lấy từ bài tiếp theo đến hết
-            if (currentIndex >= 0 && currentIndex < all.size() - 1) {
-                upcomingSongs.addAll(all.subList(currentIndex + 1, all.size()));
-            }
-        }
-
-        // 2. Nếu danh sách ít quá (dưới 10 bài), lấy thêm Random bù vào
-        if (upcomingSongs.size() < 10) {
-            List<Song> randomSongs = library.getAllSongs();
-            Collections.shuffle(randomSongs);
-            for (Song s : randomSongs) {
-                if (!upcomingSongs.contains(s) && !s.equals(currentSong)) {
-                    upcomingSongs.add(s);
-                    if (upcomingSongs.size() >= 15) break; // Lấy đủ 15 bài thì thôi
-                }
-            }
-        }
-
-        // 3. Render lên giao diện
-        for (Song s : upcomingSongs) {
-            Node row = taoDongBaiHat(s);
-            if (row != null) queueContainerVBox.getChildren().add(row);
-        }
-    }
-
-    private void loadRelatedSongs() {
-        if (relatedContainerVBox == null) return;
-        relatedContainerVBox.getChildren().clear();
-
-        // Luôn lấy Random 20 bài
-        List<Song> randomSongs = new ArrayList<>(library.getAllSongs());
-        Collections.shuffle(randomSongs);
-        
-        int count = 0;
-        for (Song s : randomSongs) {
-            // Tránh hiện bài đang phát
-            if (player.getCurrentSong() != null && s.equals(player.getCurrentSong())) continue;
-            
-            Node row = taoDongBaiHat(s);
-            if (row != null) {
-                relatedContainerVBox.getChildren().add(row);
-                count++;
-            }
-            if (count >= 20) break;
-        }
-    }
-
-    // --- HÀM TẠO DÒNG BÀI HÁT (Giống MusicCard nhưng dùng SongRow.fxml) ---
-    private Node taoDongBaiHat(Song s) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("SongRow.fxml"));
-            Node row = loader.load();
-
-            Label lbTitle = (Label) row.lookup("#rowTitle");
-            Label lbArtist = (Label) row.lookup("#rowArtist");
-            Label lbDuration = (Label) row.lookup("#rowDuration");
-            ImageView img = (ImageView) row.lookup("#rowImg");
-
-            if (lbTitle != null) lbTitle.setText(s.getTitle());
-            if (lbArtist != null) lbArtist.setText(s.getArtist());
-            if (lbDuration != null) lbDuration.setText(doiGiaySangPhut(s.getDuration()));
-            
-            try {
-                if (img != null) img.setImage(new Image(getClass().getResourceAsStream("icons/logo.png")));
-            } catch (Exception e) {}
-
-            // Bấm vào dòng thì phát bài đó
-            row.setOnMouseClicked(e -> {
-                // Logic phát ngay lập tức bài này
-                choiBaiHatMoi(s); 
-            });
-
-            return row;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    // Hàm phụ trợ để chơi 1 bài bất kỳ từ sidebar
-    private void choiBaiHatMoi(Song s) {
-        // Tạo playlist tạm thời chỉ chứa bài đó (hoặc thêm vào queue tùy logic bạn muốn)
-        // Ở đây làm đơn giản: Phát luôn bài đó
-        Playlist p = new Playlist("Temp");
-        p.addSong(s);
-        player.setPlaylist(p);
-        player.play();
-        
-        // Cập nhật lại UI
-        capNhatGiaoDienDuoiCung();
-        hienThiManHinhPlayer(); // Chuyển sang màn hình đĩa xoay
-        
-        // Cập nhật lại list Next/Related
-        updateQueueView();
     }
     
-    private void handleSongEnd() {
-        // LUÔN LUÔN đảm bảo việc cập nhật UI chạy trên JavaFX Application Thread
-        Platform.runLater(() -> { // Sửa cấu trúc lambda cho gọn: (Runnable)() -> {} --> () -> {}
-            if (isRepeat) {
-                // TÌNH HUỐNG 1: Chế độ Repeat đang BẬT
-                player.seek(0);
-                player.play();
-                
-                // DÒNG BỔ SUNG QUAN TRỌNG: Cập nhật lại UI để reset thanh trượt, thời gian và tên bài hát.
-                capNhatGiaoDienDuoiCung(); 
-                
-                if (player.getCurrentSong() != null) {
-                    System.out.println("🎵 Phát lại bài hát: " + player.getCurrentSong().getTitle());
-                }
-
-            } else {
-                // TÌNH HUỐNG 2: Chế độ Repeat đang TẮT -> Chuyển bài tiếp theo
-                nextSong();
-            }
-        });
-    }
-    
-    public void nextSong() {
-        player.next(); // Dùng player.next() từ AudioPlayer để chuyển index trong Playlist
-        capNhatGiaoDienDuoiCung(); // Cập nhật tên bài hát, v.v.
-        player.play(); // Bắt đầu phát bài mới
+    @FXML public void handleVolumeUp(javafx.scene.input.SwipeEvent event) {
+        double current = volumeSlider.getValue();
+        volumeSlider.setValue(Math.min(100, current + 10));
     }
 
+    @FXML public void handleVolumeDown(javafx.scene.input.SwipeEvent event) {
+        double current = volumeSlider.getValue();
+        volumeSlider.setValue(Math.max(0, current - 10));
+    }
 }
