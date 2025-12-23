@@ -58,6 +58,9 @@ public class MainController {
     
     @FXML private Slider progressSlider;
     @FXML private Slider volumeSlider;
+    @FXML private ImageView volumeIcon;
+    @FXML private Button volumeBtn;
+    @FXML private Button mutedBtn;
     @FXML private Label currentTimeLbl;
     @FXML private Label totalTimeLbl;
 
@@ -92,6 +95,7 @@ public class MainController {
     private AudioPlayer player;
     private SongLibrary library;
     private boolean dangKeoThanhTruot = false;
+    private boolean isShuffle = false;
 
     // Biến lưu giữ giao diện để tráo đổi
     private ScrollPane libraryView; // Màn hình Home (DS bài hát)
@@ -185,9 +189,26 @@ public class MainController {
             player.previous();
             capNhatGiaoDienDuoiCung();
         });
-
+        
+        
         volumeSlider.valueProperty().addListener((obs, cu, moi) -> {
-            if (player != null) player.setVolume(moi.doubleValue() / 100.0);
+        	double volumeValue = moi.doubleValue();
+            
+            // 1. Cập nhật âm lượng thực tế cho player
+            if (player != null) {
+                player.setVolume(volumeValue / 100.0);
+            }
+
+            // 2. Điều khiển ẩn hiện 2 nút dựa trên giá trị slider
+            if (volumeValue == 0) {
+                // Nếu volume = 0: Hiện nút Mute, ẩn nút Volume
+                volumeBtn.setVisible(false);
+                mutedBtn.setVisible(true);
+            } else {
+                // Nếu volume > 0: Hiện nút Volume, ẩn nút Mute
+                volumeBtn.setVisible(true);
+                mutedBtn.setVisible(false);
+            }
         });
 
         progressSlider.setOnMousePressed(e -> dangKeoThanhTruot = true);
@@ -200,6 +221,7 @@ public class MainController {
         homeBtn.setOnAction(e -> hienThiManHinhHome());
         
         repeatButton.setOnAction(e -> xulyRepeat());
+        shuffleButton.setOnAction(e -> xulyShuffle());
     }
     // --- LOGIC CHUYỂN MÀN HÌNH ---
 
@@ -346,17 +368,21 @@ public class MainController {
     
     // After clicking to the Repeatbutton
     private void xulyRepeat() {
-        // 1. Đảo ngược trạng thái
         isRepeat = !isRepeat;
 
-        // 2. Cập nhật giao diện (CSS) để người dùng biết trạng thái
         if (isRepeat) {
-            // Nếu BẬT: Đổi màu nút để làm nổi bật
-            repeatButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;"); 
-            System.out.println("🔁 Chế độ Lặp lại: BẬT");
+            repeatButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+            
+            // Khóa nút Shuffle
+            isShuffle = false;
+            shuffleButton.setStyle(null);
+            shuffleButton.setDisable(true);
+            
+            System.out.println("🔁 Chế độ Lặp lại: BẬT (Đã khóa Shuffle)");
         } else {
-            // Nếu TẮT: Xóa style, về mặc định
-            repeatButton.setStyle(null); 
+            repeatButton.setStyle(null);
+            shuffleButton.setDisable(false); // Mở khóa lại Shuffle
+            
             System.out.println("➡️ Chế độ Lặp lại: TẮT");
         }
     }
@@ -603,23 +629,25 @@ public class MainController {
     }
     
     private void handleSongEnd() {
-        // LUÔN LUÔN đảm bảo việc cập nhật UI chạy trên JavaFX Application Thread
-        Platform.runLater(() -> { // Sửa cấu trúc lambda cho gọn: (Runnable)() -> {} --> () -> {}
+        Platform.runLater(() -> {
             if (isRepeat) {
-                // TÌNH HUỐNG 1: Chế độ Repeat đang BẬT
                 player.seek(0);
                 player.play();
-                
-                // DÒNG BỔ SUNG QUAN TRỌNG: Cập nhật lại UI để reset thanh trượt, thời gian và tên bài hát.
-                capNhatGiaoDienDuoiCung(); 
-                
-                if (player.getCurrentSong() != null) {
-                    System.out.println("🎵 Phát lại bài hát: " + player.getCurrentSong().getTitle());
+                capNhatGiaoDienDuoiCung();
+            } 
+            else if (isShuffle) {
+                // TÌNH HUỐNG: Shuffle đang bật
+                List<Song> tatCaBai = library.getAllSongs();
+                if (!tatCaBai.isEmpty()) {
+                    // Lấy ngẫu nhiên một chỉ số (index)
+                    int randomIndex = (int) (Math.random() * tatCaBai.size());
+                    
+                    // Để tránh phát lại đúng bài vừa xong, có thể thêm logic kiểm tra ở đây
+                    choiBaiHatCuThe(randomIndex);
                 }
-
-            } else {
-                // TÌNH HUỐNG 2: Chế độ Repeat đang TẮT -> Chuyển bài tiếp theo
-                nextSong();
+            } 
+            else {
+                nextSong(); // Chế độ bình thường
             }
         });
     }
@@ -628,6 +656,28 @@ public class MainController {
         player.next(); // Dùng player.next() từ AudioPlayer để chuyển index trong Playlist
         capNhatGiaoDienDuoiCung(); // Cập nhật tên bài hát, v.v.
         player.play(); // Bắt đầu phát bài mới
+    }
+    
+    private void xulyShuffle() {
+        isShuffle = !isShuffle; // Đảo trạng thái
+
+        if (isShuffle) {
+            // 1. Nếu BẬT Shuffle: Tô màu xanh
+            shuffleButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+            
+            // 2. VÔ HIỆU HÓA nút Repeat
+            isRepeat = false; // Tắt trạng thái repeat trong logic
+            repeatButton.setStyle(null); // Xóa màu xanh của repeat (nếu có)
+            repeatButton.setDisable(true); // Làm mờ/khóa nút repeat
+            
+            System.out.println("🔀 Chế độ Ngẫu nhiên: BẬT (Đã khóa Repeat)");
+        } else {
+            // 3. Nếu TẮT Shuffle: Về mặc định
+            shuffleButton.setStyle(null);
+            repeatButton.setDisable(false); // Mở khóa lại nút repeat
+            
+            System.out.println("➡️ Chế độ Ngẫu nhiên: TẮT");
+        }
     }
 
 }
