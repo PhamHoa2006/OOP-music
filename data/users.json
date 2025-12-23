@@ -1,0 +1,15 @@
+[ {
+  "id" : "6afc7594-fee0-4a21-bd22-beab2948fb4a",
+  "name" : null,
+  "age" : null,
+  "email" : null,
+  "description" : null,
+  "playLists" : [ ],
+  "username" : "pvq",
+  "passwordHash" : "fd3795d47795c116884cf39d9d02c8886ab3d95d1101bb9bbf8ef1a21197f124",
+  "history" : {
+    "userPlayCount" : { },
+    "userHistory" : [ ],
+    "userHistoryByDate" : { }
+  }
+} ]

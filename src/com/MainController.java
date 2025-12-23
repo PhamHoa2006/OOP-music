@@ -11,6 +11,9 @@ import com.users.History;
 import com.musicPlayer.CreatePlaylistController;
 import com.musicPlayer.UploadDialogController;
 import java.util.function.BiConsumer;
+import com.users.User;
+import com.users.UserManager;
+import com.users.AuthDialogController;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -64,6 +67,7 @@ public class MainController {
     @FXML private Label currentTimeLbl, totalTimeLbl;
     @FXML private Label currentSongLabel, currentArtistLabel;
     @FXML private ImageView miniThumbView;
+    @FXML private Button settingsBtn;
 
     // Disc View
     @FXML private StackPane discContainer; 
@@ -89,6 +93,7 @@ public class MainController {
     @FXML private ComboBox<String> privacyBox;
 
     // --- LOGIC VARIABLES ---
+    private User currentUser = null;
     private AudioPlayer player;
     private SongLibrary library;
     private boolean isRepeat = false;
@@ -129,6 +134,9 @@ public class MainController {
         // 3. Setup Events
         ganSuKienChoNut();
         if (uploadBtn != null) uploadBtn.setOnAction(e -> handleUpload());
+        if (settingsBtn != null) {
+            settingsBtn.setOnAction(e -> showSettingsMenu());
+        }
         
         // 4. CHẮC CHẮN MỞ MÀN HÌNH HOME KHI KHỞI ĐỘNG
         libraryView = null; 
@@ -1178,5 +1186,90 @@ public class MainController {
         
         // (Tùy chọn) Đổi ảnh bìa cho đẹp
         // Vì Playlist ảo không có ảnh, ông có thể set cứng ảnh kính lúp nếu muốn
+    }
+
+    private void showSettingsMenu() {
+        ContextMenu menu = new ContextMenu();
+        menu.setStyle("-fx-background-color: #282828; -fx-text-fill: white;");
+
+        if (currentUser == null) {
+            // == CHƯA ĐĂNG NHẬP ==
+            MenuItem loginItem = createMenuItem("Đăng nhập");
+            loginItem.setOnAction(e -> showAuthDialog());
+            
+            MenuItem registerItem = createMenuItem("Đăng ký");
+            registerItem.setOnAction(e -> showAuthDialog()); // Vào dialog rồi chuyển tab sau cũng được
+            
+            menu.getItems().addAll(loginItem, registerItem);
+        } else {
+            // == ĐÃ ĐĂNG NHẬP ==
+            MenuItem infoItem = createMenuItem("Xin chào, " + currentUser.getUsername());
+            infoItem.setDisable(true); // Chỉ để hiển thị tên
+            infoItem.setStyle("-fx-opacity: 1.0; -fx-font-weight: bold; -fx-text-fill: #1DB954;");
+
+            MenuItem logoutItem = createMenuItem("Đăng xuất");
+            logoutItem.setOnAction(e -> handleLogout());
+            
+            menu.getItems().addAll(infoItem, logoutItem);
+        }
+
+        // Hiện menu ngay dưới nút Settings
+        menu.show(settingsBtn, Side.BOTTOM, 0, 0);
+    }
+    
+    // Helper tạo MenuItem nhanh
+    private MenuItem createMenuItem(String text) {
+        MenuItem item = new MenuItem(text);
+        // Style CSS cho MenuItem (Ông có thể đưa vào file .css)
+        item.setStyle("-fx-text-fill: white; -fx-padding: 5 10;"); 
+        return item;
+    }
+
+    // Hiển thị Dialog Đăng nhập/Đăng ký
+    private void showAuthDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/users/AuthDialog.fxml"));
+            Parent root = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(mainRoot.getScene().getWindow());
+            dialogStage.initStyle(StageStyle.UNDECORATED);
+            dialogStage.setScene(new Scene(root));
+
+            AuthDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage, (user) -> {
+                // Callback khi đăng nhập thành công
+                this.currentUser = user;
+                onUserLoggedIn();
+            });
+
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Xử lý sau khi đăng nhập thành công
+    private void onUserLoggedIn() {
+        System.out.println("User logged in: " + currentUser.getUsername());
+        
+        // 1. Cập nhật giao diện (Ví dụ: Đổi avatar, hiện tên...)
+        // TODO: Load playlist riêng của User
+        // List<Playlist> userPlaylists = currentUser.getPlayLists();
+        // playlistListView.getItems().addAll(userPlaylists);
+        
+        // 2. Load lịch sử nghe của User
+        // historyManager = currentUser.getHistory(); 
+    }
+
+    // Xử lý đăng xuất
+    private void handleLogout() {
+        currentUser = null;
+        System.out.println("Đã đăng xuất");
+        
+        // Reset giao diện về mặc định (Khách)
+        // playlistListView.getItems().clear(); // Ví dụ thế
+        // hienThiManHinhHome();
     }
 }
