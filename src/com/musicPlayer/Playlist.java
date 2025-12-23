@@ -191,4 +191,10 @@ public class Playlist {
         public String getText() { return text; }
         public Instant getCreatedAt() { return createdAt; }
     }
+
+    // Thêm vào trong class Playlist
+    public String getTitle() {
+        return this.name; // Nếu biến lưu tên ông đặt là 'name'
+        // return this.title; // Nếu biến ông đặt là 'title' thì dùng dòng này
+    }
 }

@@ -7,6 +7,9 @@ import com.musicPlayer.Song;
 import com.extra.Timer;
 import com.extra.TimerListener;
 import com.extra.TimerDialogController;
+import com.users.History;
+import com.musicPlayer.CreatePlaylistController;
+import java.util.function.Consumer;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -75,6 +78,7 @@ public class MainController {
     // Top Bar Actions
     @FXML private Button timerBtn;
     @FXML private Button uploadBtn;
+    @FXML private Button newPlaylistBtn;
 
     // --- LOGIC VARIABLES ---
     private AudioPlayer player;
@@ -97,6 +101,8 @@ public class MainController {
     private Timer sleepTimer;
     private Timeline uiUpdateTimeline; 
 
+    private History historyManager;
+
     public void initialize() {
         System.out.println("🚀 [DEBUG] Bắt đầu khởi tạo MainController...");
 
@@ -111,7 +117,17 @@ public class MainController {
         // 3. Setup Events
         ganSuKienChoNut();
         if (uploadBtn != null) uploadBtn.setOnAction(e -> handleUpload());
+        top100Btn.setOnAction(e -> chuyenManHinh(this::hienThiManHinhTop100));
+        historyBtn.setOnAction(e -> chuyenManHinh(this::hienThiManHinhHistory));
 
+        if (newPlaylistBtn != null) {
+            newPlaylistBtn.setOnAction(e -> {
+                System.out.println("🖱️ Đã bấm nút New Playlist!"); // Debug xem nút có nhận không
+                showCreatePlaylistDialog();
+            });
+        } else {
+            System.err.println("❌ [LỖI NGHIÊM TRỌNG] FXML chưa tìm thấy id 'newPlaylistBtn'. Hãy kiểm tra file MainLayout.fxml");
+        }
         // 4. CHẮC CHẮN MỞ MÀN HÌNH HOME
         // Reset lại view để đảm bảo nó được vẽ mới
         libraryView = null; 
@@ -126,6 +142,7 @@ public class MainController {
 
     private void caiDatBackend() {
         library = SongLibrary.getInstance();
+        historyManager = new History();
         Playlist danhSachTong = new Playlist("ThuVienCuaToi");
         List<Song> tatCaBaiHat = library.getAllSongs();
         
@@ -606,6 +623,8 @@ public class MainController {
             totalTimeLbl.setText(doiGiaySangPhut(s.getDuration()));
             progressSlider.setMax(s.getDuration());
             capNhatAnhDiaNhac(s);
+            historyManager.addSong(s);
+            System.out.println("Đã lưu vào lịch sử: " + s.getTitle());
         }
         daoTrangThaiNutPlay(player.isPlaying());
         batDauDongBoThoiGian();
@@ -752,5 +771,122 @@ public class MainController {
     @FXML public void handleVolumeDown(javafx.scene.input.SwipeEvent event) {
         double current = volumeSlider.getValue();
         volumeSlider.setValue(Math.max(0, current - 10));
+    }
+
+    private void hienThiManHinhHistory() {
+        // Lấy danh sách từ class History của ông
+        List<Song> dsLichSu = historyManager.getPlayedSongs();
+
+        if (dsLichSu == null || dsLichSu.isEmpty()) {
+             Label emptyLabel = new Label("Bạn chưa nghe bài hát nào.");
+             emptyLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18px;");
+             mainRoot.setCenter(emptyLabel);
+             mainRoot.setRight(null);
+             return;
+        }
+        
+        // Gọi hàm hiển thị giao diện dọc (code tui đưa ở tin nhắn trước)
+        hienThiDanhSachDoc("Nghe Gần Đây", dsLichSu);
+    }
+
+    private void hienThiDanhSachDoc(String tieuDe, List<Song> danhSach) {
+        VBox container = new VBox();
+        container.setSpacing(10);
+        container.setPadding(new Insets(20));
+        container.setStyle("-fx-background-color: #121212;");
+
+        // Tiêu đề
+        Label lblTitle = new Label(tieuDe);
+        lblTitle.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white; -fx-font-family: 'Segoe UI';");
+        container.getChildren().add(lblTitle);
+
+        // Danh sách bài hát (Container chứa các dòng)
+        VBox listContainer = new VBox();
+        listContainer.setSpacing(5);
+        
+        for (Song s : danhSach) {
+            // Tái sử dụng hàm taoDongBaiHat có sẵn trong class
+            Node row = taoDongBaiHat(s); 
+            if (row != null) {
+                // Chỉnh lại style một chút cho danh sách dọc
+                row.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 10;");
+                
+                // Hiệu ứng Hover
+                row.setOnMouseEntered(e -> row.setStyle("-fx-background-color: #282828; -fx-cursor: hand; -fx-padding: 10; -fx-background-radius: 5;"));
+                row.setOnMouseExited(e -> row.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 10;"));
+                
+                listContainer.getChildren().add(row);
+            }
+        }
+
+        // Tạo thanh cuộn
+        ScrollPane scrollPane = new ScrollPane(listContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: #121212; -fx-background-color: transparent; -fx-border-color: transparent;");
+        scrollPane.getStyleClass().add("main-scroll-pane"); 
+
+        // Quan trọng: Để scrollPane giãn hết chiều dọc màn hình
+        VBox.setVgrow(scrollPane, Priority.ALWAYS); 
+        
+        container.getChildren().add(scrollPane);
+
+        // Hiển thị ra màn hình chính
+        mainRoot.setCenter(container);
+        mainRoot.setRight(null); // Ẩn cột phải cho rộng
+    }
+
+    // Hiển thị danh sách Top 100 (Sắp xếp theo view từ cao xuống thấp)
+    private void hienThiManHinhTop100() {
+        // 1. Lấy tất cả bài hát từ thư viện ra một list mới
+        List<Song> topSongs = new ArrayList<>(library.getAllSongs());
+        
+        // 2. Sắp xếp: So sánh playCount (lượt nghe). 
+        // s2 đứng trước s1 nghĩa là Giảm Dần (Cao xuống Thấp)
+        topSongs.sort((s1, s2) -> Integer.compare(s2.getPlayCount(), s1.getPlayCount()));
+
+        // 3. Chỉ lấy 100 bài (nếu kho nhạc ít hơn 100 bài thì lấy hết)
+        if (topSongs.size() > 100) {
+            topSongs = topSongs.subList(0, 100);
+        }
+
+        // 4. Gọi hàm hiển thị dọc (hàm mà ông vừa thêm lúc nãy)
+        hienThiDanhSachDoc("Bảng Xếp Hạng Top 100", topSongs);
+    }
+
+    // Hàm mở Dialog tạo Playlist
+    private void showCreatePlaylistDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CreatePlaylistDialog.fxml"));
+            Parent page = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Tạo Playlist Mới");
+            dialogStage.initModality(Modality.WINDOW_MODAL); // Chặn không cho bấm cửa sổ chính khi đang mở dialog
+            dialogStage.initOwner(mainRoot.getScene().getWindow());
+            dialogStage.initStyle(StageStyle.UNDECORATED); // Bỏ khung title bar mặc định của Win/Mac cho đẹp (giống Spotify)
+
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            // Lấy Controller và truyền hàm xử lý
+            CreatePlaylistController controller = loader.getController();
+            
+            // --- ĐOẠN QUAN TRỌNG NHẤT ---
+            controller.setDialogStage(dialogStage, (newPlaylist) -> {
+                // Code chạy khi User bấm nút "Tạo" thành công:
+                System.out.println("Đã tạo playlist: " + newPlaylist.getTitle());
+                
+                // 1. Thêm vào Library hoặc List quản lý playlist của ông
+                // library.addPlaylist(newPlaylist); (Ví dụ thế)
+                
+                // 2. Update giao diện Sidebar để hiện Playlist mới
+                // updateSidebarPlaylistList(); 
+            });
+
+            dialogStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
