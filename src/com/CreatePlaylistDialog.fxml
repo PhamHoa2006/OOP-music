@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" spacing="20.0" style="-fx-background-color: #282828; -fx-padding: 30;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicPlayer.CreatePlaylistController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" spacing="20.0" style="-fx-background-color: #282828; -fx-padding: 30;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicPlayer.CreatePlaylistController">
 
    <Label text="Danh sách phát mới" textFill="WHITE">
       <font>
@@ -43,15 +43,15 @@
             <Font size="12.0" />
          </font>
       </Label>
-      <ComboBox fx:id="privacyCombo" prefWidth="150.0" promptText="Công khai" style="-fx-background-color: #3E3E3E; -fx-text-fill: white; -fx-mark-color: white;" />
+      <ComboBox fx:id="privacyBox" prefWidth="150.0" promptText="Chọn quyền..." styleClass="custom-combo" />
    </VBox>
 
    <Region VBox.vgrow="ALWAYS" />
 
    <HBox alignment="CENTER_RIGHT" spacing="15.0">
-      <Button fx:id="cancelBtn" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="Hủy" />
+      <Button fx:id="cancelBtn" onAction="#handleCancel" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="Hủy" />
       
-      <Button fx:id="createBtn" style="-fx-background-color: white; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 8 25; -fx-cursor: hand;" text="Tạo" />
+      <Button fx:id="createBtn" onAction="#handleCreate" style="-fx-background-color: white; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 8 25; -fx-cursor: hand;" text="Tạo" />
    </HBox>
 
 </VBox>

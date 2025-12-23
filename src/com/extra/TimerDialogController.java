@@ -1,69 +1,118 @@
 package com.extra;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
-// Controller này chỉ quản lý logic của cái cửa sổ hẹn giờ
 public class TimerDialogController {
 
-    @FXML private TextField customMinutesField;
-    @FXML private Button cancelButton;
+    @FXML private TextField hourField, minuteField, secondField;
+    @FXML private Label countdownLabel; // Dòng đếm ngược
+    @FXML private Button cancelButton, startButton;
 
     private Stage dialogStage;
-    // Interface để gửi kết quả về MainController
     private Consumer<Integer> onTimeSelectedCallback; 
 
-    // Hàm này được MainController gọi để thiết lập ban đầu
-    public void setDialogStage(Stage dialogStage, boolean isTimerRunning, Consumer<Integer> callback) {
+    @FXML
+    public void initialize() {
+        setupInputFilter(hourField);
+        setupInputFilter(minuteField);
+        setupInputFilter(secondField);
+    }
+
+    public void setDialogStage(Stage dialogStage, boolean isTimerRunning, int currentSeconds, Consumer<Integer> callback) {
         this.dialogStage = dialogStage;
         this.onTimeSelectedCallback = callback;
-        // Nếu timer đang chạy thì mới hiện nút Hủy
-        cancelButton.setVisible(isTimerRunning);
-    }
-
-    // Xử lý các nút chọn nhanh
-    @FXML private void handlePreset15() { selectTime(15); }
-    @FXML private void handlePreset30() { selectTime(30); }
-    @FXML private void handlePreset45() { selectTime(45); }
-    @FXML private void handlePreset60() { selectTime(60); }
-
-    // Xử lý nút "Bắt đầu" (nhập tay)
-    @FXML
-    private void handleCustomStart() {
-        try {
-            int minutes = Integer.parseInt(customMinutesField.getText());
-            if (minutes > 0) {
-                selectTime(minutes);
-            } else {
-                showError();
-            }
-        } catch (NumberFormatException e) {
-            showError();
+        
+        // Cập nhật giao diện dựa trên trạng thái Timer
+        updateUIState(isTimerRunning);
+        
+        if (isTimerRunning) {
+            updateCountdownTime(currentSeconds);
+            startButton.setText("Cập nhật"); // Đổi chữ nút Bắt đầu thành Cập nhật
+        } else {
+            // Reset về 00 nếu không chạy
+            hourField.setText("00");
+            minuteField.setText("00");
+            secondField.setText("00");
+            startButton.setText("Bắt đầu");
+            Platform.runLater(() -> minuteField.requestFocus());
         }
     }
 
-    // Xử lý nút "Hủy"
+    // Hàm ẩn/hiện nút Hủy và dòng đếm ngược
+    public void updateUIState(boolean isRunning) {
+        cancelButton.setVisible(isRunning);
+        cancelButton.setManaged(isRunning); // Quan trọng: setManaged=false để nút Bắt đầu tự căn giữa
+        
+        countdownLabel.setVisible(isRunning);
+        countdownLabel.setManaged(isRunning);
+    }
+
+    // Hàm cập nhật text đếm ngược (MainController sẽ gọi hàm này liên tục)
+    public void updateCountdownTime(int remainingSeconds) {
+        if (remainingSeconds <= 0) {
+            updateUIState(false);
+            return;
+        }
+        int h = remainingSeconds / 3600;
+        int m = (remainingSeconds % 3600) / 60;
+        int s = remainingSeconds % 60;
+        
+        // Format chuỗi: "Nhạc sẽ tắt sau: 00:12:30"
+        String timeText = String.format("Nhạc sẽ tắt sau: %02d:%02d:%02d", h, m, s);
+        Platform.runLater(() -> countdownLabel.setText(timeText));
+    }
+
+    @FXML
+    private void handleStart() {
+        int hours = parseTime(hourField);
+        int minutes = parseTime(minuteField);
+        int seconds = parseTime(secondField);
+
+        // [SỬA LẠI] Tính tổng ra GIÂY (Thay vì Phút)
+        long totalSeconds = (hours * 3600L) + (minutes * 60L) + seconds;
+
+        // Nếu nhập toàn 0 -> Hủy
+        if (totalSeconds == 0) {
+            handleCancel();
+        } else {
+            // Gửi thẳng số giây về MainController (ép kiểu về int cho nhẹ)
+            sendResult((int) totalSeconds);
+        }
+    }
+
     @FXML
     private void handleCancel() {
-        if (onTimeSelectedCallback != null) {
-            onTimeSelectedCallback.accept(-1); // Gửi mã -1 để hủy
-        }
+        sendResult(-1); // Gửi lệnh hủy
+    }
+
+    @FXML private void handleClose() { dialogStage.close(); }
+
+    private void sendResult(int minutes) {
+        if (onTimeSelectedCallback != null) onTimeSelectedCallback.accept(minutes);
         dialogStage.close();
     }
 
-    // Hàm chung để gửi kết quả và đóng cửa sổ
-    private void selectTime(int minutes) {
-        if (onTimeSelectedCallback != null) {
-            onTimeSelectedCallback.accept(minutes);
-        }
-        dialogStage.close();
+    // ... (Hàm parseTime và setupInputFilter giữ nguyên như cũ)
+    private int parseTime(TextField field) {
+        try { return Integer.parseInt(field.getText().trim()); } catch (Exception e) { return 0; }
     }
-
-    private void showError() {
-        customMinutesField.setStyle("-fx-background-color: #404040; -fx-text-fill: white; -fx-border-color: red;");
-        customMinutesField.setPromptText("Vui lòng nhập số dương!");
+    
+    private void setupInputFilter(TextField field) {
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String newText = change.getControlNewText();
+            if (newText.matches("[0-9]*") && newText.length() <= 2) return change;
+            return null;
+        };
+        field.setTextFormatter(new TextFormatter<>(filter));
+        field.setOnMouseClicked(e -> field.selectAll());
+        field.focusedProperty().addListener((o, oldVal, newVal) -> { if(newVal) Platform.runLater(field::selectAll); });
     }
 }

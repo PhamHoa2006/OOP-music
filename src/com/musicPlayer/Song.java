@@ -2,7 +2,7 @@ package com.musicPlayer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty; // Import cái này để map tên JSON
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.File;
 import java.io.Serializable;
@@ -19,15 +19,16 @@ public class Song implements Comparable<Song>, Serializable {
 
     @JsonProperty("id")
     private String songID;
+    
     private String title;
     
-    // 1. SỬA: Đổi sang List để hứng được mảng ["Artist1", "Artist2"] từ JSON
-    private List<String> artist; 
+    // [SỬA LẠI] Đổi về String để khớp với JSON "Shakira, Wyclef"
+    // Không dùng List<String> nữa để tránh lỗi deserialization
+    private String artist; 
     
     private String album;
     private double duration;
     
-    // 2. SỬA: Map key "filePath" trong JSON vào biến "url" của Java
     @JsonProperty("filePath") 
     private String url; 
     
@@ -39,9 +40,10 @@ public class Song implements Comparable<Song>, Serializable {
     private List<Integer> timeStamps;
     private Long totalLike;
 
+    // --- CONSTRUCTOR MẶC ĐỊNH (Quan trọng cho Jackson) ---
     public Song() {
         this.songID = UUID.randomUUID().toString();
-        this.artist = new ArrayList<>(); // Khởi tạo list
+        this.artist = "Unknown"; // Khởi tạo chuỗi mặc định
         this.genres = new ArrayList<>();
         this.ratingList = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0));
         this.lyricLines = new ArrayList<>();
@@ -49,12 +51,14 @@ public class Song implements Comparable<Song>, Serializable {
         this.totalLike = 0L;
     }
 
-    // Constructor dùng khi tạo tay (nếu cần)
+    // --- CONSTRUCTOR CÓ THAM SỐ (Dùng khi upload) ---
     public Song(String title, String artist, String album, double duration, String url) {
         this.songID = UUID.randomUUID().toString();
         this.title = title;
-        this.artist = new ArrayList<>();
-        this.artist.add(artist); // Add artist đơn lẻ vào list
+        
+        // Nhận thẳng chuỗi (Ví dụ: "Sơn Tùng - Snoop Dogg")
+        this.artist = artist; 
+        
         this.album = album;
         this.duration = duration;
         this.url = url;
@@ -67,6 +71,7 @@ public class Song implements Comparable<Song>, Serializable {
         this.totalLike = 0L;
     }
 
+    // --- HÀM LẤY LINK NHẠC (Giữ nguyên logic của ông) ---
     @JsonIgnore
     public String getPlayableUrl() {
         try {
@@ -75,30 +80,26 @@ public class Song implements Comparable<Song>, Serializable {
             }
             
             String projectDir = System.getProperty("user.dir");
-            // Fix: Đảm bảo đường dẫn dùng dấu / xuôi
             String normalizedPath = url.replace("\\", "/");
             
             File file = new File(projectDir, normalizedPath);
             
-            // --- ĐOẠN DEBUG (In ra terminal) ---
-            System.out.println("------------------------------------------------");
-            System.out.println("Đang tìm file nhạc tại: " + file.getAbsolutePath());
+            // --- LOG DEBUG ---
+            // System.out.println("Checking file: " + file.getAbsolutePath());
             if (!file.exists()) {
-                System.err.println("❌ LỖI: File không tồn tại! Hãy kiểm tra lại thư mục 'data'");
+                System.err.println("❌ FILE NOT FOUND: " + normalizedPath);
                 return null;
-            } else {
-                System.out.println("✅ File TỒN TẠI. Đang nạp vào player...");
             }
-            // ------------------------------------
+            // -----------------
 
             return file.toURI().toString();
         } catch (Exception e) {
-            System.err.println("Lỗi tạo đường dẫn: " + e.getMessage());
+            System.err.println("URL Error: " + e.getMessage());
             return null;
         }
     }
 
-    // --- Getters & Setters ---
+    // --- GETTERS & SETTERS ---
 
     public String getSongID() { return songID; }
     public void setSongID(String songID) { this.songID = songID; }
@@ -106,14 +107,14 @@ public class Song implements Comparable<Song>, Serializable {
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
-    // 3. SỬA: Getter trả về String (nối các ca sĩ bằng dấu phẩy) để hiển thị lên UI không bị lỗi
+    // [SỬA] Getter trả về String trực tiếp
     public String getArtist() { 
-        if (artist == null || artist.isEmpty()) return "Unknown Artist";
-        return String.join(", ", artist); 
+        if (artist == null) return "Unknown Artist";
+        return artist; 
     }
     
-    // Setter nhận List (để Jackson dùng)
-    public void setArtist(List<String> artist) { this.artist = artist; }
+    // [SỬA] Setter nhận String trực tiếp
+    public void setArtist(String artist) { this.artist = artist; }
 
     public String getAlbum() { return album; }
     public void setAlbum(String album) { this.album = album; }
@@ -142,7 +143,7 @@ public class Song implements Comparable<Song>, Serializable {
     public List<Integer> getTimeStamps() { return timeStamps; }
     public void setTimeStamps(List<Integer> timeStamps) { this.timeStamps = timeStamps; }
 
-    // Giữ nguyên logic lấy lời bài hát
+    // --- LOGIC LYRICS (Giữ nguyên) ---
     public int getIndexAtTime(double currentTimeInSeconds) {
         if (timeStamps == null || lyricLines == null || timeStamps.isEmpty()) return -1;
         int currentTimeMs = (int) (currentTimeInSeconds * 1000);
@@ -156,16 +157,20 @@ public class Song implements Comparable<Song>, Serializable {
         return -1;
     }
 
+    // --- OVERRIDES ---
+
     @Override
     public String toString() {
-        return title + " - " + getArtist();
+        return title + " - " + artist;
     }
 
     @Override
     public int compareTo(Song other) {
-        return Comparator.comparing(Song::getTitle, String.CASE_INSENSITIVE_ORDER)
-                .thenComparing(Song::getArtist, String.CASE_INSENSITIVE_ORDER)
-                .compare(this, other);
+        // So sánh String thì dùng String.CASE_INSENSITIVE_ORDER trực tiếp
+        // Logic: So tên bài -> So tên ca sĩ
+        int titleCompare = String.CASE_INSENSITIVE_ORDER.compare(this.title, other.title);
+        if (titleCompare != 0) return titleCompare;
+        return String.CASE_INSENSITIVE_ORDER.compare(this.artist, other.artist);
     }
     
     @Override

@@ -1,67 +1,76 @@
 package com.musicPlayer;
 
+import java.util.function.Consumer;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import java.util.function.Consumer;
 
 public class CreatePlaylistController {
 
     @FXML private TextField nameField;
-    @FXML private TextField descField;
-    @FXML private ComboBox<String> privacyCombo;
-    @FXML private Button createBtn;
-    @FXML private Button cancelBtn;
+    @FXML private TextField descField; // Trường nhập mô tả (Check kỹ fx:id bên FXML nhé)
+    @FXML private ComboBox<String> privacyBox; // Hộp chọn Công khai/Riêng tư
 
     private Stage dialogStage;
-    private Consumer<Playlist> onPlaylistCreated; // Cái "móc" để trả hàng về Main
+    private Consumer<Playlist> onPlaylistCreated; // Callback trả về playlist khi tạo xong
 
     @FXML
     public void initialize() {
-        // 1. Setup ComboBox Quyền riêng tư
-        privacyCombo.getItems().addAll("Công khai", "Riêng tư");
-        privacyCombo.getSelectionModel().selectFirst(); // Mặc định là Công khai
-
-        // 2. Xử lý sự kiện nút bấm
-        cancelBtn.setOnAction(e -> closeDialog());
-        createBtn.setOnAction(e -> handleCreate());
-        
-        // Bonus: Bấm Enter ở ô tên thì cũng Tạo luôn cho tiện
-        nameField.setOnAction(e -> handleCreate());
+        // Setup dữ liệu cho ComboBox
+        if (privacyBox != null) {
+            privacyBox.getItems().addAll("Công khai", "Riêng tư");
+            privacyBox.getSelectionModel().selectFirst(); // Mặc định chọn cái đầu
+        }
     }
 
-    // Hàm set stage và callback (Được gọi từ MainController)
+    // Hàm nhận Stage và Callback từ MainController truyền sang
     public void setDialogStage(Stage dialogStage, Consumer<Playlist> onPlaylistCreated) {
         this.dialogStage = dialogStage;
         this.onPlaylistCreated = onPlaylistCreated;
     }
 
+    @FXML
     private void handleCreate() {
+        if (nameField == null) return;
+        
         String name = nameField.getText().trim();
-        String description = descField.getText().trim();
-        // String privacy = privacyCombo.getValue(); // Hiện tại Playlist chưa có trường này, lấy để đó sau này nâng cấp
+        String description = "";
+        if (descField != null) {
+            description = descField.getText().trim();
+        }
 
-        // Validate cơ bản: Không được để trống tên
+        // Validate cơ bản: Tên không được để trống
         if (name.isEmpty()) {
-            nameField.setStyle("-fx-border-color: red; -fx-background-color: transparent; -fx-text-fill: white;");
+            nameField.setStyle("-fx-border-color: red;"); // Báo đỏ nếu rỗng
             nameField.setPromptText("Vui lòng nhập tên!");
             return;
         }
 
-        // Tạo Playlist mới
-        // Lưu ý: Nếu class Playlist của ông chưa có field description thì dùng constructor cơ bản
+        // 1. Tạo Playlist mới
         Playlist newPlaylist = new Playlist(name);
         
-        // Nếu ông đã upgrade class Playlist có thêm description thì dùng:
-        // Playlist newPlaylist = new Playlist(name, description);
+        // 2. [QUAN TRỌNG] Lưu mô tả vào
+        newPlaylist.setDescription(description);
+        
+        // 3. Set người tạo mặc định (User đang login)
+        newPlaylist.setCreator("pvq"); 
 
-        // Gọi Callback để trả Playlist về cho MainController xử lý tiếp
+        // 4. (Tùy chọn) Xử lý Privacy nếu sau này cần
+        // String privacy = privacyBox.getValue();
+        // newPlaylist.setPrivacy(privacy); 
+
+        // 5. Trả hàng về nơi sản xuất (MainController)
         if (onPlaylistCreated != null) {
             onPlaylistCreated.accept(newPlaylist);
         }
 
+        // 6. Đóng Dialog
+        closeDialog();
+    }
+
+    @FXML
+    private void handleCancel() {
         closeDialog();
     }
 
