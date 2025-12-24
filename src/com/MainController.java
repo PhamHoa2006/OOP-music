@@ -64,6 +64,7 @@ public class MainController {
     @FXML private Label currentTimeLbl, totalTimeLbl;
     @FXML private Label currentSongLabel, currentArtistLabel;
     @FXML private ImageView miniThumbView;
+    @FXML private ImageView volumeIcon;
 
     // Disc View
     @FXML private StackPane discContainer; 
@@ -72,6 +73,8 @@ public class MainController {
 
     // Navigation
     @FXML private Button homeBtn, favoritesBtn, historyBtn, top100Btn;
+    @FXML private Button volumeBtn;
+    @FXML private Button mutedBtn;
     @FXML private Button logoBtn, backBtn, forwardBtn;
     @FXML private TextField searchField;
 
@@ -255,13 +258,30 @@ public class MainController {
         });
         repeatButton.setOnAction(e -> xulyRepeat());
         if (likeBtn != null) likeBtn.setOnAction(e -> toggleLike());
-        shuffleButton.setOnAction(e -> toggleShuffle()); 
+        shuffleButton.setOnAction(e -> xulyShuffle()); 
 
         // --- SLIDER (Giữ nguyên) ---
         volumeSlider.valueProperty().addListener((obs, cu, moi) -> {
-            if (player != null) player.setVolume(moi.doubleValue() / 100.0);
-        });
+            double volumeValue = moi.doubleValue();
+            
+            // 1. Cập nhật âm lượng thực tế cho player
+            if (player != null) {
+                player.setVolume(volumeValue / 100.0);
+            }
 
+            // 2. Điều khiển ẩn hiện 2 nút dựa trên giá trị slider
+            if (volumeValue == 0) {
+                // Nếu volume = 0: Hiện nút Mute, ẩn nút Volume
+                volumeBtn.setVisible(false);
+                mutedBtn.setVisible(true);
+            } else {
+                // Nếu volume > 0: Hiện nút Volume, ẩn nút Mute
+                volumeBtn.setVisible(true);
+                mutedBtn.setVisible(false);
+            }
+        });
+        
+        
         progressSlider.setOnMousePressed(e -> dangKeoThanhTruot = true);
         progressSlider.setOnMouseReleased(e -> {
             if (player != null) player.seek((int) progressSlider.getValue());
@@ -898,18 +918,80 @@ public class MainController {
     // Player Helpers
     private void xuLyPlay() { if (player != null) { player.play(); daoTrangThaiNutPlay(true); xyLyHieuUngXoay(true); batDauDongBoThoiGian(); } }
     private void xuLyPause() { if (player != null) { player.pause(); daoTrangThaiNutPlay(false); xyLyHieuUngXoay(false); } }
-    public void nextSong() { player.next(); capNhatGiaoDienDuoiCung(); player.play(); }
+    
+    public void nextSong() {
+        if (isShuffle) {
+            int totalSongs = player.getPlaylist().getSongs().size();
+            int randomIndex = (int) (Math.random() * totalSongs);
+            choiBaiHatCuThe(randomIndex);
+        } else {
+            player.next(); // Tăng index lên 1 (đúng thứ tự)
+            capNhatGiaoDienDuoiCung();
+            player.play();
+        }
+    }
     
     private void handleSongEnd() {
         Platform.runLater(() -> {
-            if (isRepeat) { player.seek(0); player.play(); capNhatGiaoDienDuoiCung(); } 
-            else nextSong();
+            if (isRepeat) {
+                player.seek(0);
+                player.play();
+                capNhatGiaoDienDuoiCung();
+            } 
+            else if (isShuffle) {
+                // Lấy danh sách đang có của player
+                int totalSongs = player.getPlaylist().getSongs().size();
+                int randomIndex = (int) (Math.random() * totalSongs);
+                
+                // Nhảy đến bài đó mà không phá hủy cấu trúc Playlist
+                choiBaiHatCuThe(randomIndex); 
+            } 
+            else {
+                nextSong(); // Lúc này nextSong() sẽ chạy theo đúng thứ tự currentIndex + 1
+            }
         });
     }
 
     private void xulyRepeat() {
         isRepeat = !isRepeat;
-        repeatButton.setStyle(isRepeat ? "-fx-background-color: #4CAF50; -fx-text-fill: white;" : null);
+
+        if (isRepeat) {
+            repeatButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+            
+            // Khóa nút Shuffle
+            isShuffle = false;
+            shuffleButton.setStyle(null);
+            shuffleButton.setDisable(true);
+            
+            System.out.println("🔁 Chế độ Lặp lại: BẬT (Đã khóa Shuffle)");
+        } else {
+            repeatButton.setStyle(null);
+            shuffleButton.setDisable(false); // Mở khóa lại Shuffle
+            
+            System.out.println("➡️ Chế độ Lặp lại: TẮT");
+        }
+    }
+    
+    private void xulyShuffle() {
+        isShuffle = !isShuffle; // Đảo trạng thái
+
+        if (isShuffle) {
+            // 1. Nếu BẬT Shuffle: Tô màu xanh
+            shuffleButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+            
+            // 2. VÔ HIỆU HÓA nút Repeat
+            isRepeat = false; // Tắt trạng thái repeat trong logic
+            repeatButton.setStyle(null); // Xóa màu xanh của repeat (nếu có)
+            repeatButton.setDisable(true); // Làm mờ/khóa nút repeat
+            
+            System.out.println("🔀 Chế độ Ngẫu nhiên: BẬT (Đã khóa Repeat)");
+        } else {
+            // 3. Nếu TẮT Shuffle: Về mặc định
+            shuffleButton.setStyle(null);
+            repeatButton.setDisable(false); // Mở khóa lại nút repeat
+            
+            System.out.println("➡️ Chế độ Ngẫu nhiên: TẮT");
+        }
     }
 
     // Hàm xử lý nút Trộn bài (Shuffle) ở thanh player bên dưới
