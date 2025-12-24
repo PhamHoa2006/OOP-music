@@ -426,3 +426,183 @@
     -fx-background-color: #535353;
     -fx-background-radius: 4px;
 }
+
+/* --- TIMER DIALOG STYLE --- */
+.custom-dialog {
+    -fx-background-color: #262626; /* Nền xám đậm */
+    -fx-border-color: #333333;
+    -fx-border-width: 1px;
+}
+
+.dialog-title {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+}
+
+.dialog-input {
+    -fx-background-color: #121212;
+    -fx-text-fill: white;
+    -fx-border-color: #333333;
+    -fx-background-radius: 4;
+    -fx-padding: 5;
+}
+
+/* Text hiển thị đếm ngược trên nút Timer */
+.timer-countdown-text {
+    -fx-text-fill: #1DB954; /* Màu xanh Spotify */
+    -fx-font-weight: bold;
+    -fx-font-size: 10px;
+}
+
+/* --- Playlist Row Style (YTM Style) --- */
+
+/* 1. Style cho cả dòng playlist */
+.playlist-row {
+    -fx-background-color: transparent; /* QUAN TRỌNG: Nền trong suốt */
+    -fx-cursor: hand;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-transition: all 0.2s ease;
+}
+
+/* 2. Hiệu ứng khi di chuột vào (Hover) -> Sáng lên xíu giống YTM */
+.playlist-row:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1); 
+}
+
+/* 3. Chỉnh màu chữ Người tạo (Creator) cho mờ đi */
+.playlist-row .label {
+    -fx-text-fill: white; /* Mặc định là trắng */
+}
+
+/* Nếu ông muốn can thiệp sâu hơn vào ID cụ thể từ CSS */
+#playlistCreator {
+    -fx-text-fill: #aaaaaa; /* Màu xám nhạt */
+}
+
+/* 4. Xử lý ListView để nó không sinh ra nền trắng mặc định */
+.playlist-list {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.playlist-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 2px 10px 2px 10px; /* Căn lề chút cho đẹp */
+    -fx-text-fill: white;
+}
+
+/* Khi chọn 1 dòng (Selected) */
+.playlist-list .list-cell:filled:selected .playlist-row {
+    -fx-background-color: #282828; /* Màu nền khi đang chọn */
+}
+
+/* Xóa cái viền xanh mặc định khi focus vào list */
+.playlist-list:focused {
+    -fx-background-color: transparent;
+}
+
+/* --- CUSTOM SCROLLBAR CHO PLAYLIST --- */
+.playlist-scroll {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.playlist-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Thanh cuộn dọc */
+.playlist-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10px; /* Mỏng đi (Mặc định là khoảng 15px) */
+}
+
+/* Rãnh trượt (Track) - Cho trong suốt luôn */
+.playlist-scroll .scroll-bar:vertical .track {
+    -fx-background-color: transparent; 
+    -fx-border-color: transparent;
+}
+
+/* Cục kéo (Thumb) - Bo tròn và màu tối */
+.playlist-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #404040; 
+    -fx-background-insets: 2;
+    -fx-background-radius: 10px; /* Bo tròn như viên thuốc */
+}
+
+/* Khi di chuột vào thì sáng lên tí */
+.playlist-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #707070;
+}
+
+/* Ẩn thanh cuộn ngang và góc */
+.playlist-scroll .scroll-bar:horizontal {
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
+}
+.playlist-scroll .corner {
+    -fx-background-color: transparent;
+}
+
+/* --- CUSTOM COMBOBOX - DARK MODE XỊN --- */
+
+/* 1. Cái hộp chính (Khi chưa xổ xuống) */
+.custom-combo {
+    -fx-background-color: #3E3E3E; /* Nền xám đậm */
+    -fx-background-radius: 4px;
+    -fx-border-color: #555555; /* Viền mỏng cho nét */
+    -fx-border-radius: 4px;
+    -fx-padding: 0; /* Reset padding */
+}
+
+/* Chữ hiển thị bên trong hộp */
+.custom-combo .list-cell {
+    -fx-text-fill: white; 
+    -fx-background-color: transparent;
+    -fx-padding: 8 10 8 10; /* Căn chỉnh chữ cho giữa */
+}
+
+/* 2. Nút mũi tên bên phải */
+.custom-combo .arrow-button {
+    -fx-background-color: transparent; /* Nền trong suốt */
+}
+
+.custom-combo .arrow {
+    -fx-background-color: #b3b3b3; /* Mũi tên màu xám sáng */
+    -fx-scale-x: 0.8; /* Thu nhỏ mũi tên tí cho tinh tế */
+    -fx-scale-y: 0.8;
+}
+
+/* 3. DANH SÁCH XỔ XUỐNG (Popup) - Quan trọng nhất */
+/* JavaFX dùng .combo-box-popup độc lập, không nằm trong class .custom-combo */
+.combo-box-popup .list-view {
+    -fx-background-color: #282828; /* Nền danh sách tối thui */
+    -fx-background-radius: 4px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 0); /* Bóng đổ xịn */
+}
+
+/* Từng dòng trong danh sách xổ xuống */
+.combo-box-popup .list-view .list-cell {
+    -fx-text-fill: #cccccc; /* Chữ xám nhạt */
+    -fx-background-color: transparent;
+    -fx-padding: 10 15 10 15; /* Giãn dòng cho dễ bấm */
+    -fx-font-size: 13px;
+}
+
+/* Khi di chuột vào dòng nào (Hover) */
+.combo-box-popup .list-view .list-cell:filled:hover {
+    -fx-background-color: #3E3E3E; /* Nền sáng lên */
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+/* Dòng đang được chọn (Selected) */
+.combo-box-popup .list-view .list-cell:filled:selected {
+    -fx-background-color: #1DB954; /* Màu xanh Spotify */
+    -fx-text-fill: white;
+}
