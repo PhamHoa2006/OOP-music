@@ -1,6 +1,7 @@
 package com;
 
 import com.users.SongLibrary;
+import com.users.PlaylistLibrary;
 import com.musicPlayer.AudioPlayer;
 import com.musicPlayer.Playlist;
 import com.musicPlayer.Song;
@@ -64,6 +65,7 @@ public class MainController {
     @FXML private Label currentSongLabel, currentArtistLabel;
     @FXML private ImageView miniThumbView;
     @FXML private Button settingsBtn;
+    @FXML private Button addToPlaylistBtn;
 
     // Disc View
     @FXML private StackPane discContainer; 
@@ -94,10 +96,13 @@ public class MainController {
     private User currentUser = null;
     private AudioPlayer player;
     private SongLibrary library;
+    private PlaylistLibrary playlistLibrary;
     private boolean isRepeat = false;
     private boolean isShuffle = false;
     private boolean dangKeoThanhTruot = false;
-
+    private boolean isSearchingPlaylist = false; // Biến trạng thái để biết searchField đang lọc cái gì
+    private FlowPane currentPlaylistContainer;
+    
     // UI State
     private ScrollPane libraryView;
     private Node savedRightSidebar;
@@ -141,6 +146,7 @@ public class MainController {
 
     private void caiDatBackend() {
         library = SongLibrary.getInstance();
+        playlistLibrary = PlaylistLibrary.getInstance(); 
         historyManager = new History();
         Playlist danhSachTong = new Playlist("ThuVienCuaToi");
         List<Song> tatCaBaiHat = library.getAllSongs();
@@ -365,6 +371,7 @@ public class MainController {
         repeatButton.setOnAction(e -> xulyRepeat());
         if (likeBtn != null) likeBtn.setOnAction(e -> toggleLike());
         shuffleButton.setOnAction(e -> toggleShuffle()); 
+        addToPlaylistBtn.setOnAction(e -> hienThiGiaoDienChonPlaylist());
 
         // Slider
         volumeSlider.valueProperty().addListener((obs, cu, moi) -> { if (player != null) player.setVolume(moi.doubleValue() / 100.0); });
@@ -389,9 +396,19 @@ public class MainController {
         
         // Chức năng khác
         if (newPlaylistBtn != null) newPlaylistBtn.setOnAction(e -> showCreatePlaylistDialog());
-        if (searchField != null) {
-            searchField.textProperty().addListener((observable, oldValue, newValue) -> xuLyTimKiem(newValue));
-        }
+        
+     // Cấu trúc lại SearchField để hỗ trợ cả 2 chế độ
+        
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (isSearchingPlaylist) {
+                locDanhSachPlaylist(newVal); // Chế độ lọc Playlist
+            } else {
+                xuLyTimKiem(newVal);		// Chế độ lọc Bài hát
+            }
+        });
+        
+        
+
     }
 
     private void huyChonPlaylist() {
@@ -449,7 +466,10 @@ public class MainController {
                 }
                 if (currentUser != null) {
                     newPlaylist.setCreator(currentUser.getUsername());
-                    currentUser.getPlayLists().add(newPlaylist);
+                    playlistLibrary.addPlaylist(newPlaylist);
+                    
+                    // 2. Cập nhật giao diện bên trái (Sidebar) để thấy playlist mới ngay
+                    //lamMoiDanhSachPlaylistSidebar();
                     // LƯU NGAY
                     UserManager.getInstance().saveToJSON(); 
                     System.out.println("✅ Đã lưu playlist mới: " + newPlaylist.getTitle());
@@ -1142,12 +1162,14 @@ public class MainController {
     }
     
     private void hienThiManHinhHome() {
+    	resetSearchState();
         if (libraryView == null) chuanBiGiaoDienLibrary();
         mainRoot.setCenter(libraryView);
         mainRoot.setRight(null);
     }
     
     private void hienThiManHinhPlayer() {
+    	resetSearchState();
         if (discContainer != null) {
             mainRoot.setCenter(discContainer);
             mainRoot.setRight(savedRightSidebar);
@@ -1162,4 +1184,117 @@ public class MainController {
         if (!isNextTab) loadRelatedSongs(); else updateQueueView();
         toShow.setVisible(true); toShow.setManaged(true);
     }
+    
+    private void hienThiGiaoDienChonPlaylist() {
+        if (player.getCurrentSong() == null) return;
+
+        isSearchingPlaylist = true; // Bật chế độ tìm playlist
+        searchField.clear();
+        searchField.setPromptText("Nhập tên Playlist để lọc...");
+
+        VBox layout = new VBox(20);
+        layout.setPadding(new Insets(20));
+        layout.setStyle("-fx-background-color: #121212;");
+
+        Label title = new Label("Thêm \"" + player.getCurrentSong().getTitle() + "\" vào...");
+        title.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
+        
+        FlowPane container = new FlowPane(15, 15);
+        container.setId("playlistContainer"); // ID để hàm locDanhSachPlaylist tìm thấy
+        
+        FlowPane playlistContainer = new FlowPane(15, 15);
+        this.currentPlaylistContainer = playlistContainer;
+        
+        veDanhSachPlaylist(playlistLibrary.getAllPlaylists(), playlistContainer);
+
+        layout.getChildren().addAll(title, container);
+        ScrollPane scroll = new ScrollPane(layout);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+
+        mainRoot.setCenter(scroll);
+    }
+
+    private void veDanhSachPlaylist(List<Playlist> ds, FlowPane container) {
+        container.getChildren().clear();
+        for (Playlist p : ds) {
+            VBox card = new VBox(10);
+            card.setStyle("-fx-background-color: #282828; -fx-padding: 15; -fx-background-radius: 8; -fx-cursor: hand;");
+            card.setPrefWidth(140);
+
+            Label name = new Label(p.getName());
+            name.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+            Label count = new Label(p.getSongs().size() + " bài hát");
+            count.setStyle("-fx-text-fill: #b3b3b3; -fx-font-size: 11px;");
+
+            card.getChildren().addAll(name, count);
+
+            // KHI CHỌN PLAYLIST
+            card.setOnMouseClicked(e -> {
+                p.addSong(player.getCurrentSong()); // Thêm bài vào đối tượng
+                playlistLibrary.saveToJSON();       // Lưu xuống file json ngay lập tức
+                
+                // Thoát chế độ chọn, quay về màn hình nhạc
+                isSearchingPlaylist = false;
+                searchField.setPromptText("Tìm kiếm bài hát...");
+                hienThiManHinhPlayer();
+            });
+
+            container.getChildren().add(card);
+        }
+    }
+    
+    private void locDanhSachPlaylist(String tuKhoa) {
+        if (currentPlaylistContainer == null) return; // Bảo vệ nếu container chưa tạo
+
+        List<Playlist> ketQua = new ArrayList<>();
+        for (Playlist p : playlistLibrary.getAllPlaylists()) {
+            if (p.getName().toLowerCase().contains(tuKhoa.toLowerCase())) {
+                ketQua.add(p);
+            }
+        }
+        // Vẽ lại trực tiếp vào biến đã lưu
+        veDanhSachPlaylist(ketQua, currentPlaylistContainer);
+    }
+    
+    @FXML
+    private void xuLyNutAddSongToPlaylist() {
+        if (player.getCurrentSong() == null) return;
+
+        // 1. Chuyển trạng thái SearchField
+        isSearchingPlaylist = true;
+        searchField.clear();
+        searchField.setPromptText("Nhập tên Playlist để lọc...");
+
+        // 2. Tạo giao diện hiển thị danh sách Playlist ở Center
+        VBox mainLayout = new VBox(20);
+        mainLayout.setPadding(new Insets(20));
+        mainLayout.setStyle("-fx-background-color: #121212;");
+
+        Label header = new Label("Thêm vào Playlist");
+        header.setStyle("-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;");
+
+        FlowPane playlistContainer = new FlowPane(15, 15);
+        playlistContainer.setId("playlistContainer"); // Rất quan trọng để hàm lọc tìm thấy
+
+        // 3. Hiển thị toàn bộ playlist hiện có
+        veDanhSachPlaylist(playlistLibrary.getAllPlaylists(), playlistContainer);
+
+        mainLayout.getChildren().addAll(header, playlistContainer);
+        
+        ScrollPane scroll = new ScrollPane(mainLayout);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background: #121212; -fx-background-color: transparent;");
+
+        // 4. Đưa vào Center
+        mainRoot.setCenter(scroll);
+    }
+    
+    private void resetSearchState() {
+        isSearchingPlaylist = false;
+        currentPlaylistContainer = null;
+        searchField.clear();
+        searchField.setPromptText("Tìm kiếm bài hát...");
+    }
 }
+
