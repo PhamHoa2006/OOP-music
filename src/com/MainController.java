@@ -10,9 +10,8 @@ import com.extra.TimerDialogController;
 import com.users.History;
 import com.musicPlayer.CreatePlaylistController;
 import com.musicPlayer.UploadDialogController;
-import java.util.function.BiConsumer;
 import com.users.User;
-import com.users.UserManager;
+import com.users.UserManager; // Import thêm cái này để gọi saveToJSON cho gọn
 import com.users.AuthDialogController;
 
 import javafx.application.Platform;
@@ -28,20 +27,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.shape.Circle; 
-import javafx.scene.paint.ImagePattern; 
+import javafx.scene.shape.Circle;
+import javafx.scene.paint.ImagePattern;
 import javafx.animation.RotateTransition;
 import javafx.animation.Interpolator;
-import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.FileChooser; 
-import javafx.scene.media.Media;       // <--- THÊM DÒNG NÀY
-import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser;
+import javafx.scene.media.Media;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -52,11 +49,10 @@ import java.util.Stack;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.Map;
 
 public class MainController {
 
-    // --- KHAI BÁO FXML (Đảm bảo ID khớp với MainLayout.fxml) ---
+    // --- KHAI BÁO FXML ---
     @FXML private BorderPane mainRoot;
     @FXML private VBox rightSidebar; 
 
@@ -84,7 +80,7 @@ public class MainController {
     @FXML private ToggleGroup tabGroup;
     @FXML private ScrollPane queueScrollPane, relatedScrollPane;
     @FXML private VBox queueContainerVBox, relatedContainerVBox, queueTabContent;
-    @FXML private ListView<Playlist> playlistListView; // List Playlist bên trái
+    @FXML private ListView<Playlist> playlistListView; 
 
     // Top Bar Actions
     @FXML private Button timerBtn;
@@ -99,7 +95,6 @@ public class MainController {
     private boolean isRepeat = false;
     private boolean isShuffle = false;
     private boolean dangKeoThanhTruot = false;
-    private List<Song> favoriteSongs = new ArrayList<>();
 
     // UI State
     private ScrollPane libraryView;
@@ -114,13 +109,11 @@ public class MainController {
     // Timer
     private Timer sleepTimer;
     private Timeline uiUpdateTimeline; 
-
     private History historyManager;
     private TimerDialogController currentTimerDialog;
-    private boolean isUpdatingTimer = false;
 
     public void initialize() {
-        System.out.println("🚀 [DEBUG] Bắt đầu khởi tạo MainController...");
+        System.out.println("🚀 [DEBUG] MainController đang khởi động...");
 
         // 1. Setup Logic & Data
         savedRightSidebar = rightSidebar; 
@@ -134,19 +127,14 @@ public class MainController {
         // 3. Setup Events
         ganSuKienChoNut();
         if (uploadBtn != null) uploadBtn.setOnAction(e -> handleUpload());
-        if (settingsBtn != null) {
-            settingsBtn.setOnAction(e -> showSettingsMenu());
-        }
+        if (settingsBtn != null) settingsBtn.setOnAction(e -> showSettingsMenu());
         
-        // 4. CHẮC CHẮN MỞ MÀN HÌNH HOME KHI KHỞI ĐỘNG
+        // 4. Mặc định vào màn hình Home
         libraryView = null; 
         hienThiManHinhHome();
         
-        // Lưu trạng thái history ban đầu
         currentViewAction = this::hienThiManHinhHome;
         updateNavigationButtons();
-        
-        System.out.println("✅ [DEBUG] Khởi tạo hoàn tất.");
     }
 
     private void caiDatBackend() {
@@ -164,7 +152,10 @@ public class MainController {
         daoTrangThaiNutPlay(false);
     }
 
-    // --- SETUP GIAO DIỆN HOME ---
+    // =================================================================================================
+    // PHẦN 1: GIAO DIỆN CHÍNH (HOME, LIBRARY, PLAYLIST VIEW)
+    // =================================================================================================
+
     private void chuanBiGiaoDienLibrary() {
         VBox mainContent = new VBox();
         mainContent.setSpacing(30);
@@ -178,7 +169,6 @@ public class MainController {
             emptyLbl.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
             mainContent.getChildren().add(emptyLbl);
         } else {
-            // Chia section hiển thị
             if (allSongs.size() > 0) {
                 List<Song> section1 = allSongs.subList(0, Math.min(allSongs.size(), 5));
                 mainContent.getChildren().add(taoMotHangNgang("Dành cho bạn", section1));
@@ -238,136 +228,40 @@ public class MainController {
 
             if (lbTenBai != null) lbTenBai.setText(baiHat.getTitle());
             if (lbCaSi != null) lbCaSi.setText(baiHat.getArtist());
-            
-            try {
-                anhBia.setImage(new Image(getClass().getResourceAsStream("icons/logo.png")));
-            } catch (Exception e) {}
+            try { anhBia.setImage(new Image(getClass().getResourceAsStream("icons/logo.png"))); } catch (Exception e) {}
 
             nutPlayTrenThe.setOnAction(e -> choiBaiHatCuThe(viTriIndex));
             theGoc.setOnMouseClicked(e -> choiBaiHatCuThe(viTriIndex));
             return theGoc;
-        } catch (IOException e) {
-            return null;
-        }
+        } catch (IOException e) { return null; }
     }
 
-    // --- SỰ KIỆN NÚT BẤM (GỌN GÀNG) ---
-    private void ganSuKienChoNut() {
-        // --- CÁC NÚT ĐIỀU KHIỂN NHẠC (Giữ nguyên) ---
-        playButton.setOnAction(e -> xuLyPlay());
-        pauseButton.setOnAction(e -> xuLyPause());
-        nextButton.setOnAction(e -> nextSong());
-        prevButton.setOnAction(e -> {
-            player.previous();
-            capNhatGiaoDienDuoiCung();
-        });
-        repeatButton.setOnAction(e -> xulyRepeat());
-        if (likeBtn != null) likeBtn.setOnAction(e -> toggleLike());
-        shuffleButton.setOnAction(e -> toggleShuffle()); 
-
-        // --- SLIDER (Giữ nguyên) ---
-        volumeSlider.valueProperty().addListener((obs, cu, moi) -> {
-            if (player != null) player.setVolume(moi.doubleValue() / 100.0);
-        });
-
-        progressSlider.setOnMousePressed(e -> dangKeoThanhTruot = true);
-        progressSlider.setOnMouseReleased(e -> {
-            if (player != null) player.seek((int) progressSlider.getValue());
-            dangKeoThanhTruot = false;
-        });
-
-        // --- [QUAN TRỌNG] SỬA LỖI ĐIỀU HƯỚNG TẠI ĐÂY ---
-        
-        // 1. Home là màn hình thuần túy (không tự chuyển cảnh bên trong) -> Cần bọc chuyenManHinh
-        homeBtn.setOnAction(e -> { 
-            chuyenManHinh(this::hienThiManHinhHome); 
-            huyChonPlaylist(); 
-        });
-        logoBtn.setOnAction(e -> { 
-            chuyenManHinh(this::hienThiManHinhHome); 
-            huyChonPlaylist(); 
-        });
-
-        // 2. Favorites, Top100, History: Bên trong hàm đã gọi chuyenManHinh rồi -> GỌI TRỰC TIẾP (Bỏ bọc)
-        favoritesBtn.setOnAction(e -> { 
-            hienThiManHinhFavorites(); // Sửa ở đây
-            huyChonPlaylist(); 
-        });
-        
-        top100Btn.setOnAction(e -> { 
-            hienThiManHinhTop100();    // Sửa ở đây
-            huyChonPlaylist(); 
-        });
-        
-        historyBtn.setOnAction(e -> { 
-            hienThiManHinhHistory();   // Sửa ở đây
-            huyChonPlaylist(); 
-        });
-        
-        // Back/Forward (Giữ nguyên)
-        backBtn.setOnAction(e -> handleBackNav());
-        forwardBtn.setOnAction(e -> handleForwardNav());
-
-        // Sidebar Right (Giữ nguyên)
-        nextTabBtn.setOnAction(e -> switchSidebarTab(true));
-        relatedTabBtn.setOnAction(e -> switchSidebarTab(false));
-        
-        // Playlist Action (Giữ nguyên)
-        if (newPlaylistBtn != null) newPlaylistBtn.setOnAction(e -> showCreatePlaylistDialog());
-        if (searchField != null) {
-            // Bắt sự kiện thay đổi text (Gõ chữ nào tìm chữ đấy)
-            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-                xuLyTimKiem(newValue);
-            });
-        }
-    }
-
-    private void huyChonPlaylist() {
-        if (playlistListView != null) {
-            playlistListView.getSelectionModel().clearSelection();
-        }
-    }
-
-    // --- MÀN HÌNH PLAYLIST CHI TIẾT (V3 PRO MAX: SORT + NULLPOINTER FIX) ---
     private void hienThiChiTietPlaylist(Playlist p) {
         if (p == null) return;
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("PlaylistView.fxml"));
             HBox viewRoot = loader.load(); 
-            
-            // Dùng getNamespace() để lấy ID chuẩn xác
             java.util.Map<String, Object> namespace = loader.getNamespace();
             
             Label titleLbl = (Label) namespace.get("detailPlaylistTitle");
             Label creatorLbl = (Label) namespace.get("detailPlaylistCreator");
             Label descLbl = (Label) namespace.get("detailPlaylistDesc");
             ImageView coverImg = (ImageView) namespace.get("detailPlaylistImg");
-            
             Button playAllBtn = (Button) namespace.get("detailPlayAllBtn");
-            Button shuffleBtn = (Button) namespace.get("detailShuffleBtn"); // <--- NÚT ÔNG CẦN ĐÂY
+            Button shuffleBtn = (Button) namespace.get("detailShuffleBtn"); 
             Button sortBtn = (Button) namespace.get("sortBtn"); 
-            
             VBox songContainer = (VBox) namespace.get("detailSongContainer");
 
-            // 1. GÁN DỮ LIỆU CƠ BẢN
+            // Fill Data
             if (titleLbl != null) titleLbl.setText(p.getTitle());
             if (creatorLbl != null) creatorLbl.setText(p.getCreator() + " • " + p.getSize() + " bài hát");
             
-            // Xử lý mô tả
             if (descLbl != null) {
-                String desc = p.getDescription();
-                if (desc != null && !desc.trim().isEmpty()) {
-                    descLbl.setText(desc);
-                    descLbl.setVisible(true);
-                    descLbl.setManaged(true);
-                } else {
-                    descLbl.setVisible(false);
-                    descLbl.setManaged(false);
-                }
+                descLbl.setText(p.getDescription() != null ? p.getDescription() : "");
+                descLbl.setVisible(p.getDescription() != null && !p.getDescription().isEmpty());
+                descLbl.setManaged(descLbl.isVisible());
             }
             
-            // Xử lý ảnh bìa
             if (coverImg != null) {
                 String imgPath = "icons/logo.png";
                 String title = p.getTitle().toLowerCase();
@@ -377,11 +271,10 @@ public class MainController {
                 try { coverImg.setImage(new Image(getClass().getResourceAsStream(imgPath))); } catch (Exception e) {}
             }
 
-            // --- 2. XỬ LÝ NÚT "PHÁT TẤT CẢ" ---
+            // Logic Play All
             if (playAllBtn != null) {
                 playAllBtn.setOnAction(e -> {
                     if (!p.getSongs().isEmpty()) {
-                        // Phát theo thứ tự bình thường
                         player.setPlaylist(p);
                         player.play();
                         capNhatGiaoDienDuoiCung();
@@ -390,96 +283,64 @@ public class MainController {
                 });
             }
 
-            // --- 3. [MỚI] XỬ LÝ NÚT "TRỘN BÀI" (SHUFFLE) Ở HEADER ---
+            // Logic Shuffle (Trộn bài)
             if (shuffleBtn != null) {
                 shuffleBtn.setOnAction(e -> {
                     if (!p.getSongs().isEmpty()) {
-                        // 1. Tạo playlist tạm (để không làm hỏng thứ tự playlist gốc)
                         Playlist shuffledPlaylist = new Playlist(p.getTitle() + " (Shuffle)");
-                        
-                        // 2. Copy bài hát sang list mới
                         List<Song> tempList = new ArrayList<>(p.getSongs());
-                        
-                        // 3. Xáo trộn
                         Collections.shuffle(tempList);
-                        
-                        // 4. Add vào playlist tạm
                         for (Song s : tempList) shuffledPlaylist.addSong(s);
                         
-                        // 5. Phát playlist tạm này
                         player.setPlaylist(shuffledPlaylist);
                         player.play();
-                        
-                        // 6. Cập nhật UI
                         capNhatGiaoDienDuoiCung();
-                        
-                        // Tùy chọn: Bật luôn nút shuffle ở player dưới đáy cho đồng bộ
                         if (!isShuffle) toggleShuffle(); 
-                        
                         chuyenManHinh(this::hienThiManHinhPlayer);
-                        System.out.println("🔀 Đã phát trộn bài từ playlist: " + p.getTitle());
                     }
                 });
             }
 
-            // 4. XỬ LÝ NÚT SẮP XẾP (SORT) - Bên phải
+            // Logic Sort
             if (sortBtn != null) {
                 if (p.getTitle().toLowerCase().contains("top 100")) {
                     sortBtn.setVisible(false);
                     sortBtn.setManaged(false);
                 } else {
-                    sortBtn.setVisible(true);
-                    sortBtn.setManaged(true);
                     ContextMenu sortMenu = new ContextMenu();
                     sortMenu.setStyle("-fx-background-color: #282828; -fx-text-fill: white;");
                     MenuItem sortAZ = new MenuItem("Tên bài hát (A-Z)");
                     MenuItem sortArtist = new MenuItem("Nghệ sĩ (A-Z)");
                     MenuItem sortTime = new MenuItem("Thời lượng (Ngắn -> Dài)");
 
-                    sortAZ.setOnAction(e -> {
-                        p.getSongs().sort(Comparator.comparing(Song::getTitle));
-                        refreshSongList(songContainer, p);
-                    });
-                    sortArtist.setOnAction(e -> {
-                        p.getSongs().sort(Comparator.comparing(Song::getArtist));
-                        refreshSongList(songContainer, p);
-                    });
-                    sortTime.setOnAction(e -> {
-                        p.getSongs().sort(Comparator.comparingDouble(Song::getDuration));
-                        refreshSongList(songContainer, p);
-                    });
+                    sortAZ.setOnAction(e -> { p.getSongs().sort(Comparator.comparing(Song::getTitle)); refreshSongList(songContainer, p); });
+                    sortArtist.setOnAction(e -> { p.getSongs().sort(Comparator.comparing(Song::getArtist)); refreshSongList(songContainer, p); });
+                    sortTime.setOnAction(e -> { p.getSongs().sort(Comparator.comparingDouble(Song::getDuration)); refreshSongList(songContainer, p); });
+
                     sortMenu.getItems().addAll(sortAZ, sortArtist, sortTime);
                     sortBtn.setOnAction(e -> sortMenu.show(sortBtn, Side.BOTTOM, 0, 0));
                 }
             }
 
-            // 5. LOAD DANH SÁCH BÀI HÁT
             refreshSongList(songContainer, p);
 
-            // 6. HIỂN THỊ
             chuyenManHinh(() -> {
                 mainRoot.setCenter(viewRoot);
                 mainRoot.setRight(null);
             });
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
-    // Helper: Vẽ lại danh sách bài hát (Dùng cho cả lúc mới load và lúc Sort)
     private void refreshSongList(VBox container, Playlist p) {
         if (container == null || p == null) return;
         container.getChildren().clear();
         List<Song> songs = p.getSongs();
-
         if (songs.isEmpty()) {
             Label emptyMsg = new Label("Danh sách trống!");
             emptyMsg.setStyle("-fx-text-fill: #808080; -fx-padding: 20;");
             container.getChildren().add(emptyMsg);
         } else {
-            for (int i = 0; i < songs.size(); i++) {
-                Song s = songs.get(i);
+            for (Song s : songs) {
                 Node row = taoDongBaiHat(s);
                 if (row != null) {
                     row.setStyle("-fx-background-color: transparent; -fx-padding: 5 10; -fx-border-color: transparent transparent #1a1a1a transparent;");
@@ -489,15 +350,56 @@ public class MainController {
         }
     }
 
-    // --- CÁC MÀN HÌNH "ẢO" (Top 100, Fav, History) ---
-    private void hienThiManHinhFavorites() {
-        Playlist favPlaylist = new Playlist("Bài hát yêu thích");
-        favPlaylist.setCreator("Tuyển tập của bạn");
-        favPlaylist.setDescription("Những bài hát bạn đã thả tim ❤️");
-        if (favoriteSongs != null) {
-            for (Song s : favoriteSongs) favPlaylist.addSong(s);
+    // =================================================================================================
+    // PHẦN 2: NAVIGATION & SỰ KIỆN NÚT
+    // =================================================================================================
+
+    private void ganSuKienChoNut() {
+        // Player Control
+        playButton.setOnAction(e -> xuLyPlay());
+        pauseButton.setOnAction(e -> xuLyPause());
+        nextButton.setOnAction(e -> nextSong());
+        prevButton.setOnAction(e -> { player.previous(); capNhatGiaoDienDuoiCung(); });
+        repeatButton.setOnAction(e -> xulyRepeat());
+        if (likeBtn != null) likeBtn.setOnAction(e -> toggleLike());
+        shuffleButton.setOnAction(e -> toggleShuffle()); 
+
+        // Slider
+        volumeSlider.valueProperty().addListener((obs, cu, moi) -> { if (player != null) player.setVolume(moi.doubleValue() / 100.0); });
+        progressSlider.setOnMousePressed(e -> dangKeoThanhTruot = true);
+        progressSlider.setOnMouseReleased(e -> { if (player != null) player.seek((int) progressSlider.getValue()); dangKeoThanhTruot = false; });
+
+        // Menu chính
+        homeBtn.setOnAction(e -> { chuyenManHinh(this::hienThiManHinhHome); huyChonPlaylist(); });
+        logoBtn.setOnAction(e -> { chuyenManHinh(this::hienThiManHinhHome); huyChonPlaylist(); });
+        
+        favoritesBtn.setOnAction(e -> { hienThiManHinhFavorites(); huyChonPlaylist(); });
+        top100Btn.setOnAction(e -> { hienThiManHinhTop100(); huyChonPlaylist(); });
+        historyBtn.setOnAction(e -> { hienThiManHinhHistory(); huyChonPlaylist(); });
+        
+        // Điều hướng
+        backBtn.setOnAction(e -> handleBackNav());
+        forwardBtn.setOnAction(e -> handleForwardNav());
+
+        // Sidebar tabs
+        nextTabBtn.setOnAction(e -> switchSidebarTab(true));
+        relatedTabBtn.setOnAction(e -> switchSidebarTab(false));
+        
+        // Chức năng khác
+        if (newPlaylistBtn != null) newPlaylistBtn.setOnAction(e -> showCreatePlaylistDialog());
+        if (searchField != null) {
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> xuLyTimKiem(newValue));
         }
-        hienThiChiTietPlaylist(favPlaylist);
+    }
+
+    private void huyChonPlaylist() {
+        if (playlistListView != null) playlistListView.getSelectionModel().clearSelection();
+    }
+
+    // --- CÁC MÀN HÌNH "ẢO" ---
+    private void hienThiManHinhFavorites() {
+        if (currentUser == null) return;
+        hienThiChiTietPlaylist(getFavoritesPlaylist());
     }
 
     private void hienThiManHinhHistory() {
@@ -522,37 +424,11 @@ public class MainController {
         hienThiChiTietPlaylist(topPlaylist);
     }
 
-    // --- SETUP SIDEBAR PLAYLIST LIST ---
-    private void setupPlaylistListView() {
-        playlistListView.getStyleClass().add("playlist-list");
-        playlistListView.setCellFactory(param -> new ListCell<Playlist>() {
-            @Override
-            protected void updateItem(Playlist item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null); setText(null); setStyle("-fx-background-color: transparent;");
-                } else {
-                    try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("PlaylistRow.fxml"));
-                        VBox root = loader.load();
-                        Label nameLbl = (Label) root.lookup("#playlistName");
-                        Label creatorLbl = (Label) root.lookup("#playlistCreator");
-                        nameLbl.setText(item.getTitle());
-                        creatorLbl.setText(item.getCreator());
-                        setGraphic(root); setText(null);
-                    } catch (IOException e) { setText(item.getTitle()); }
-                }
-            }
-        });
+    // =================================================================================================
+    // PHẦN 3: LOGIC NGƯỜI DÙNG & DỮ LIỆU (QUAN TRỌNG)
+    // =================================================================================================
 
-        playlistListView.setOnMouseClicked(event -> {
-            Playlist selectedPlaylist = playlistListView.getSelectionModel().getSelectedItem();
-            if (selectedPlaylist != null) {
-                hienThiChiTietPlaylist(selectedPlaylist); 
-            }
-        });
-    }
-
+    // Xử lý tạo Playlist mới
     private void showCreatePlaylistDialog() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CreatePlaylistDialog.fxml"));
@@ -565,149 +441,33 @@ public class MainController {
 
             CreatePlaylistController controller = loader.getController();
             controller.setDialogStage(dialogStage, (newPlaylist) -> {
-                newPlaylist.setCreator("pvq"); // Set cứng tên ông hoặc lấy từ UserManager
+                if (newPlaylist.getTitle().equalsIgnoreCase("Favorites")) {
+                    // Nếu user cố tình đặt tên này -> Đổi tên khác
+                    newPlaylist.setName("My Favorites"); 
+                }
+                if (currentUser != null) {
+                    newPlaylist.setCreator(currentUser.getUsername());
+                    currentUser.getPlayLists().add(newPlaylist);
+                    // LƯU NGAY
+                    UserManager.getInstance().saveToJSON(); 
+                    System.out.println("✅ Đã lưu playlist mới: " + newPlaylist.getTitle());
+                } else {
+                    newPlaylist.setCreator("Khách");
+                }
                 if (playlistListView != null) playlistListView.getItems().add(newPlaylist);
             });
             dialogStage.showAndWait();
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    // --- CÁC HÀM HỖ TRỢ KHÁC (PLAYER, TIMER, UPLOAD...) ---
-    // (Giữ nguyên logic cũ nhưng sắp xếp lại cho gọn)
-
-    private void setupTimerSystem() {
-        // Khởi tạo timer rỗng ban đầu
-        sleepTimer = new Timer(); 
-        
-        // Chỉ xử lý việc bấm nút mở Dialog
-        timerBtn.setOnAction(e -> showTimerDialog());
-    }
-
-    private void showTimerDialog() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/TimerDialog.fxml"));
-            Parent root = loader.load();
-
-            Stage dialogStage = new Stage();
-            dialogStage.initModality(Modality.WINDOW_MODAL); // KHÔNG dùng blocking modal để Main còn chạy update được? 
-            // À KHÔNG, showAndWait() sẽ chặn luồng, nhưng Timeline chạy thread khác nên vẫn update được UI.
-            dialogStage.initOwner(timerBtn.getScene().getWindow());
-            dialogStage.initStyle(StageStyle.UNDECORATED);
-            dialogStage.setScene(new Scene(root));
-            
-            // Lấy controller
-            currentTimerDialog = loader.getController();
-            
-            // Truyền trạng thái hiện tại (Đang chạy hay không, còn bao nhiêu giây)
-            boolean isRunning = sleepTimer.isActive();
-            int remaining = sleepTimer.getTimeRemaining();
-            
-            currentTimerDialog.setDialogStage(dialogStage, isRunning, remaining, (val) -> {
-                if (val == -1) { 
-                    stopCountdownUI(); 
-                    sleepTimer.cancelTimer(); 
-                } else if (val > 0) { 
-                    startCountdownUI(val); 
-                }
-                currentTimerDialog = null; // Reset khi đóng
-            });
-            
-            dialogStage.showAndWait();
-            currentTimerDialog = null; // Đảm bảo null khi tắt
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // 3. Sửa hàm startCountdownUI để update cho Dialog nếu đang mở
-    // Tham số totalSeconds là GIÂY
-    private void startCountdownUI(int totalSeconds) {
-        // 1. Hủy Timer cũ (nếu đang chạy)
-        if (sleepTimer != null) {
-            // Chỉ cần cancel, không cần remove listener vì listener mới bên dưới được xử lý an toàn rồi
-            sleepTimer.cancelTimer(); 
-        }
-
-        // 2. TẠO MỚI HOÀN TOÀN (Instance mới)
-        sleepTimer = new Timer();
-        sleepTimer.setTimer(totalSeconds);
-
-        // 3. Gán sự kiện cho Timer mới này
-        sleepTimer.addListener(new TimerListener() {
-            @Override
-            public void onTimerFinished() {
-                Platform.runLater(() -> {
-                    if (player != null && player.isPlaying()) xuLyPause();
-                    stopCountdownUI();
-                    System.out.println("⏰ Hết giờ! Đã tắt nhạc.");
-                });
-            }
-
-            @Override
-            public void onTimerCancelled() {
-                // [QUAN TRỌNG] Để RỖNG ở đây.
-                // Khi ta bấm cập nhật, timer cũ bị cancel -> Nó chạy vào đây -> Không làm gì cả -> UI không bị tắt.
-            }
-        });
-
-        // 4. Setup Timeline cập nhật giao diện (Đồng hồ đếm ngược)
-        if (uiUpdateTimeline != null) uiUpdateTimeline.stop();
-        
-        uiUpdateTimeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
-            int remaining = sleepTimer.getTimeRemaining();
-            
-            // Nếu hết giờ -> Tắt UI
-            if (remaining <= 0) {
-                stopCountdownUI();
-                return;
-            }
-            
-            // Format thời gian hiển thị
-            String timeText;
-            if (remaining >= 3600) {
-                 timeText = String.format("%02d:%02d:%02d", remaining/3600, (remaining%3600)/60, remaining%60);
-            } else {
-                 timeText = String.format("%02d:%02d", remaining/60, remaining%60);
-            }
-            
-            // Cập nhật nút bé ở góc (Căn giữa không bị lệch)
-            timerBtn.setText(timeText);
-            timerBtn.setAlignment(javafx.geometry.Pos.CENTER); 
-            timerBtn.setContentDisplay(ContentDisplay.RIGHT); 
-            timerBtn.setStyle("-fx-text-fill: #1DB954; -fx-font-weight: bold; -fx-background-color: transparent; -fx-alignment: center;");
-            
-            // Cập nhật ngược lại cho Dialog to (nếu đang mở)
-            if (currentTimerDialog != null) {
-                currentTimerDialog.updateCountdownTime(remaining);
-            }
-        }));
-        
-        uiUpdateTimeline.setCycleCount(Timeline.INDEFINITE);
-        uiUpdateTimeline.play();
-    }
-
-    private void stopCountdownUI() {
-        if (uiUpdateTimeline != null) uiUpdateTimeline.stop();
-        
-        // Nếu muốn hủy timer logic luôn
-        if (sleepTimer != null) sleepTimer.cancelTimer();
-
-        timerBtn.setText(""); 
-        timerBtn.setStyle("-fx-background-color: transparent;"); 
-        timerBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); // Chỉ hiện icon đồng hồ
-        timerBtn.setAlignment(javafx.geometry.Pos.CENTER); // Vẫn căn giữa cho đẹp
-    }
-
+    // Xử lý Upload nhạc
     private void handleUpload() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Chọn nhạc từ máy tính");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.wav", "*.m4a"));
-        
         File selectedFile = fileChooser.showOpenDialog(uploadBtn.getScene().getWindow());
 
         if (selectedFile != null) {
-            // Hiển thị Popup nhập thông tin
             showUploadInfoDialog(selectedFile);
         }
     }
@@ -716,35 +476,24 @@ public class MainController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/UploadDialog.fxml"));
             Parent root = loader.load();
-
             Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(mainRoot.getScene().getWindow());
-            dialogStage.initStyle(StageStyle.UNDECORATED); // Không viền cho đẹp
+            dialogStage.initStyle(StageStyle.UNDECORATED);
             dialogStage.setScene(new Scene(root));
 
             UploadDialogController controller = loader.getController();
-            
-            // Lấy tên file bỏ đuôi .mp3 để làm gợi ý
             String defaultTitle = file.getName().replaceFirst("[.][^.]+$", "");
 
-            // Xử lý khi user bấm LƯU
             controller.setDialogStage(dialogStage, defaultTitle, (title, artist) -> {
                 processFileAndAddLibrary(file, title, artist);
             });
-
             dialogStage.showAndWait();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
-    // Hàm xử lý backend: Copy file + Tạo Song + Add Playlist
-    // Hàm xử lý backend: Copy file -> Đọc Duration -> Tạo Song -> Add Playlist
     private void processFileAndAddLibrary(File sourceFile, String title, String artist) {
         try {
-            // 1. Copy file vào thư mục data/Music (Giữ nguyên logic an toàn)
             File desDir = new File("data/Music");
             if (!desDir.exists()) desDir.mkdirs();
 
@@ -753,157 +502,182 @@ public class MainController {
             int i = originalName.lastIndexOf('.');
             if (i > 0) extension = originalName.substring(i);
             
-            // Tên file theo timestamp
             String newFileName = System.currentTimeMillis() + extension; 
             File destFile = new File(desDir, newFileName);
-            
-            // Thực hiện Copy
             Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-            // 2. [MỚI - QUAN TRỌNG] Tạo Player tạm để "ngửi" xem file dài bao nhiêu
             Media tempMedia = new Media(destFile.toURI().toString());
             MediaPlayer tempPlayer = new MediaPlayer(tempMedia);
             
-            // Khi Player tạm đọc xong thông tin file:
             tempPlayer.setOnReady(() -> {
-                // a. Lấy thời lượng chuẩn (Giây)
                 double realDuration = tempMedia.getDuration().toSeconds();
-                
-                // b. Tạo bài hát với thời lượng chuẩn (Thay vì số 0)
                 Song newSong = new Song(title, artist, "Local Upload", realDuration, "data/Music/" + newFileName);
-
-                // c. Thêm vào thư viện & Playlist
+                
                 library.addSong(newSong);
-                addToUploadPlaylist(newSong);
+                addToUploadPlaylist(newSong); // GỌI HÀM NÀY ĐỂ ADD VÀO USER VÀ SAVE
 
-                // d. Refresh giao diện
-                // Lưu ý: Code này chạy bất đồng bộ nên phải refresh ở trong này mới nhận dữ liệu mới
                 Platform.runLater(() -> {
                     chuanBiGiaoDienLibrary();
-                    // Tự động chuyển đến màn hình Playlist Upload để user thấy thành quả
-                    Playlist uploadPl = null;
-                    for(Playlist p : playlistListView.getItems()) {
-                        if(p.getTitle().equals("Nhạc tải lên")) uploadPl = p;
+                    // Auto chuyển đến playlist upload để xem kết quả
+                    if (currentUser != null) {
+                         for(Playlist p : currentUser.getPlayLists()) {
+                             if(p.getTitle().equals("Nhạc tải lên")) {
+                                 hienThiChiTietPlaylist(p);
+                                 break;
+                             }
+                         }
                     }
-                    if (uploadPl != null) hienThiChiTietPlaylist(uploadPl);
                 });
-                
-                System.out.println("✅ Upload thành công: " + title + " (" + realDuration + "s)");
-                
-                // e. Dọn dẹp player tạm để đỡ tốn RAM
+                System.out.println("✅ Upload thành công: " + title);
                 tempPlayer.dispose(); 
             });
 
-            // Xử lý trường hợp file lỗi không đọc được
             tempPlayer.setOnError(() -> {
-                 System.err.println("❌ Lỗi đọc file: " + title);
-                 // Vẫn thêm vào nhưng chấp nhận duration = 0 (Fallback)
-                 Song newSong = new Song(title, artist, "Local Upload", 0, "data/Music/" + newFileName);
-                 library.addSong(newSong);
-                 addToUploadPlaylist(newSong);
-                 Platform.runLater(this::hienThiManHinhHome);
+                 System.err.println("❌ Lỗi đọc file media!");
                  tempPlayer.dispose();
             });
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
-    // Hàm tìm hoặc tạo Playlist "Nhạc tải lên"
+    // [FIX QUAN TRỌNG] Logic thêm vào playlist "Nhạc tải lên" của User
     private void addToUploadPlaylist(Song s) {
-        String uploadPlaylistName = "Nhạc tải lên"; // Tên cố định
-        Playlist targetPlaylist = null;
-
-        // 1. Tìm xem đã có playlist này trong list view chưa
-        if (playlistListView != null) {
-            for (Playlist p : playlistListView.getItems()) {
+        String uploadPlaylistName = "Nhạc tải lên";
+        
+        if (currentUser != null) {
+            Playlist targetPlaylist = null;
+            // 1. Tìm trong playlist của User
+            for (Playlist p : currentUser.getPlayLists()) {
                 if (p.getTitle().equals(uploadPlaylistName)) {
                     targetPlaylist = p;
                     break;
                 }
             }
-        }
-
-        // 2. Nếu chưa có -> Tạo mới
-        if (targetPlaylist == null) {
-            targetPlaylist = new Playlist(uploadPlaylistName);
-            targetPlaylist.setCreator("Hệ thống");
-            targetPlaylist.setDescription("Các bài hát bạn đã tải lên từ máy tính 💻");
             
-            // Thêm vào ListView bên trái
-            if (playlistListView != null) {
-                playlistListView.getItems().add(targetPlaylist);
+            // 2. Nếu chưa có -> Tạo mới
+            if (targetPlaylist == null) {
+                targetPlaylist = new Playlist(uploadPlaylistName);
+                targetPlaylist.setCreator(currentUser.getUsername());
+                targetPlaylist.setDescription("Các bài hát bạn đã tải lên từ máy tính 💻");
+                currentUser.getPlayLists().add(targetPlaylist);
+                
+                // Add vào UI ListView
+                if (playlistListView != null) playlistListView.getItems().add(targetPlaylist);
             }
             
-            // Nếu ông có quản lý danh sách playlist trong Library thì add vào đó luôn
-            // library.addPlaylist(targetPlaylist); 
-        }
-
-        // 3. Thêm bài hát vào playlist
-        targetPlaylist.addSong(s);
-    }
-
-    // Navigation Helper
-    private void chuyenManHinh(Runnable viewMethod) {
-        if (currentViewAction == viewMethod) return;
-        if (currentViewAction != null) backStack.push(currentViewAction);
-        forwardStack.clear();
-        currentViewAction = viewMethod;
-        viewMethod.run();
-        updateNavigationButtons();
-    }
-    
-    private void handleBackNav() {
-        if (!backStack.isEmpty()) {
-            Runnable prev = backStack.pop();
-            forwardStack.push(currentViewAction);
-            currentViewAction = prev;
-            prev.run();
-            updateNavigationButtons();
-        }
-    }
-    
-    private void handleForwardNav() {
-        if (!forwardStack.isEmpty()) {
-            Runnable next = forwardStack.pop();
-            backStack.push(currentViewAction);
-            currentViewAction = next;
-            next.run();
-            updateNavigationButtons();
+            // 3. Add bài hát vào
+            targetPlaylist.addSong(s);
+            
+            // 4. LƯU NGAY
+            UserManager.getInstance().saveToJSON();
+        } else {
+            // Nếu là khách (Chưa đăng nhập) -> Có thể tạo playlist tạm trong Library hoặc bỏ qua
+            System.out.println("⚠️ Khách upload nhạc - sẽ không được lưu vào Playlist cá nhân.");
         }
     }
 
-    private void updateNavigationButtons() {
-        backBtn.setDisable(backStack.isEmpty());
-        forwardBtn.setDisable(forwardStack.isEmpty());
-        backBtn.setOpacity(backStack.isEmpty() ? 0.3 : 1.0);
-        forwardBtn.setOpacity(forwardStack.isEmpty() ? 0.3 : 1.0);
+    // --- AUTH (ĐĂNG NHẬP/ĐĂNG KÝ) ---
+    private void showSettingsMenu() {
+        ContextMenu menu = new ContextMenu();
+        menu.setStyle("-fx-background-color: #282828; -fx-text-fill: white;");
+
+        if (currentUser == null) {
+            MenuItem loginItem = new MenuItem("Đăng nhập");
+            loginItem.setStyle("-fx-text-fill: white;");
+            loginItem.setOnAction(e -> showAuthDialog());
+            menu.getItems().add(loginItem);
+        } else {
+            MenuItem infoItem = new MenuItem("Xin chào, " + currentUser.getUsername());
+            infoItem.setDisable(true);
+            infoItem.setStyle("-fx-opacity: 1.0; -fx-font-weight: bold; -fx-text-fill: #1DB954;");
+
+            MenuItem logoutItem = new MenuItem("Đăng xuất");
+            logoutItem.setStyle("-fx-text-fill: white;");
+            logoutItem.setOnAction(e -> handleLogout());
+            
+            menu.getItems().addAll(infoItem, logoutItem);
+        }
+        menu.show(settingsBtn, Side.BOTTOM, 0, 0);
     }
 
-    private void hienThiManHinhHome() {
-        if (libraryView == null) chuanBiGiaoDienLibrary();
-        mainRoot.setCenter(libraryView);
-        mainRoot.setRight(null);
+    private void showAuthDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/users/AuthDialog.fxml"));
+            Parent root = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(mainRoot.getScene().getWindow());
+            dialogStage.initStyle(StageStyle.UNDECORATED);
+            dialogStage.setScene(new Scene(root));
+
+            AuthDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage, (user) -> {
+                this.currentUser = user;
+                onUserLoggedIn();
+            });
+            dialogStage.showAndWait();
+        } catch (IOException e) { e.printStackTrace(); }
     }
-    
-    private void hienThiManHinhPlayer() {
-        if (discContainer != null) {
-            mainRoot.setCenter(discContainer);
-            mainRoot.setRight(savedRightSidebar);
+
+    // Trong MainController.java
+    private void onUserLoggedIn() {
+        System.out.println("User logged in: " + currentUser.getUsername());
+        
+        // 1. Cập nhật giao diện Playlist bên trái
+        if (playlistListView != null) {
+            // Xóa hết playlist cũ
+            playlistListView.getItems().removeIf(p -> !p.getCreator().equals("Hệ thống"));
+            
+            List<Playlist> userPlaylists = currentUser.getPlayLists();
+            if (userPlaylists != null) {
+                for (Playlist p : userPlaylists) {
+                    // [FIX QUAN TRỌNG] Chỉ hiện playlist thường, ẨN playlist Favorites và Nhạc tải lên (nếu muốn ẩn nốt)
+                    if (!p.getTitle().equals("Favorites")) { 
+                        playlistListView.getItems().add(p);
+                    }
+                }
+            }
+        }
+        
+        // 2. Load History (Giữ nguyên)
+        if (currentUser.getHistory() != null) {
+            this.historyManager = currentUser.getHistory();
+        } else {
+            History newHistory = new History();
+            currentUser.setHistory(newHistory);
+            this.historyManager = newHistory;
         }
     }
 
-    private void switchSidebarTab(boolean isNextTab) {
-        if (queueTabContent == null || relatedScrollPane == null) return;
-        Node toShow = isNextTab ? queueTabContent : relatedScrollPane;
-        Node toHide = isNextTab ? relatedScrollPane : queueTabContent;
-        toHide.setVisible(false); toHide.setManaged(false);
-        if (!isNextTab) loadRelatedSongs(); else updateQueueView();
-        toShow.setVisible(true); toShow.setManaged(true);
+    private void handleLogout() {
+        currentUser = null;
+        System.out.println("Đã đăng xuất");
+        if (playlistListView != null) {
+            playlistListView.getItems().removeIf(p -> !p.getCreator().equals("Hệ thống"));
+        }
+        this.historyManager = new History();
+        hienThiManHinhHome();
     }
 
-    // Player Helpers
+    private Playlist getFavoritesPlaylist() {
+        if (currentUser == null) return null;
+        for (Playlist p : currentUser.getPlayLists()) {
+            if (p.getTitle().equals("Favorites")) return p;
+        }
+        // Nếu chưa có thì tạo mới
+        Playlist fav = new Playlist("Favorites");
+        fav.setCreator(currentUser.getUsername());
+        fav.setDescription("Bài hát đã thả tim");
+        currentUser.getPlayLists().add(fav);
+        // Lưu ngay khi vừa tạo mới
+        com.users.UserManager.getInstance().saveToJSON();
+        return fav;
+    }
+
+    // =================================================================================================
+    // PHẦN 4: PLAYER LOGIC & HELPER
+    // =================================================================================================
+
     private void xuLyPlay() { if (player != null) { player.play(); daoTrangThaiNutPlay(true); xyLyHieuUngXoay(true); batDauDongBoThoiGian(); } }
     private void xuLyPause() { if (player != null) { player.pause(); daoTrangThaiNutPlay(false); xyLyHieuUngXoay(false); } }
     public void nextSong() { player.next(); capNhatGiaoDienDuoiCung(); player.play(); }
@@ -920,66 +694,80 @@ public class MainController {
         repeatButton.setStyle(isRepeat ? "-fx-background-color: #4CAF50; -fx-text-fill: white;" : null);
     }
 
-    // Hàm xử lý nút Trộn bài (Shuffle) ở thanh player bên dưới
     private void toggleShuffle() {
-        isShuffle = !isShuffle; // Đảo trạng thái tắt/bật
-
+        isShuffle = !isShuffle;
         if (isShuffle) {
-            // 1. Đổi màu nút sang Xanh (Bật)
-            if (shuffleButton != null) 
-                shuffleButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-            
-            // 2. Logic tráo bài (Nếu đang nghe thì giữ nguyên bài hiện tại)
+            if (shuffleButton != null) shuffleButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
             if (player != null && player.getPlaylist() != null) {
                 List<Song> currentList = player.getPlaylist().getSongs();
                 Song currentSong = player.getCurrentSong();
-                
                 if (!currentList.isEmpty()) {
-                    // Copy ra list tạm để trộn
                     List<Song> tempList = new ArrayList<>(currentList);
                     Collections.shuffle(tempList); 
-                    
-                    // Nếu đang hát, đưa bài hiện tại về đúng vị trí cũ để không bị ngắt nhạc
                     if (currentSong != null) {
                         tempList.remove(currentSong);
-                        // Chèn lại vào vị trí đầu hoặc vị trí hiện tại
                         tempList.add(0, currentSong); 
-                        // Reset player về bài đầu tiên (là bài đang hát)
-                        player.stop(); // Stop nhẹ để reset index nội bộ
-                        // Nạp lại list mới
+                        player.stop(); 
                         player.getPlaylist().getSongs().clear();
                         player.getPlaylist().getSongs().addAll(tempList);
-                        
-                        player.play(); // Play tiếp
+                        player.play(); 
                     }
                 }
             }
         } else {
-            // 1. Đổi màu về mặc định (Tắt)
-            if (shuffleButton != null) 
-                shuffleButton.setStyle(null); 
-            
-            // 2. Sắp xếp lại A-Z (Un-shuffle)
+            if (shuffleButton != null) shuffleButton.setStyle(null); 
             if (player != null && player.getPlaylist() != null) {
                 player.getPlaylist().getSongs().sort(Comparator.comparing(Song::getTitle));
             }
         }
-        
-        // Cập nhật danh sách chờ bên phải
         updateQueueView();
     }
 
+    // Trong MainController.java
     private void toggleLike() {
         Song s = player.getCurrentSong();
-        if (s == null) return;
-        if (favoriteSongs.contains(s)) favoriteSongs.remove(s); else favoriteSongs.add(s);
+        if (s == null || currentUser == null) return;
+        
+        Playlist fav = getFavoritesPlaylist();
+        
+        boolean isLiked = false;
+        Song songToRemove = null;
+        
+        for (Song existing : fav.getSongs()) {
+            if (existing.getSongID().equals(s.getSongID())) {
+                isLiked = true;
+                songToRemove = existing;
+                break;
+            }
+        }
+
+        if (isLiked) {
+            fav.removeSong(songToRemove);
+            System.out.println("💔 Đã bỏ like: " + s.getTitle());
+        } else {
+            fav.addSong(s);
+            System.out.println("❤️ Đã like: " + s.getTitle());
+        }
+        
         updateLikeButtonState();
+        
+        // [CỰC QUAN TRỌNG] Lưu dữ liệu ngay lập tức!
+        com.users.UserManager.getInstance().saveToJSON();
+        System.out.println("💾 [Auto-Save] Đã lưu User sau khi Like/Unlike.");
     }
     
     private void updateLikeButtonState() {
-        if (likeBtn == null) return;
+        if (likeBtn == null || player == null) return;
         Song s = player.getCurrentSong();
-        likeBtn.setStyle((s != null && favoriteSongs.contains(s)) ? "-fx-opacity: 1.0; -fx-effect: dropshadow(three-pass-box, rgba(29,185,84,0.8), 10, 0, 0, 0);" : "-fx-opacity: 0.5;");
+        boolean isLiked = false;
+        if (s != null && currentUser != null) {
+            Playlist fav = getFavoritesPlaylist();
+            for (Song existing : fav.getSongs()) {
+                if (existing.getSongID().equals(s.getSongID())) { isLiked = true; break; }
+            }
+        }
+        if (isLiked) likeBtn.setStyle("-fx-opacity: 1.0; -fx-effect: dropshadow(three-pass-box, rgba(29,185,84,0.8), 10, 0, 0, 0);");
+        else likeBtn.setStyle("-fx-opacity: 0.5;");
     }
 
     private void choiBaiHatCuThe(int index) {
@@ -1030,7 +818,10 @@ public class MainController {
             totalTimeLbl.setText(doiGiaySangPhut(s.getDuration()));
             progressSlider.setMax(s.getDuration());
             capNhatAnhDiaNhac(s);
+            
+            // Auto add History & Save
             historyManager.addSong(s);
+            if (currentUser != null) UserManager.getInstance().saveToJSON();
         }
         daoTrangThaiNutPlay(player.isPlaying());
         xyLyHieuUngXoay(player.isPlaying());
@@ -1047,32 +838,21 @@ public class MainController {
 
     private void batDauDongBoThoiGian() {
         MediaPlayer mp = player.getMediaPlayer();
-        
         if (mp != null) {
-            // 1. Xóa các listener cũ (nếu cần, nhưng tạo mới MediaPlayer thì nó tự mất)
-            
-            // 2. [QUAN TRỌNG] Tự động cập nhật Max thanh trượt khi file load xong
             mp.totalDurationProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal != null && newVal.toSeconds() > 0) {
-                    // Cập nhật giới hạn thanh trượt
                     progressSlider.setMax(newVal.toSeconds());
                     totalTimeLbl.setText(doiGiaySangPhut(newVal.toSeconds()));
-
-                    // Fix lỗi 00:00 cho bài hát tải lên (Lưu ngược vào data)
                     Song currentSong = player.getCurrentSong();
                     if (currentSong != null && currentSong.getDuration() == 0) {
                         currentSong.setDuration(newVal.toSeconds());
                     }
                 }
             });
-
-            // 3. Logic chạy thanh trượt theo thời gian thực (Giữ nguyên)
             mp.currentTimeProperty().addListener((obs, old, val) -> {
                 if (!dangKeoThanhTruot) {
                     progressSlider.setValue(val.toSeconds());
                     currentTimeLbl.setText(doiGiaySangPhut(val.toSeconds()));
-                    
-                    // Hiệu ứng tô màu thanh trượt
                     toMauThanhTruot(val.toSeconds(), progressSlider.getMax());
                 }
             });
@@ -1125,7 +905,6 @@ public class MainController {
         }
     }
 
-    // Utilities
     private void toMauThanhTruot(double cur, double total) {
         if (total > 0) {
             double p = (cur / total) * 100;
@@ -1150,126 +929,173 @@ public class MainController {
     @FXML public void handleVolumeDown(javafx.scene.input.SwipeEvent e) { volumeSlider.setValue(Math.max(0, volumeSlider.getValue()-10)); }
 
     private void xuLyTimKiem(String tuKhoa) {
-        // 1. Nếu từ khóa rỗng -> Trả về màn hình Home
         if (tuKhoa == null || tuKhoa.trim().isEmpty()) {
-            hienThiManHinhHome();
-            return;
+            hienThiManHinhHome(); return;
         }
-
         String keyword = tuKhoa.toLowerCase().trim();
         List<Song> ketQua = new ArrayList<>();
-
-        // 2. Lọc bài hát từ thư viện
         for (Song s : library.getAllSongs()) {
-            // So sánh Tên bài hát HOẶC Tên nghệ sĩ (chứa từ khóa)
-            boolean matchTitle = s.getTitle().toLowerCase().contains(keyword);
-            boolean matchArtist = s.getArtist().toLowerCase().contains(keyword);
-            
-            if (matchTitle || matchArtist) {
+            if (s.getTitle().toLowerCase().contains(keyword) || s.getArtist().toLowerCase().contains(keyword)) {
                 ketQua.add(s);
             }
         }
-
-        // 3. Hiển thị kết quả
-        // Mẹo: Dùng lại giao diện PlaylistView để hiển thị danh sách tìm được
         Playlist playlistKetQua = new Playlist("Kết quả tìm kiếm: \"" + tuKhoa + "\"");
         playlistKetQua.setCreator("Tìm thấy " + ketQua.size() + " bài hát");
         playlistKetQua.setDescription("Kết quả phù hợp với từ khóa bạn nhập.");
-        
-        // Add bài hát tìm được vào playlist ảo này
-        for (Song s : ketQua) {
-            playlistKetQua.addSong(s);
-        }
-
-        // Gọi hàm hiển thị playlist chi tiết (tận dụng code cũ, đỡ phải viết màn hình mới)
+        for (Song s : ketQua) playlistKetQua.addSong(s);
         hienThiChiTietPlaylist(playlistKetQua);
-        
-        // (Tùy chọn) Đổi ảnh bìa cho đẹp
-        // Vì Playlist ảo không có ảnh, ông có thể set cứng ảnh kính lúp nếu muốn
-    }
-
-    private void showSettingsMenu() {
-        ContextMenu menu = new ContextMenu();
-        menu.setStyle("-fx-background-color: #282828; -fx-text-fill: white;");
-
-        if (currentUser == null) {
-            // == CHƯA ĐĂNG NHẬP ==
-            MenuItem loginItem = createMenuItem("Đăng nhập");
-            loginItem.setOnAction(e -> showAuthDialog());
-            
-            MenuItem registerItem = createMenuItem("Đăng ký");
-            registerItem.setOnAction(e -> showAuthDialog()); // Vào dialog rồi chuyển tab sau cũng được
-            
-            menu.getItems().addAll(loginItem, registerItem);
-        } else {
-            // == ĐÃ ĐĂNG NHẬP ==
-            MenuItem infoItem = createMenuItem("Xin chào, " + currentUser.getUsername());
-            infoItem.setDisable(true); // Chỉ để hiển thị tên
-            infoItem.setStyle("-fx-opacity: 1.0; -fx-font-weight: bold; -fx-text-fill: #1DB954;");
-
-            MenuItem logoutItem = createMenuItem("Đăng xuất");
-            logoutItem.setOnAction(e -> handleLogout());
-            
-            menu.getItems().addAll(infoItem, logoutItem);
-        }
-
-        // Hiện menu ngay dưới nút Settings
-        menu.show(settingsBtn, Side.BOTTOM, 0, 0);
     }
     
-    // Helper tạo MenuItem nhanh
-    private MenuItem createMenuItem(String text) {
-        MenuItem item = new MenuItem(text);
-        // Style CSS cho MenuItem (Ông có thể đưa vào file .css)
-        item.setStyle("-fx-text-fill: white; -fx-padding: 5 10;"); 
-        return item;
+    // --- TIMER SYSTEM ---
+    private void setupTimerSystem() {
+        sleepTimer = new Timer(); 
+        timerBtn.setOnAction(e -> showTimerDialog());
     }
 
-    // Hiển thị Dialog Đăng nhập/Đăng ký
-    private void showAuthDialog() {
+    private void showTimerDialog() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/users/AuthDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/TimerDialog.fxml"));
             Parent root = loader.load();
-
             Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(mainRoot.getScene().getWindow());
+            dialogStage.initOwner(timerBtn.getScene().getWindow());
             dialogStage.initStyle(StageStyle.UNDECORATED);
             dialogStage.setScene(new Scene(root));
-
-            AuthDialogController controller = loader.getController();
-            controller.setDialogStage(dialogStage, (user) -> {
-                // Callback khi đăng nhập thành công
-                this.currentUser = user;
-                onUserLoggedIn();
+            
+            currentTimerDialog = loader.getController();
+            currentTimerDialog.setDialogStage(dialogStage, sleepTimer.isActive(), sleepTimer.getTimeRemaining(), (val) -> {
+                if (val == -1) { stopCountdownUI(); sleepTimer.cancelTimer(); } 
+                else if (val > 0) { startCountdownUI(val); }
+                currentTimerDialog = null; 
             });
-
             dialogStage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
+            currentTimerDialog = null;
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    private void startCountdownUI(int totalSeconds) {
+        if (sleepTimer != null) sleepTimer.cancelTimer(); 
+        sleepTimer = new Timer();
+        sleepTimer.setTimer(totalSeconds);
+        sleepTimer.addListener(new TimerListener() {
+            @Override public void onTimerFinished() {
+                Platform.runLater(() -> {
+                    if (player != null && player.isPlaying()) xuLyPause();
+                    stopCountdownUI();
+                    System.out.println("⏰ Hết giờ! Đã tắt nhạc.");
+                });
+            }
+            @Override public void onTimerCancelled() { }
+        });
+
+        if (uiUpdateTimeline != null) uiUpdateTimeline.stop();
+        uiUpdateTimeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
+            int remaining = sleepTimer.getTimeRemaining();
+            if (remaining <= 0) { stopCountdownUI(); return; }
+            String timeText = (remaining >= 3600) ? String.format("%02d:%02d:%02d", remaining/3600, (remaining%3600)/60, remaining%60) : String.format("%02d:%02d", remaining/60, remaining%60);
+            timerBtn.setText(timeText);
+            timerBtn.setAlignment(javafx.geometry.Pos.CENTER); 
+            timerBtn.setContentDisplay(ContentDisplay.RIGHT); 
+            timerBtn.setStyle("-fx-text-fill: #1DB954; -fx-font-weight: bold; -fx-background-color: transparent; -fx-alignment: center;");
+            if (currentTimerDialog != null) currentTimerDialog.updateCountdownTime(remaining);
+        }));
+        uiUpdateTimeline.setCycleCount(Timeline.INDEFINITE);
+        uiUpdateTimeline.play();
+    }
+
+    private void stopCountdownUI() {
+        if (uiUpdateTimeline != null) uiUpdateTimeline.stop();
+        if (sleepTimer != null) sleepTimer.cancelTimer();
+        timerBtn.setText(""); 
+        timerBtn.setStyle("-fx-background-color: transparent;"); 
+        timerBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        timerBtn.setAlignment(javafx.geometry.Pos.CENTER); 
+    }
+    
+    // Setup List view bên trái
+    private void setupPlaylistListView() {
+        playlistListView.getStyleClass().add("playlist-list");
+        playlistListView.setCellFactory(param -> new ListCell<Playlist>() {
+            @Override
+            protected void updateItem(Playlist item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null); setText(null); setStyle("-fx-background-color: transparent;");
+                } else {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("PlaylistRow.fxml"));
+                        VBox root = loader.load();
+                        Label nameLbl = (Label) root.lookup("#playlistName");
+                        Label creatorLbl = (Label) root.lookup("#playlistCreator");
+                        nameLbl.setText(item.getTitle());
+                        creatorLbl.setText(item.getCreator());
+                        setGraphic(root); setText(null);
+                    } catch (IOException e) { setText(item.getTitle()); }
+                }
+            }
+        });
+        playlistListView.setOnMouseClicked(event -> {
+            Playlist selectedPlaylist = playlistListView.getSelectionModel().getSelectedItem();
+            if (selectedPlaylist != null) hienThiChiTietPlaylist(selectedPlaylist); 
+        });
+    }
+
+    // Navigation Helper
+    private void chuyenManHinh(Runnable viewMethod) {
+        if (currentViewAction == viewMethod) return;
+        if (currentViewAction != null) backStack.push(currentViewAction);
+        forwardStack.clear();
+        currentViewAction = viewMethod;
+        viewMethod.run();
+        updateNavigationButtons();
+    }
+    
+    private void handleBackNav() {
+        if (!backStack.isEmpty()) {
+            Runnable prev = backStack.pop();
+            forwardStack.push(currentViewAction);
+            currentViewAction = prev;
+            prev.run();
+            updateNavigationButtons();
+        }
+    }
+    
+    private void handleForwardNav() {
+        if (!forwardStack.isEmpty()) {
+            Runnable next = forwardStack.pop();
+            backStack.push(currentViewAction);
+            currentViewAction = next;
+            next.run();
+            updateNavigationButtons();
         }
     }
 
-    // Xử lý sau khi đăng nhập thành công
-    private void onUserLoggedIn() {
-        System.out.println("User logged in: " + currentUser.getUsername());
-        
-        // 1. Cập nhật giao diện (Ví dụ: Đổi avatar, hiện tên...)
-        // TODO: Load playlist riêng của User
-        // List<Playlist> userPlaylists = currentUser.getPlayLists();
-        // playlistListView.getItems().addAll(userPlaylists);
-        
-        // 2. Load lịch sử nghe của User
-        // historyManager = currentUser.getHistory(); 
+    private void updateNavigationButtons() {
+        backBtn.setDisable(backStack.isEmpty());
+        forwardBtn.setDisable(forwardStack.isEmpty());
+        backBtn.setOpacity(backStack.isEmpty() ? 0.3 : 1.0);
+        forwardBtn.setOpacity(forwardStack.isEmpty() ? 0.3 : 1.0);
+    }
+    
+    private void hienThiManHinhHome() {
+        if (libraryView == null) chuanBiGiaoDienLibrary();
+        mainRoot.setCenter(libraryView);
+        mainRoot.setRight(null);
+    }
+    
+    private void hienThiManHinhPlayer() {
+        if (discContainer != null) {
+            mainRoot.setCenter(discContainer);
+            mainRoot.setRight(savedRightSidebar);
+        }
     }
 
-    // Xử lý đăng xuất
-    private void handleLogout() {
-        currentUser = null;
-        System.out.println("Đã đăng xuất");
-        
-        // Reset giao diện về mặc định (Khách)
-        // playlistListView.getItems().clear(); // Ví dụ thế
-        // hienThiManHinhHome();
+    private void switchSidebarTab(boolean isNextTab) {
+        if (queueTabContent == null || relatedScrollPane == null) return;
+        Node toShow = isNextTab ? queueTabContent : relatedScrollPane;
+        Node toHide = isNextTab ? relatedScrollPane : queueTabContent;
+        toHide.setVisible(false); toHide.setManaged(false);
+        if (!isNextTab) loadRelatedSongs(); else updateQueueView();
+        toShow.setVisible(true); toShow.setManaged(true);
     }
 }

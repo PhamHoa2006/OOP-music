@@ -193,4 +193,30 @@
   "lyrics" : [ ],
   "id" : "15",
   "filePath" : "data/Music/song15.mp3"
+}, {
+  "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+  "artist" : "eiei",
+  "album" : "Local Upload",
+  "duration" : 360.411428571,
+  "genres" : [ ],
+  "playCount" : 0,
+  "ratingList" : [ 0, 0, 0, 0, 0 ],
+  "timeStamps" : [ ],
+  "totalLike" : 0,
+  "lyrics" : [ ],
+  "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+  "filePath" : "data/Music/1766580547875.mp3"
+}, {
+  "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+  "artist" : "vfv",
+  "album" : "Local Upload",
+  "duration" : 347.350204081,
+  "genres" : [ ],
+  "playCount" : 0,
+  "ratingList" : [ 0, 0, 0, 0, 0 ],
+  "timeStamps" : [ ],
+  "totalLike" : 0,
+  "lyrics" : [ ],
+  "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+  "filePath" : "data/Music/1766580557462.mp3"
 } ]

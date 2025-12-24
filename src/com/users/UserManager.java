@@ -7,23 +7,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserManager {
-    // Singleton pattern (Nên dùng 1 instance duy nhất cho toàn app)
     private static UserManager instance;
-    
-    // Map lưu user
     private Map<String, User> users;
-    
     private static final String USER_FILE_PATH = "data/users.json";
 
     private UserManager() {
         users = new HashMap<>();
-        loadFromJSON(); // Tự động load khi khởi tạo
+        loadFromJSON(); 
     }
 
     public static UserManager getInstance() {
-        if (instance == null) {
-            instance = new UserManager();
-        }
+        if (instance == null) instance = new UserManager();
         return instance;
     }
 
@@ -32,74 +26,87 @@ public class UserManager {
         return users.get(username.toLowerCase());
     }
 
-    // Đăng ký
     public boolean register(String username, String password) {
-        if (username == null || username.trim().isEmpty()) {
-            System.out.println("Username không hợp lệ");
-            return false;
-        }
-        if (password == null || password.length() < 6) {
-            System.out.println("Password quá ngắn (<6 ký tự)");
-            return false;
-        }
+        if (username == null || username.trim().isEmpty()) return false;
+        if (password == null || password.length() < 6) return false;
 
         String key = username.toLowerCase();
-        if (users.containsKey(key)) {
-            System.out.println("Tên người dùng đã tồn tại");
-            return false;
-        }
+        if (users.containsKey(key)) return false;
 
         User newUser = new User(username, password);
         users.put(key, newUser);
-        saveToJSON(); // Lưu ngay sau khi đăng ký
-        System.out.println("Đăng ký thành công: " + username);
+        
+        // Lưu ngay sau khi đăng ký
+        saveToJSON(); 
         return true;
     }
 
-    // Đăng nhập: Trả về User object thay vì boolean
     public User login(String username, String password) {
         if (username == null || password == null) return null;
-
-        User user = findUser(username);
-        if (user != null && user.getPasswordHash().equals(User.hashPassword(password))) {
-            System.out.println("Đăng nhập thành công: " + username);
-            return user; // Trả về user session
+        String key = username.toLowerCase();
+        User user = users.get(key);
+        
+        if (user == null) {
+            System.out.println("❌ User không tồn tại: " + username);
+            return null;
         }
         
-        System.out.println("Sai tên đăng nhập hoặc mật khẩu");
+        String inputHash = User.hashPassword(password);
+        if (user.getPasswordHash().equals(inputHash)) {
+            System.out.println("🔓 Đăng nhập thành công: " + username);
+            return user; 
+        }
+        
+        System.out.println("❌ Sai mật khẩu!");
         return null;
     }
     
-    // Lưu ra file JSON
     public void saveToJSON() {
         ObjectMapper mapper = new ObjectMapper();
         try {
             File file = new File(USER_FILE_PATH);
             if (file.getParentFile() != null) file.getParentFile().mkdirs();
             
-            // Convert Map values to List to save
+            // Ghi đè file cũ
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, users.values());
+            System.out.println("💾 [UserManager] Đã lưu " + users.size() + " users vào ổ cứng.");
         } catch (IOException e) {
-            System.err.println("Lỗi lưu users.json: " + e.getMessage());
+            System.err.println("❌ Lỗi CRITICAL: Không thể lưu file users.json! " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    // Load từ file JSON
+    // Trong file UserManager.java
+
     public void loadFromJSON() {
         File file = new File(USER_FILE_PATH);
-        if (!file.exists()) return;
+        if (!file.exists()) {
+            System.out.println("⚠️ File users.json chưa tồn tại. Sẽ tạo mới khi đăng ký.");
+            return;
+        }
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            // Đọc list user xong map ngược lại vào HashMap
+            // Đọc mảng User[]
             User[] userList = mapper.readValue(file, User[].class);
             users.clear();
             for (User u : userList) {
-                users.put(u.getUsername().toLowerCase(), u);
+                if (u.getUsername() != null) {
+                    // Key lưu lowercase để login không phân biệt hoa thường
+                    users.put(u.getUsername().toLowerCase(), u);
+                }
             }
-            System.out.println("Đã load " + users.size() + " users.");
+            System.out.println("📂 [UserManager] Đã load thành công " + users.size() + " users.");
         } catch (IOException e) {
-            System.err.println("Lỗi đọc users.json: " + e.getMessage());
+            System.err.println("❌ Lỗi ĐỌC file users.json! File có thể bị hỏng hoặc sai cấu trúc.");
+            e.printStackTrace(); // In lỗi đầy đủ ra để debug
+            
+            // [FIX] Nếu lỗi format, đổi tên file cũ để backup và reset data
+            File backup = new File(USER_FILE_PATH + ".bak");
+            if(file.renameTo(backup)) {
+                System.out.println("👉 Đã backup file lỗi thành users.json.bak. Dữ liệu sẽ được reset.");
+            }
+            users.clear(); 
         }
     }
 }

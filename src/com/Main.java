@@ -1,8 +1,10 @@
 package com;
 
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
+import com.users.SongLibrary;
+import com.users.UserManager;
+
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -57,7 +59,17 @@ public class Main extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
 
-            primaryStage.setOnCloseRequest(e -> System.exit(0));
+            primaryStage.setOnCloseRequest(e -> {
+                System.out.println("Dang luu du lieu truoc khi tat...");
+                
+                // GỌI HÀM LƯU DỮ LIỆU USER XUỐNG FILE
+                UserManager.getInstance().saveToJSON();
+                SongLibrary.getInstance().saveToJSON(); 
+                
+                // Thoát chương trình
+                Platform.exit();
+                System.exit(0);
+            });
 
         } catch (Exception e) {
             e.printStackTrace(); 

@@ -1,15 +1,266 @@
 [ {
-  "id" : "6afc7594-fee0-4a21-bd22-beab2948fb4a",
+  "id" : "363046a7-6d9d-4b2b-85cc-a013ba9e9801",
   "name" : null,
   "age" : null,
   "email" : null,
   "description" : null,
-  "playLists" : [ ],
-  "username" : "pvq",
+  "playLists" : [ {
+    "id" : "d21b70b8-ac85-42b0-9359-8cc25d259966",
+    "name" : "Favorites",
+    "songs" : [ {
+      "title" : "Nơi Này Có Anh",
+      "artist" : "Sơn Tùng M-TP",
+      "album" : null,
+      "duration" : 260.0,
+      "genres" : [ ],
+      "playCount" : 45,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "3",
+      "filePath" : "data/Music/song3.mp3"
+    }, {
+      "title" : "Một Bước Yêu, Vạn Dặm Đau",
+      "artist" : "Mr. Siro",
+      "album" : null,
+      "duration" : 299.0,
+      "genres" : [ ],
+      "playCount" : 12,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "9",
+      "filePath" : "data/Music/song9.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "iampvq",
+    "description" : "Bài hát đã thả tim"
+  }, {
+    "id" : "aba2a648-3301-4030-bf6e-34c1ebde2ed9",
+    "name" : "i am ok",
+    "songs" : [ ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "iampvq",
+    "description" : ""
+  } ],
+  "username" : "iampvq",
   "passwordHash" : "fd3795d47795c116884cf39d9d02c8886ab3d95d1101bb9bbf8ef1a21197f124",
   "history" : {
-    "userPlayCount" : { },
-    "userHistory" : [ ],
-    "userHistoryByDate" : { }
+    "userPlayCount" : {
+      "3" : 1,
+      "9" : 1,
+      "10" : 1
+    },
+    "userHistory" : [ {
+      "song" : {
+        "title" : "Nơi Này Có Anh",
+        "artist" : "Sơn Tùng M-TP",
+        "album" : null,
+        "duration" : 260.0,
+        "genres" : [ ],
+        "playCount" : 45,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "3",
+        "filePath" : "data/Music/song3.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    }, {
+      "song" : {
+        "title" : "Một Bước Yêu, Vạn Dặm Đau",
+        "artist" : "Mr. Siro",
+        "album" : null,
+        "duration" : 299.0,
+        "genres" : [ ],
+        "playCount" : 12,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "9",
+        "filePath" : "data/Music/song9.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    }, {
+      "song" : {
+        "title" : "Em Gái Mưa",
+        "artist" : "Hương Tràm",
+        "album" : null,
+        "duration" : 347.0,
+        "genres" : [ ],
+        "playCount" : 50,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "10",
+        "filePath" : "data/Music/song10.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    } ]
+  }
+}, {
+  "id" : "251fb14e-24f3-4465-80e6-dad637120aa3",
+  "name" : null,
+  "age" : null,
+  "email" : null,
+  "description" : null,
+  "playLists" : [ {
+    "id" : "0a60eefd-34c9-49ac-86bb-d4266c133b3a",
+    "name" : "Favorites",
+    "songs" : [ {
+      "title" : "Tình Đầu",
+      "artist" : "Tăng Duy Tân",
+      "album" : null,
+      "duration" : 296.0,
+      "genres" : [ ],
+      "playCount" : 2,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "6",
+      "filePath" : "data/Music/song6.mp3"
+    }, {
+      "title" : "Giá Như Mình Đừng Yêu Nhau",
+      "artist" : "Quang Trung",
+      "album" : null,
+      "duration" : 301.0,
+      "genres" : [ ],
+      "playCount" : 41,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "15",
+      "filePath" : "data/Music/song15.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "Bài hát đã thả tim"
+  }, {
+    "id" : "fc6caccc-68ef-4d4c-8775-9d7ce5312ffa",
+    "name" : "Nhạc chill",
+    "songs" : [ ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "ok fine"
+  }, {
+    "id" : "60ae7236-dc53-4b60-aea9-56b3a52d6e4f",
+    "name" : "Nhạc tải lên",
+    "songs" : [ {
+      "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+      "artist" : "eiei",
+      "album" : "Local Upload",
+      "duration" : 360.411428571,
+      "genres" : [ ],
+      "playCount" : 0,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+      "filePath" : "data/Music/1766580547875.mp3"
+    }, {
+      "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+      "artist" : "vfv",
+      "album" : "Local Upload",
+      "duration" : 347.350204081,
+      "genres" : [ ],
+      "playCount" : 0,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+      "filePath" : "data/Music/1766580557462.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "Các bài hát bạn đã tải lên từ máy tính \uD83D\uDCBB"
+  } ],
+  "username" : "pvq",
+  "passwordHash" : "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+  "history" : {
+    "userPlayCount" : {
+      "1" : 1,
+      "9" : 1,
+      "6" : 1,
+      "15" : 1
+    },
+    "userHistory" : [ {
+      "song" : {
+        "title" : "Hips Don't Lie",
+        "artist" : "Shakira, Wyclef",
+        "album" : null,
+        "duration" : 217.0,
+        "genres" : [ ],
+        "playCount" : 32,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "1",
+        "filePath" : "data/Music/song1.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    }, {
+      "song" : {
+        "title" : "Một Bước Yêu, Vạn Dặm Đau",
+        "artist" : "Mr. Siro",
+        "album" : null,
+        "duration" : 299.0,
+        "genres" : [ ],
+        "playCount" : 12,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "9",
+        "filePath" : "data/Music/song9.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    }, {
+      "song" : {
+        "title" : "Tình Đầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 296.0,
+        "genres" : [ ],
+        "playCount" : 2,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "6",
+        "filePath" : "data/Music/song6.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    }, {
+      "song" : {
+        "title" : "Giá Như Mình Đừng Yêu Nhau",
+        "artist" : "Quang Trung",
+        "album" : null,
+        "duration" : 301.0,
+        "genres" : [ ],
+        "playCount" : 41,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "15",
+        "filePath" : "data/Music/song15.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    } ]
   }
 } ]
