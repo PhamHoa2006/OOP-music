@@ -10,6 +10,19 @@ public class UserManager {
     private static UserManager instance;
     private Map<String, User> users;
     private static final String USER_FILE_PATH = "data/users.json";
+    private User currentUser = null;
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+    }
+
+    public void logout() {
+        this.currentUser = null;
+    }
 
     private UserManager() {
         users = new HashMap<>();
@@ -53,6 +66,7 @@ public class UserManager {
         
         String inputHash = User.hashPassword(password);
         if (user.getPasswordHash().equals(inputHash)) {
+            this.currentUser = user;
             System.out.println("🔓 Đăng nhập thành công: " + username);
             return user; 
         }

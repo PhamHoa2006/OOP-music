@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #121212;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.users.GuestViewController">
+   <children>
+      <Label text="Thưởng thức âm nhạc trọn vẹn" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label text="Đăng nhập để xem playlist, lịch sử nghe và tải nhạc lên." textFill="#b3b3b3" />
+      
+      <Button fx:id="loginBtn" onAction="#openLogin" style="-fx-background-color: white; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 10 30; -fx-cursor: hand;" text="Đăng nhập miễn phí" />
+      
+      <Button fx:id="registerBtn" onAction="#openRegister" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: #808080; -fx-border-radius: 20; -fx-padding: 10 30; -fx-cursor: hand;" text="Đăng ký tài khoản" />
+   </children>
+   <padding>
+      <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+   </padding>
+</VBox>

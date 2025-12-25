@@ -114,7 +114,7 @@
                      </viewport>
                   </ImageView>
                </graphic></Button>
-            <Button fx:id="settingsBtn" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="icon-button">
+            <Button fx:id="settingsBtn" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#showUserScreen" prefHeight="25.0" prefWidth="25.0" styleClass="icon-button">
                <graphic>
                   <ImageView fitHeight="34.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>

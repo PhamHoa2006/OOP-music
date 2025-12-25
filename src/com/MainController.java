@@ -12,12 +12,15 @@ import com.users.History;
 import com.musicPlayer.CreatePlaylistController;
 import com.musicPlayer.UploadDialogController;
 import com.users.User;
-import com.users.UserManager; // Import thêm cái này để gọi saveToJSON cho gọn
+import com.users.UserManager; 
+import com.users.UserProfileController;
 import com.users.AuthDialogController;
+// import com.users.GuestViewController; // Không cần import controller, chỉ cần load fxml
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
 import javafx.scene.Node;
@@ -47,11 +50,13 @@ import java.util.ArrayList;
 import java.io.IOException;
 import java.util.List;
 import java.util.Stack;
+import java.net.URL; 
+import java.util.ResourceBundle; 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-public class MainController {
+public class MainController implements Initializable {
 
     // --- KHAI BÁO FXML ---
     @FXML private BorderPane mainRoot;
@@ -100,7 +105,7 @@ public class MainController {
     private boolean isRepeat = false;
     private boolean isShuffle = false;
     private boolean dangKeoThanhTruot = false;
-    private boolean isSearchingPlaylist = false; // Biến trạng thái để biết searchField đang lọc cái gì
+    private boolean isSearchingPlaylist = false; 
     private FlowPane currentPlaylistContainer;
     
     // UI State
@@ -119,7 +124,16 @@ public class MainController {
     private History historyManager;
     private TimerDialogController currentTimerDialog;
 
-    public void initialize() {
+    // --- SINGLETON ---
+    private static MainController instance;
+
+    public static MainController getInstance() {
+        return instance;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        instance = this; 
         System.out.println("🚀 [DEBUG] MainController đang khởi động...");
 
         // 1. Setup Logic & Data
@@ -134,7 +148,7 @@ public class MainController {
         // 3. Setup Events
         ganSuKienChoNut();
         if (uploadBtn != null) uploadBtn.setOnAction(e -> handleUpload());
-        if (settingsBtn != null) settingsBtn.setOnAction(e -> showSettingsMenu());
+        if (settingsBtn != null) settingsBtn.setOnAction(e -> showUserScreen());
         
         // 4. Mặc định vào màn hình Home
         libraryView = null; 
@@ -142,6 +156,23 @@ public class MainController {
         
         currentViewAction = this::hienThiManHinhHome;
         updateNavigationButtons();
+    }
+
+    // --- [FIXED] HÀM QUAN TRỌNG ĐỂ LOAD DATA SAU KHI ĐĂNG NHẬP ---
+    // Hàm này được GuestViewController gọi khi login thành công
+    public void setLoggedInUser(User user) {
+        this.currentUser = user;
+        
+        // Đồng bộ sang UserManager
+        UserManager.getInstance().setCurrentUser(user);
+        
+        // Load lại Playlist, History của user này lên giao diện
+        onUserLoggedIn(); 
+        
+        // Chuyển màn hình sang trang Profile (Xin chào...)
+        showUserScreen();
+        
+        System.out.println("✅ MainController: Đã nhận user " + user.getUsername() + " và load data.");
     }
 
     private void caiDatBackend() {
@@ -371,7 +402,7 @@ public class MainController {
         repeatButton.setOnAction(e -> xulyRepeat());
         if (likeBtn != null) likeBtn.setOnAction(e -> toggleLike());
         shuffleButton.setOnAction(e -> toggleShuffle()); 
-        addToPlaylistBtn.setOnAction(e -> hienThiGiaoDienChonPlaylist());
+        addToPlaylistBtn.setOnAction(e -> xuLyNutAddSongToPlaylist());
 
         // Slider
         volumeSlider.valueProperty().addListener((obs, cu, moi) -> { if (player != null) player.setVolume(moi.doubleValue() / 100.0); });
@@ -397,27 +428,35 @@ public class MainController {
         // Chức năng khác
         if (newPlaylistBtn != null) newPlaylistBtn.setOnAction(e -> showCreatePlaylistDialog());
         
-     // Cấu trúc lại SearchField để hỗ trợ cả 2 chế độ
-        
+        // Cấu trúc lại SearchField để hỗ trợ cả 2 chế độ
         searchField.textProperty().addListener((obs, oldVal, newVal) -> {
             if (isSearchingPlaylist) {
                 locDanhSachPlaylist(newVal); // Chế độ lọc Playlist
             } else {
-                xuLyTimKiem(newVal);		// Chế độ lọc Bài hát
+                xuLyTimKiem(newVal);        // Chế độ lọc Bài hát
             }
         });
-        
-        
-
     }
 
     private void huyChonPlaylist() {
         if (playlistListView != null) playlistListView.getSelectionModel().clearSelection();
     }
+    
+    private void resetSidebarStyles() {
+        // Xóa class active cho tất cả nút điều hướng
+        homeBtn.getStyleClass().remove("nav-btn-selected");
+        favoritesBtn.getStyleClass().remove("nav-btn-selected");
+        historyBtn.getStyleClass().remove("nav-btn-selected");
+        top100Btn.getStyleClass().remove("nav-btn-selected");
+    }
 
     // --- CÁC MÀN HÌNH "ẢO" ---
     private void hienThiManHinhFavorites() {
-        if (currentUser == null) return;
+        if (currentUser == null) {
+            // Nếu chưa login thì hiện thông báo hoặc màn login
+            showUserScreen();
+            return;
+        }
         hienThiChiTietPlaylist(getFavoritesPlaylist());
     }
 
@@ -461,21 +500,20 @@ public class MainController {
             CreatePlaylistController controller = loader.getController();
             controller.setDialogStage(dialogStage, (newPlaylist) -> {
                 if (newPlaylist.getTitle().equalsIgnoreCase("Favorites")) {
-                    // Nếu user cố tình đặt tên này -> Đổi tên khác
                     newPlaylist.setName("My Favorites"); 
                 }
                 if (currentUser != null) {
                     newPlaylist.setCreator(currentUser.getUsername());
-                    playlistLibrary.addPlaylist(newPlaylist);
+                    currentUser.getPlayLists().add(newPlaylist); // Add vào user list
                     
-                    // 2. Cập nhật giao diện bên trái (Sidebar) để thấy playlist mới ngay
-                    //lamMoiDanhSachPlaylistSidebar();
                     // LƯU NGAY
                     UserManager.getInstance().saveToJSON(); 
                     System.out.println("✅ Đã lưu playlist mới: " + newPlaylist.getTitle());
                 } else {
                     newPlaylist.setCreator("Khách");
                 }
+                
+                // Add vào UI ListView bên trái
                 if (playlistListView != null) playlistListView.getItems().add(newPlaylist);
             });
             dialogStage.showAndWait();
@@ -593,55 +631,11 @@ public class MainController {
             // 4. LƯU NGAY
             UserManager.getInstance().saveToJSON();
         } else {
-            // Nếu là khách (Chưa đăng nhập) -> Có thể tạo playlist tạm trong Library hoặc bỏ qua
             System.out.println("⚠️ Khách upload nhạc - sẽ không được lưu vào Playlist cá nhân.");
         }
     }
 
-    // --- AUTH (ĐĂNG NHẬP/ĐĂNG KÝ) ---
-    private void showSettingsMenu() {
-        ContextMenu menu = new ContextMenu();
-        menu.setStyle("-fx-background-color: #282828; -fx-text-fill: white;");
-
-        if (currentUser == null) {
-            MenuItem loginItem = new MenuItem("Đăng nhập");
-            loginItem.setStyle("-fx-text-fill: white;");
-            loginItem.setOnAction(e -> showAuthDialog());
-            menu.getItems().add(loginItem);
-        } else {
-            MenuItem infoItem = new MenuItem("Xin chào, " + currentUser.getUsername());
-            infoItem.setDisable(true);
-            infoItem.setStyle("-fx-opacity: 1.0; -fx-font-weight: bold; -fx-text-fill: #1DB954;");
-
-            MenuItem logoutItem = new MenuItem("Đăng xuất");
-            logoutItem.setStyle("-fx-text-fill: white;");
-            logoutItem.setOnAction(e -> handleLogout());
-            
-            menu.getItems().addAll(infoItem, logoutItem);
-        }
-        menu.show(settingsBtn, Side.BOTTOM, 0, 0);
-    }
-
-    private void showAuthDialog() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/users/AuthDialog.fxml"));
-            Parent root = loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(mainRoot.getScene().getWindow());
-            dialogStage.initStyle(StageStyle.UNDECORATED);
-            dialogStage.setScene(new Scene(root));
-
-            AuthDialogController controller = loader.getController();
-            controller.setDialogStage(dialogStage, (user) -> {
-                this.currentUser = user;
-                onUserLoggedIn();
-            });
-            dialogStage.showAndWait();
-        } catch (IOException e) { e.printStackTrace(); }
-    }
-
-    // Trong MainController.java
+    // --- LOGIC AUTH ---
     private void onUserLoggedIn() {
         System.out.println("User logged in: " + currentUser.getUsername());
         
@@ -653,7 +647,7 @@ public class MainController {
             List<Playlist> userPlaylists = currentUser.getPlayLists();
             if (userPlaylists != null) {
                 for (Playlist p : userPlaylists) {
-                    // [FIX QUAN TRỌNG] Chỉ hiện playlist thường, ẨN playlist Favorites và Nhạc tải lên (nếu muốn ẩn nốt)
+                    // Chỉ hiện playlist thường, ẨN playlist Favorites và Nhạc tải lên (nếu muốn)
                     if (!p.getTitle().equals("Favorites")) { 
                         playlistListView.getItems().add(p);
                     }
@@ -661,7 +655,7 @@ public class MainController {
             }
         }
         
-        // 2. Load History (Giữ nguyên)
+        // 2. Load History
         if (currentUser.getHistory() != null) {
             this.historyManager = currentUser.getHistory();
         } else {
@@ -681,21 +675,6 @@ public class MainController {
         hienThiManHinhHome();
     }
 
-    private Playlist getFavoritesPlaylist() {
-        if (currentUser == null) return null;
-        for (Playlist p : currentUser.getPlayLists()) {
-            if (p.getTitle().equals("Favorites")) return p;
-        }
-        // Nếu chưa có thì tạo mới
-        Playlist fav = new Playlist("Favorites");
-        fav.setCreator(currentUser.getUsername());
-        fav.setDescription("Bài hát đã thả tim");
-        currentUser.getPlayLists().add(fav);
-        // Lưu ngay khi vừa tạo mới
-        com.users.UserManager.getInstance().saveToJSON();
-        return fav;
-    }
-
     // =================================================================================================
     // PHẦN 4: PLAYER LOGIC & HELPER
     // =================================================================================================
@@ -709,7 +688,7 @@ public class MainController {
             int randomIndex = (int) (Math.random() * totalSongs);
             choiBaiHatCuThe(randomIndex);
         } else {
-            player.next(); // Tăng index lên 1 (đúng thứ tự)
+            player.next(); 
             capNhatGiaoDienDuoiCung();
             player.play();
         }
@@ -723,61 +702,30 @@ public class MainController {
                 capNhatGiaoDienDuoiCung();
             } 
             else if (isShuffle) {
-                // Lấy danh sách đang có của player
                 int totalSongs = player.getPlaylist().getSongs().size();
                 int randomIndex = (int) (Math.random() * totalSongs);
-                
-                // Nhảy đến bài đó mà không phá hủy cấu trúc Playlist
                 choiBaiHatCuThe(randomIndex); 
             } 
             else {
-                nextSong(); // Lúc này nextSong() sẽ chạy theo đúng thứ tự currentIndex + 1
+                nextSong(); 
             }
         });
     }
 
     private void xulyRepeat() {
         isRepeat = !isRepeat;
-
         if (isRepeat) {
             repeatButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-            
             // Khóa nút Shuffle
             isShuffle = false;
             shuffleButton.setStyle(null);
             shuffleButton.setDisable(true);
-            
-            System.out.println("🔁 Chế độ Lặp lại: BẬT (Đã khóa Shuffle)");
         } else {
             repeatButton.setStyle(null);
             shuffleButton.setDisable(false); // Mở khóa lại Shuffle
-            
-            System.out.println("➡️ Chế độ Lặp lại: TẮT");
         }
     }
     
-    private void xulyShuffle() {
-        isShuffle = !isShuffle; // Đảo trạng thái
-
-        if (isShuffle) {
-            // 1. Nếu BẬT Shuffle: Tô màu xanh
-            shuffleButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-            
-            // 2. VÔ HIỆU HÓA nút Repeat
-            isRepeat = false; // Tắt trạng thái repeat trong logic
-            repeatButton.setStyle(null); // Xóa màu xanh của repeat (nếu có)
-            repeatButton.setDisable(true); // Làm mờ/khóa nút repeat
-            
-            System.out.println("🔀 Chế độ Ngẫu nhiên: BẬT (Đã khóa Repeat)");
-        } else {
-            // 3. Nếu TẮT Shuffle: Về mặc định
-            shuffleButton.setStyle(null);
-            repeatButton.setDisable(false); // Mở khóa lại nút repeat
-            
-            System.out.println("➡️ Chế độ Ngẫu nhiên: TẮT");
-        }
-    }
-
     private void toggleShuffle() {
         isShuffle = !isShuffle;
         if (isShuffle) {
@@ -807,7 +755,6 @@ public class MainController {
         updateQueueView();
     }
 
-    // Trong MainController.java
     private void toggleLike() {
         Song s = player.getCurrentSong();
         if (s == null || currentUser == null) return;
@@ -837,7 +784,6 @@ public class MainController {
         
         // [CỰC QUAN TRỌNG] Lưu dữ liệu ngay lập tức!
         com.users.UserManager.getInstance().saveToJSON();
-        System.out.println("💾 [Auto-Save] Đã lưu User sau khi Like/Unlike.");
     }
     
     private void updateLikeButtonState() {
@@ -1162,14 +1108,14 @@ public class MainController {
     }
     
     private void hienThiManHinhHome() {
-    	resetSearchState();
+        resetSearchState();
         if (libraryView == null) chuanBiGiaoDienLibrary();
         mainRoot.setCenter(libraryView);
         mainRoot.setRight(null);
     }
     
     private void hienThiManHinhPlayer() {
-    	resetSearchState();
+        resetSearchState();
         if (discContainer != null) {
             mainRoot.setCenter(discContainer);
             mainRoot.setRight(savedRightSidebar);
@@ -1199,15 +1145,13 @@ public class MainController {
         Label title = new Label("Thêm \"" + player.getCurrentSong().getTitle() + "\" vào...");
         title.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
         
-        FlowPane container = new FlowPane(15, 15);
-        container.setId("playlistContainer"); // ID để hàm locDanhSachPlaylist tìm thấy
-        
+        // [FIX] Khởi tạo container và gán vào biến toàn cục
         FlowPane playlistContainer = new FlowPane(15, 15);
         this.currentPlaylistContainer = playlistContainer;
         
         veDanhSachPlaylist(playlistLibrary.getAllPlaylists(), playlistContainer);
 
-        layout.getChildren().addAll(title, container);
+        layout.getChildren().addAll(title, playlistContainer);
         ScrollPane scroll = new ScrollPane(layout);
         scroll.setFitToWidth(true);
         scroll.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
@@ -1232,7 +1176,8 @@ public class MainController {
             // KHI CHỌN PLAYLIST
             card.setOnMouseClicked(e -> {
                 p.addSong(player.getCurrentSong()); // Thêm bài vào đối tượng
-                playlistLibrary.saveToJSON();       // Lưu xuống file json ngay lập tức
+                // Cần đảm bảo playlistLibrary có phương thức save hoặc gọi UserManager lưu nếu là playlist user
+                UserManager.getInstance().saveToJSON(); 
                 
                 // Thoát chế độ chọn, quay về màn hình nhạc
                 isSearchingPlaylist = false;
@@ -1248,7 +1193,12 @@ public class MainController {
         if (currentPlaylistContainer == null) return; // Bảo vệ nếu container chưa tạo
 
         List<Playlist> ketQua = new ArrayList<>();
-        for (Playlist p : playlistLibrary.getAllPlaylists()) {
+        // Kết hợp cả playlist hệ thống và user playlist
+        List<Playlist> allPlaylists = new ArrayList<>();
+        // Ở đây đơn giản hóa lấy từ user hiện tại
+        if (currentUser != null) allPlaylists.addAll(currentUser.getPlayLists());
+
+        for (Playlist p : allPlaylists) {
             if (p.getName().toLowerCase().contains(tuKhoa.toLowerCase())) {
                 ketQua.add(p);
             }
@@ -1275,10 +1225,12 @@ public class MainController {
         header.setStyle("-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;");
 
         FlowPane playlistContainer = new FlowPane(15, 15);
-        playlistContainer.setId("playlistContainer"); // Rất quan trọng để hàm lọc tìm thấy
+        this.currentPlaylistContainer = playlistContainer; // [FIX] Gán biến toàn cục
 
-        // 3. Hiển thị toàn bộ playlist hiện có
-        veDanhSachPlaylist(playlistLibrary.getAllPlaylists(), playlistContainer);
+        // 3. Hiển thị toàn bộ playlist hiện có (Của user hiện tại)
+        if (currentUser != null) {
+             veDanhSachPlaylist(currentUser.getPlayLists(), playlistContainer);
+        }
 
         mainLayout.getChildren().addAll(header, playlistContainer);
         
@@ -1296,5 +1248,59 @@ public class MainController {
         searchField.clear();
         searchField.setPromptText("Tìm kiếm bài hát...");
     }
-}
 
+    // Hàm này sẽ được gọi khi ấn nút User (Avatar/Settings) trên thanh công cụ
+    public void showUserScreen() {
+        try {
+            // 1. Reset hiệu ứng sidebar
+            resetSidebarStyles(); 
+            
+            // 2. Lấy user hiện tại
+            User currentUser = UserManager.getInstance().getCurrentUser();
+            
+            // Logic chọn view
+            String fxmlPath = "";
+            if (currentUser == null) {
+                // [QUAN TRỌNG] Thêm /com/users/ vào trước tên file
+                fxmlPath = "/com/users/GuestView.fxml"; 
+            } else {
+                fxmlPath = "/com/users/UserProfileView.fxml";
+            }
+
+            // [FIXED] SỬA TÊN BIẾN fxmlFile -> fxmlPath
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent view = loader.load();
+
+            // Nếu là màn hình profile, truyền data user vào
+            if (currentUser != null && loader.getController() instanceof UserProfileController) {
+                UserProfileController profileCtrl = loader.getController();
+                profileCtrl.setUserData(currentUser);
+            }
+
+            // 3. Hiển thị ra giữa màn hình
+            mainRoot.setCenter(view);
+            
+            // 4. Ẩn sidebar bên phải nếu cần cho thoáng
+            mainRoot.setRight(null);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Lỗi load màn hình User: " + e.getMessage());
+        }
+    }
+    
+    private Playlist getFavoritesPlaylist() {
+        if (currentUser == null) return null;
+        for (Playlist p : currentUser.getPlayLists()) {
+            if (p.getTitle().equals("Favorites")) return p;
+        }
+        // Nếu chưa có thì tạo mới
+        Playlist fav = new Playlist("Favorites");
+        fav.setCreator(currentUser.getUsername());
+        fav.setDescription("Bài hát đã thả tim");
+        currentUser.getPlayLists().add(fav);
+        // Lưu ngay khi vừa tạo mới
+        com.users.UserManager.getInstance().saveToJSON();
+        return fav;
+    }
+}
