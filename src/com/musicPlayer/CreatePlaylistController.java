@@ -1,17 +1,22 @@
 package com.musicPlayer;
+import com.users.PlaylistLibrary;
+import com.musicPlayer.Playlist;
 
 import java.util.function.Consumer;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
 
 public class CreatePlaylistController {
 
     @FXML private TextField nameField;
     @FXML private TextField descField; // Trường nhập mô tả (Check kỹ fx:id bên FXML nhé)
     @FXML private ComboBox<String> privacyBox; // Hộp chọn Công khai/Riêng tư
-
+    @FXML private Label dialogTitleLbl;
+    
     private Stage dialogStage;
     private Consumer<Playlist> onPlaylistCreated; // Callback trả về playlist khi tạo xong
 
@@ -46,6 +51,20 @@ public class CreatePlaylistController {
             nameField.setPromptText("Vui lòng nhập tên!");
             return;
         }
+        
+        // Kiểm tra xem tên có trùng lặp không
+        for (Playlist p : PlaylistLibrary.getInstance().getAllPlaylists()) {
+            // So sánh không phân biệt hoa thường (Ví dụ: "Rock" trùng với "rock")
+            if (p.getTitle().equalsIgnoreCase(name)) {
+                nameField.setStyle("-fx-border-color: red;");
+                nameField.clear(); // Xóa tên vừa nhập đi
+                nameField.setPromptText("Tên này đã tồn tại!"); // Cảnh báo
+                return; // Dừng lại, không tạo playlist
+            }
+        }
+
+        // Nếu vượt qua 2 bước trên thì Reset lại style (bỏ viền đỏ nếu có)
+        nameField.setStyle(null);
 
         // 1. Tạo Playlist mới
         Playlist newPlaylist = new Playlist(name);
@@ -77,6 +96,13 @@ public class CreatePlaylistController {
     private void closeDialog() {
         if (dialogStage != null) {
             dialogStage.close();
+        }
+    }
+    
+ // Hàm này để MainController gọi và đổi tên tiêu đề
+    public void setDialogTitle(String title) {
+        if (dialogTitleLbl != null) {
+            dialogTitleLbl.setText(title);
         }
     }
 }

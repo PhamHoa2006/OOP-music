@@ -222,4 +222,12 @@ public class AudioPlayer implements Player {
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
+    
+    public int getCurrentIndex() {
+        return this.currentIndex;
+    }
+    
+    public void setCurrentIndex(int index) {
+        this.currentIndex = index;
+    }
 }

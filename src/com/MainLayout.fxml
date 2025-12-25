@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
@@ -21,7 +28,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="800.0" prefWidth="1200.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
+<BorderPane fx:id="mainRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="800.0" prefWidth="1200.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.MainController">
 
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="15.0" styleClass="border-bottom" BorderPane.alignment="CENTER">
@@ -373,16 +380,18 @@
                      </image>
                   </ImageView>
                   <VBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="130.0" HBox.hgrow="NEVER">
-                     <Label fx:id="currentSongLabel" text="Tên bài hát" textFill="#fdfdfd">
-                        <font>
-                           <Font name="System Bold" size="12.0" />
-                        </font>
-                     </Label>
-                     <Label fx:id="currentArtistLabel" text="Nghệ sĩ">
-                        <font>
-                           <Font size="11.0" />
-                        </font>
-                     </Label>
+                     <children>
+                        <Label fx:id="currentSongLabel" text="Tên bài hát" textFill="#fdfdfd">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="currentArtistLabel" text="Nghệ sĩ">
+                           <font>
+                              <Font size="11.0" />
+                           </font>
+                        </Label>
+                     </children>
                      <padding>
                         <Insets left="5.0" />
                      </padding>
@@ -541,65 +550,67 @@
             <Region prefHeight="74.0" prefWidth="76.0" HBox.hgrow="ALWAYS" />
             
                   <HBox alignment="CENTER_RIGHT" prefWidth="275.0" spacing="5.0" HBox.hgrow="NEVER">
-               <Button fx:id="mvBtn" minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
-                  <graphic>
-                     <ImageView fitHeight="16.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                           <Image url="@icons/MV.png" />
-                        </image>
-                        <viewport>
-                           <Rectangle2D height="455.0" minX="710.0" minY="349.0" width="701.0" />
-                        </viewport>
-                     </ImageView>
-                  </graphic>
-                  <padding>
-                     <Insets left="1.0" />
-                  </padding>
-                  <HBox.margin>
-                     <Insets right="10.0" />
-                  </HBox.margin>
-               </Button>
-               <Button fx:id="lyricsBtn" minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
-                  <graphic>
-                     <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                           <Image url="@icons/lyrics.png" />
-                        </image>
-                        <viewport>
-                           <Rectangle2D height="611.0" minX="695.0" minY="262.0" width="702.0" />
-                        </viewport>
-                     </ImageView>
-                  </graphic>
-                  <HBox.margin>
-                     <Insets right="5.0" />
-                  </HBox.margin>
-               </Button>
-               <StackPane minHeight="15.0" minWidth="15.0" prefHeight="15.0" prefWidth="15.0">
-                  <children>
-                     <Button fx:id="volumeBtn" minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0" visible="false">
-                        <graphic>
-                           <ImageView fitHeight="28.0" fitWidth="118.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                 <Image url="@icons/volume.png" />
-                              </image>
-                           </ImageView>
-                        </graphic>
-                     </Button>
-                     <Button fx:id="mutedBtn" alignment="CENTER" minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
-                        <graphic>
-                           <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                 <Image url="@icons/mute.png" />
-                              </image>
-                              <viewport>
-                                 <Rectangle2D height="558.0" minX="726.0" minY="290.0" width="764.0" />
-                              </viewport>
-                           </ImageView>
-                        </graphic>
-                     </Button>
-                  </children>
-               </StackPane>
-               <Slider fx:id="volumeSlider" onSwipeLeft="#handleVolumeDown" onSwipeRight="#handleVolumeUp" prefHeight="12.0" prefWidth="70.0" value="50.0" />
+               <children>
+                  <Button fx:id="mvBtn" minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/MV.png" />
+                           </image>
+                           <viewport>
+                              <Rectangle2D height="455.0" minX="710.0" minY="349.0" width="701.0" />
+                           </viewport>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="1.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="lyricsBtn" minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/lyrics.png" />
+                           </image>
+                           <viewport>
+                              <Rectangle2D height="611.0" minX="695.0" minY="262.0" width="702.0" />
+                           </viewport>
+                        </ImageView>
+                     </graphic>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <StackPane minHeight="15.0" minWidth="15.0" prefHeight="15.0" prefWidth="15.0">
+                     <children>
+                        <Button fx:id="volumeBtn" minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0" visible="false">
+                           <graphic>
+                              <ImageView fitHeight="28.0" fitWidth="118.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/volume.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="mutedBtn" alignment="CENTER" minHeight="15.0" minWidth="15.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/mute.png" />
+                                 </image>
+                                 <viewport>
+                                    <Rectangle2D height="558.0" minX="726.0" minY="290.0" width="764.0" />
+                                 </viewport>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </StackPane>
+                  <Slider fx:id="volumeSlider" onSwipeLeft="#handleVolumeDown" onSwipeRight="#handleVolumeUp" prefHeight="12.0" prefWidth="70.0" value="50.0" />
+               </children>
             </HBox>
          </children>
       </HBox>
