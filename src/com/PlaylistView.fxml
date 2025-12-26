@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="playlistViewRoot" prefHeight="600.0" prefWidth="900.0" spacing="30.0" style="-fx-background-color: #030303;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="playlistViewRoot" prefHeight="600.0" prefWidth="900.0" spacing="30.0" style="-fx-background-color: #030303;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <padding>
       <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
    </padding>

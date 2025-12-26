@@ -27,6 +27,7 @@ public class Playlist {
     
     private String creator;
     private String description;
+    private String privacy;
 
     public Playlist() {
         this.id = UUID.randomUUID().toString();
@@ -54,6 +55,13 @@ public class Playlist {
 
     public String getId() { return this.id; }
     public void setId(String id) { this.id = id; }
+    public String getPrivacy() {
+        return privacy;
+    }
+
+    public void setPrivacy(String privacy) {
+        this.privacy = privacy;
+    }
     
     // Jackson sẽ dùng getter này để ghi ra "size": 0
     @JsonIgnore

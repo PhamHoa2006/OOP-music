@@ -1,43 +1,83 @@
-package com.users; // [QUAN TRỌNG] Đổi package
+package com.users;
 
-import com.MainController; // Import để gọi lại Main
+import com.MainController;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 
 public class GuestViewController {
 
-    @FXML
-    private void openLogin() { showAuthDialog(true); }
+    @FXML private Label titleLabel;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private Label messageLabel;
+    @FXML private Button actionBtn;
+    @FXML private Label switchLabel;
+    @FXML private Button switchModeBtn;
+
+    private boolean isLoginMode = true; // Mặc định là Login
 
     @FXML
-    private void openRegister() { showAuthDialog(false); }
+    private void handleAction() {
+        String user = usernameField.getText().trim();
+        String pass = passwordField.getText().trim();
 
-    private void showAuthDialog(boolean isLoginMode) {
-        try {
-            // Vì file này và AuthDialog cùng nằm trong com.users nên gọi tên trực tiếp được
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AuthDialog.fxml"));
-            
-            Stage stage = new Stage();
-            stage.initStyle(StageStyle.TRANSPARENT);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(loader.load()));
+        if (user.isEmpty() || pass.isEmpty()) {
+            messageLabel.setText("Vui lòng nhập đầy đủ thông tin!");
+            messageLabel.setStyle("-fx-text-fill: #ff5555;");
+            return;
+        }
 
-            AuthDialogController controller = loader.getController();
-            
-            // Set chế độ Login/Register (Ông cần thêm hàm setMode bên AuthDialogController nếu chưa có)
-            // controller.setMode(isLoginMode); 
+        UserManager userManager = UserManager.getInstance();
 
-            controller.setDialogStage(stage, (user) -> {
-                System.out.println("Login xong: " + user.getUsername());
-                // Gọi ra ngoài Main để reload màn hình
-                MainController.getInstance().setLoggedInUser(user);
-            });
+        if (isLoginMode) {
+            // --- XỬ LÝ ĐĂNG NHẬP ---
+            User loggedInUser = userManager.login(user, pass);
+            if (loggedInUser != null) {
+                System.out.println("✅ Đăng nhập thành công: " + user);
+                // Gọi thẳng sang MainController để vào app luôn
+                MainController.getInstance().setLoggedInUser(loggedInUser);
+            } else {
+                messageLabel.setText("Sai tài khoản hoặc mật khẩu!");
+                messageLabel.setStyle("-fx-text-fill: #ff5555;");
+            }
+        } else {
+            // --- XỬ LÝ ĐĂNG KÝ ---
+            boolean success = userManager.register(user, pass);
+            if (success) {
+                messageLabel.setText("Đăng ký thành công! Đang tự động đăng nhập...");
+                messageLabel.setStyle("-fx-text-fill: #1DB954;");
+                
+                // Đăng ký xong thì auto login luôn cho ngầu
+                User newUser = userManager.login(user, pass);
+                MainController.getInstance().setLoggedInUser(newUser);
+            } else {
+                messageLabel.setText("Tên đăng nhập đã tồn tại!");
+                messageLabel.setStyle("-fx-text-fill: #ff5555;");
+            }
+        }
+    }
 
-            stage.showAndWait();
-        } catch (Exception e) { e.printStackTrace(); }
+    @FXML
+    private void toggleMode() {
+        isLoginMode = !isLoginMode;
+        updateUI();
+        messageLabel.setText(""); // Xóa thông báo lỗi cũ
+    }
+
+    private void updateUI() {
+        if (isLoginMode) {
+            titleLabel.setText("Đăng nhập");
+            actionBtn.setText("ĐĂNG NHẬP");
+            switchLabel.setText("Chưa có tài khoản?");
+            switchModeBtn.setText("Đăng ký ngay");
+        } else {
+            titleLabel.setText("Đăng ký");
+            actionBtn.setText("ĐĂNG KÝ MIỄN PHÍ");
+            switchLabel.setText("Đã có tài khoản?");
+            switchModeBtn.setText("Đăng nhập tại đây");
+        }
     }
 }

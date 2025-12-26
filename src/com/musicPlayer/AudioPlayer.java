@@ -124,9 +124,6 @@ public class AudioPlayer implements Player {
 
         // Logic xoay vòng lùi
         currentIndex = (currentIndex - 1 + playlist.getSongs().size()) % playlist.getSongs().size();
-        
-        stop();
-        play();
     }
 
     @Override
@@ -221,5 +218,13 @@ public class AudioPlayer implements Player {
     // Getter cho MediaPlayer để Controller có thể bind slider (Thanh chạy)
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
+    }
+    
+    public int getCurrentIndex() {
+        return this.currentIndex;
+    }
+    
+    public void setCurrentIndex(int index) {
+        this.currentIndex = index;
     }
 }

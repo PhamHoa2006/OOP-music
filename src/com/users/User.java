@@ -22,6 +22,7 @@ public class User {
     private String username;
     private String passwordHash;
     private History history;
+    private List<Playlist> likedPlaylists = new ArrayList<>();
 
     // 1. QUAN TRỌNG: Constructor rỗng cho Jackson
     public User() {
@@ -70,6 +71,15 @@ public class User {
 
     public History getHistory() { return history; }
     public void setHistory(History history) { this.history = history; }
+
+    public List<Playlist> getLikedPlaylists() {
+        if (likedPlaylists == null) likedPlaylists = new ArrayList<>();
+        return likedPlaylists;
+    }
+
+    public void setLikedPlaylists(List<Playlist> likedPlaylists) {
+        this.likedPlaylists = likedPlaylists;
+    }
 
     // Logic đổi pass
     public void setPassword(String password) {
