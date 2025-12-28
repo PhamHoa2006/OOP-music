@@ -60,7 +60,7 @@ public class MainController implements Initializable {
 
     // --- KHAI BÁO FXML ---
     @FXML
-    private BorderPane mainRoot;
+    private BorderPane mainRoot;	
     @FXML
     private VBox rightSidebar;
     @FXML
@@ -68,11 +68,11 @@ public class MainController implements Initializable {
 
     // Player Controls
     @FXML
-    private Button playButton, pauseButton, nextButton, prevButton;
+    private Button playButton, pauseButton, nextButton, prevButton;		// Các nút cơ bản trên thanh Player
     @FXML
-    private Button shuffleButton, repeatButton, likeBtn;
+    private Button shuffleButton, repeatButton, likeBtn;				
     @FXML
-    private Slider progressSlider, volumeSlider;
+    private Slider progressSlider, volumeSlider;						
     @FXML
     private Label currentTimeLbl, totalTimeLbl;
     @FXML
@@ -157,10 +157,10 @@ public class MainController implements Initializable {
     private AudioPlayer player;
     private SongLibrary library;
     private PlaylistLibrary playlistLibrary;
-    private boolean isRepeat = false;
-    private boolean isShuffle = false;
-    private boolean dangKeoThanhTruot = false;
-    private boolean isSearchingPlaylist = false;
+    private boolean isRepeat = false;				// Biến kiểm tra trạng thái Repeat.
+    private boolean isShuffle = false;				// Biến kiểm tra trạng thái Shuffle.
+    private boolean dangKeoThanhTruot = false;		
+    private boolean isSearchingPlaylist = false;	
     private FlowPane currentPlaylistContainer;
 
     private double lastVolume = 50.0;
@@ -282,7 +282,7 @@ public class MainController implements Initializable {
         }
     }
 
-    public void setLoggedInUser(User user) {
+    public void setLoggedInUser(User user) {		// Dọn sạch giao diện phát nhạc và hiển thị giao diện đăng nhập
         this.currentUser = user;
         UserManager.getInstance().setCurrentUser(user);
 
@@ -509,8 +509,8 @@ public class MainController implements Initializable {
         }
     }
 
-    public void hienThiChiTietPlaylist(Playlist p) {
-        isPlayerMode = false;
+    public void hienThiChiTietPlaylist(Playlist p) {	// Hàm này dùng để show giao diện của 1 playlist: các bài, nút phát, trộn, chỉnh sửa...
+        isPlayerMode = false;						// Đánh dấu ko phải chế độ quay đĩa
         if (p == null) return;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("PlaylistView.fxml"));
@@ -560,7 +560,7 @@ public class MainController implements Initializable {
             }
 
             // ... (Các nút PlayAll, Shuffle, Sort giữ nguyên logic cũ) ...
-            if (playAllBtn != null) {
+            if (playAllBtn != null) {					// Ấn nút phát tất cả => như bình thường
                 playAllBtn.setOnAction(e -> {
                     if (!p.getSongs().isEmpty()) {
                         player.setPlaylist(p); player.play();
@@ -569,7 +569,7 @@ public class MainController implements Initializable {
                 });
             }
             if (shuffleBtn != null) {
-                shuffleBtn.setOnAction(e -> {
+                shuffleBtn.setOnAction(e -> {			// Nút shuffle => Tạo shuffledPlaylist và đưa vào player để phát nhạc
                     if (!p.getSongs().isEmpty()) {
                         Playlist shuffledPlaylist = new Playlist(p.getTitle() + " (Shuffle)");
                         List<Song> tempList = new ArrayList<>(p.getSongs());
@@ -582,11 +582,11 @@ public class MainController implements Initializable {
                     }
                 });
             }
-            if (sortBtn != null) {
+            if (sortBtn != null) {						
                 // ... (Giữ nguyên logic sort) ...
                 if (p.getTitle().toLowerCase().contains("top 100")) {
                     sortBtn.setVisible(false); sortBtn.setManaged(false);
-                } else {
+                } else {								// Tạo sort Menu theo 3 tiêu chí
                     ContextMenu sortMenu = new ContextMenu();
                     sortMenu.setStyle("-fx-background-color: #282828; -fx-text-fill: white;");
                     MenuItem sortAZ = new MenuItem("Tên bài hát (A-Z)");
@@ -795,7 +795,7 @@ public class MainController implements Initializable {
         });
     }
 
-    private void huyChonPlaylist() {
+    private void huyChonPlaylist() {	// Hàm này có tác dụng ẩn đi giao diện chọn playlist chính
         if (playlistListView != null)
             playlistListView.getSelectionModel().clearSelection();
     }
@@ -809,7 +809,7 @@ public class MainController implements Initializable {
 
     public void hienThiManHinhFavorites() {
         isPlayerMode = false;
-        if (currentUser == null) {
+        if (currentUser == null) {					// nếu là Khách => Bắt đăng nhập mới cho dùng
             showUserScreen();
             return;
         }
@@ -832,8 +832,8 @@ public class MainController implements Initializable {
         hienThiChiTietPlaylist(historyPlaylist);
     }
 
-    private void hienThiManHinhTop100() {
-        isPlayerMode = false;
+    private void hienThiManHinhTop100() {		// Đặt trạng thái isPlayerMode về false rồi sort tất cả bài hát
+        isPlayerMode = false;					// Đánh dấu: đây ko phải màn hình quay đĩa		
         List<Song> allSongs = new ArrayList<>(library.getAllSongs());
         allSongs.sort((s1, s2) -> Integer.compare(s2.getPlayCount(), s1.getPlayCount()));
         Playlist topPlaylist = new Playlist("Top 100 - BXH");
@@ -846,7 +846,7 @@ public class MainController implements Initializable {
     }
 
     private void showCreatePlaylistDialog() {
-        if (currentUser == null) {
+        if (currentUser == null) {				// Nếu là khách => bắt đăng nhập mới cho dùng
             showUserScreen();
             return;
         }
@@ -859,13 +859,13 @@ public class MainController implements Initializable {
             dialogStage.initStyle(StageStyle.UNDECORATED);
             dialogStage.setScene(new Scene(page));
             CreatePlaylistController controller = loader.getController();
-            controller.setDialogStage(dialogStage, (newPlaylist) -> {
+            controller.setDialogStage(dialogStage, (newPlaylist) -> {			// Gọi về createPlaylistController để xử lý quá trình khởi tạo
                 if (newPlaylist.getTitle().equalsIgnoreCase("Favorites")) {
                     newPlaylist.setName("My Favorites");
                 }
                 if (currentUser != null) {
                     newPlaylist.setCreator(currentUser.getUsername());
-                    playlistLibrary.addPlaylist(newPlaylist);
+                    playlistLibrary.addPlaylist(newPlaylist);					// Lưu vào JSON sau khi tạo mới
                     currentUser.getPlayLists().add(newPlaylist);
                     UserManager.getInstance().saveToJSON();
                     System.out.println("✅ Đã lưu playlist mới: " + newPlaylist.getTitle());
@@ -884,7 +884,7 @@ public class MainController implements Initializable {
 
     private void handleUpload() {
         if (currentUser == null) {
-            showUserScreen();
+            showUserScreen();		// Khách phải đăng nhập mới được dùng
             return;
         }
         FileChooser fileChooser = new FileChooser();
@@ -908,7 +908,7 @@ public class MainController implements Initializable {
             dialogStage.setScene(new Scene(root));
             UploadDialogController controller = loader.getController();
             String defaultTitle = file.getName().replaceFirst("[.][^.]+$", "");
-            controller.setDialogStage(dialogStage, defaultTitle, (title, artist) -> {
+            controller.setDialogStage(dialogStage, defaultTitle, (title, artist) -> {			// Gọi uploadDialogController để xử lý
                 processFileAndAddLibrary(file, title, artist);
             });
             dialogStage.showAndWait();
@@ -932,11 +932,11 @@ public class MainController implements Initializable {
             Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             Media tempMedia = new Media(destFile.toURI().toString());
             MediaPlayer tempPlayer = new MediaPlayer(tempMedia);
-            tempPlayer.setOnReady(() -> {
+            tempPlayer.setOnReady(() -> {			// Set on ready dùng để thiết lập sự kiện khi file đã được load xong
                 double realDuration = tempMedia.getDuration().toSeconds();
                 Song newSong = new Song(title, artist, "Local Upload", realDuration, "data/Music/" + newFileName);
-                library.addSong(newSong);
-                addToUploadPlaylist(newSong);
+                library.addSong(newSong);		// Thêm nhạc vào thư viện tổng
+                addToUploadPlaylist(newSong);	// Thêm vào "Nhạc tải lên"
                 Platform.runLater(() -> {
                     chuanBiGiaoDienLibrary();
                     if (currentUser != null) {
@@ -980,7 +980,7 @@ public class MainController implements Initializable {
                 refreshPlaylistSidebar(); 
             }
             targetPlaylist.addSong(s);
-            UserManager.getInstance().saveToJSON();
+            UserManager.getInstance().saveToJSON();				// Lưu vào JSON
         } else {
             System.out.println("⚠️ Khách upload nhạc - sẽ không được lưu vào Playlist cá nhân.");
         }
@@ -1048,13 +1048,13 @@ public class MainController implements Initializable {
         }
     }
 
-    private void handleSongEnd() {
+    private void handleSongEnd() {			// Xử lý khi kết thúc bài nhạc hiện tại
         Platform.runLater(() -> {
             progressSlider.setValue(0);
             toMauThanhTruot(0, progressSlider.getMax());
             currentTimeLbl.setText("00:00");
 
-            if (isRepeat) {
+            if (isRepeat) {					// Nếu đang bật repeat => quá đơn giản
                 player.stop();
                 player.seek(0);
                 player.play();
@@ -1064,34 +1064,34 @@ public class MainController implements Initializable {
                 batDauDongBoThoiGian();
 
                 System.out.println("🔁 Repeat One: Đã reset và phát lại.");
-            } else if (isShuffle) {
+            } else if (isShuffle) {			// Nếu là shuffle => cứ next vì danh sách sau nó đã được trộn
                 nextSong();
             } else {
                 int total = player.getPlaylist().getSongs().size();
                 int currentIdx = player.getPlaylist().getSongs().indexOf(player.getCurrentSong());
 
-                if (currentIdx >= total - 1) {
-                    if (isQueueLoop) {
+                if (currentIdx >= total - 1) {			// Kiểm tra xem đã chạy hết playlist hiện tại chưa
+                    if (isQueueLoop) {					// đang bật queueLoop => chạy lại từ Idx 0
                         choiBaiTaiIndex(0);
-                    } else {
+                    } else {							// Ko bật queueLoop => ko phát nữa
                         player.stop();
                         daoTrangThaiNutPlay(false);
                         xyLyHieuUngXoay(false);
                     }
                 } else {
-                    nextSong();
+                    nextSong();							// Chưa hết playlist
                 }
             }
         });
     }
 
     private void choiBaiTaiIndex(int targetIndex) {
-        Playlist currentPl = player.getPlaylist();
-        double currentVol = player.getVolume();
+        Playlist currentPl = player.getPlaylist();		// Lấy playlist hiện tại
+        double currentVol = player.getVolume();			// Lấy volume hiện tại
 
-        player.stop();
+        player.stop();								
 
-        player = new AudioPlayer(currentPl);
+        player = new AudioPlayer(currentPl);			// Khởi tạo lại player và dịch đến targetIndex
         player.setVolume(currentVol);
         player.setOnSongEnd(this::handleSongEnd);
 
@@ -1104,7 +1104,7 @@ public class MainController implements Initializable {
     }
 
     private void xulyRepeat() {
-        isRepeat = !isRepeat;
+        isRepeat = !isRepeat;					
         setToggleState(repeatButton, onRepeatBtn, isRepeat);
         System.out.println("🔁 Repeat One: " + (isRepeat ? "ON" : "OFF"));
     }
@@ -1115,7 +1115,7 @@ public class MainController implements Initializable {
         System.out.println("🔀 Random Mode: " + (isShuffle ? "ON" : "OFF"));
     }
 
-    private void toggleLike() {
+    private void toggleLike() {				// Maybe hàm này ko dùng nữa
         Song s = player.getCurrentSong();
         if (s == null || currentUser == null)
             return;
@@ -1214,12 +1214,12 @@ public class MainController implements Initializable {
     }
 
     private void capNhatGiaoDienDuoiCung() {
-        if (bottomPlayerBar != null && !bottomPlayerBar.isVisible()) {
+        if (bottomPlayerBar != null && !bottomPlayerBar.isVisible()) {	// kiểm tra sơ bộ
             bottomPlayerBar.setVisible(true);
             bottomPlayerBar.setManaged(true);
         }
         Song s = player.getCurrentSong();
-        if (s != null) {
+        if (s != null) {												// Cập nhật các thông tin của bài đang hát
             currentSongLabel.setText(s.getTitle());
             currentArtistLabel.setText(s.getArtist());
             totalTimeLbl.setText(doiGiaySangPhut(s.getDuration()));
@@ -1227,7 +1227,7 @@ public class MainController implements Initializable {
             capNhatAnhDiaNhac(s);
 
             s.setPlayCount(s.getPlayCount() + 1);
-            SongLibrary.getInstance().saveToJSON();
+            SongLibrary.getInstance().saveToJSON();						// Lưu vào JSON
 
             System.out.println("🎧 Đang phát: " + s.getTitle() + " | Views: " + s.getPlayCount());
 
@@ -1235,6 +1235,7 @@ public class MainController implements Initializable {
             if (currentUser != null)
                 UserManager.getInstance().saveToJSON();
         }
+        
         daoTrangThaiNutPlay(player.isPlaying());
         xyLyHieuUngXoay(player.isPlaying());
 
@@ -1261,19 +1262,19 @@ public class MainController implements Initializable {
     }
 
     private void batDauDongBoThoiGian() {
-        MediaPlayer mp = player.getMediaPlayer();
+        MediaPlayer mp = player.getMediaPlayer();								// Lấy bài đang phát
         if (mp != null) {
-            mp.totalDurationProperty().addListener((obs, oldVal, newVal) -> {
+            mp.totalDurationProperty().addListener((obs, oldVal, newVal) -> {	// Nhận diện độ dài của bài hát mỗi lần chuẩn bị phát
                 if (newVal != null && newVal.toSeconds() > 0) {
                     progressSlider.setMax(newVal.toSeconds());
-                    totalTimeLbl.setText(doiGiaySangPhut(newVal.toSeconds()));
+                    totalTimeLbl.setText(doiGiaySangPhut(newVal.toSeconds()));	
                     Song currentSong = player.getCurrentSong();
                     if (currentSong != null && currentSong.getDuration() == 0) {
-                        currentSong.setDuration(newVal.toSeconds());
+                        currentSong.setDuration(newVal.toSeconds());					
                     }
                 }
             });
-            mp.currentTimeProperty().addListener((obs, old, val) -> {
+            mp.currentTimeProperty().addListener((obs, old, val) -> {			// Kiểm tra và cập nhật thời gian thực, bao gồm cả slider
                 if (!dangKeoThanhTruot) {
                     progressSlider.setValue(val.toSeconds());
                     currentTimeLbl.setText(doiGiaySangPhut(val.toSeconds()));
@@ -1340,7 +1341,7 @@ public class MainController implements Initializable {
                     }
 
                     int targetIndex = i;
-                    row.setOnMouseClicked(e -> choiBaiTaiIndex(targetIndex));
+                    row.setOnMouseClicked(e -> choiBaiTaiIndex(targetIndex));	
 
                     queueContainerVBox.getChildren().add(row);
                 }
@@ -1552,18 +1553,18 @@ public class MainController implements Initializable {
         });
     }
 
-    private void chuyenManHinh(Runnable viewMethod) {
-        if (currentViewAction == viewMethod)
+    private void chuyenManHinh(Runnable viewMethod) {  // Chủ yếu là theo nguyên lý Stack
+        if (currentViewAction == viewMethod)		 
             return;
-        if (currentViewAction != null)
-            backStack.push(currentViewAction);
+        if (currentViewAction != null)			
+            backStack.push(currentViewAction);		
         forwardStack.clear();
         currentViewAction = viewMethod;
         viewMethod.run();
         updateNavigationButtons();
     }
 
-    private void handleBackNav() {
+    private void handleBackNav() {				// Hoạt động theo nguyên lý Stack
         isPlayerMode = false;
         if (!backStack.isEmpty()) {
             Runnable prev = backStack.pop();
@@ -1574,7 +1575,7 @@ public class MainController implements Initializable {
         }
     }
 
-    private void handleForwardNav() {
+    private void handleForwardNav() {			// Theo nguyên lý Stack
         if (!forwardStack.isEmpty()) {
             Runnable next = forwardStack.pop();
             backStack.push(currentViewAction);
@@ -1647,7 +1648,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void xuLyNutAddSongToPlaylist() {
+    private void xuLyNutAddSongToPlaylist() {		// Hàm cũ của CaCanCap
         if (player.getCurrentSong() == null) {
             System.out.println("⚠️ Chưa có bài hát nào đang phát!");
             return;
@@ -1688,7 +1689,7 @@ public class MainController implements Initializable {
         });
     }
 
-    private void veDanhSachPlaylist(List<Playlist> dsPlaylist, FlowPane container) {
+    private void veDanhSachPlaylist(List<Playlist> dsPlaylist, FlowPane container) { // Hàm cũ của CaCanCap
         container.getChildren().clear();
         if (dsPlaylist == null || dsPlaylist.isEmpty()) {
             Label empty = new Label("Không tìm thấy Playlist nào.");
@@ -1729,7 +1730,7 @@ public class MainController implements Initializable {
         }
     }
 
-    private void xuLyThemBaiHatVaoPlaylist(Playlist targetPlaylist) {
+    private void xuLyThemBaiHatVaoPlaylist(Playlist targetPlaylist) {	// Hàm cũ của CaCanCap
         Song currentSong = player.getCurrentSong();
         if (currentSong == null)
             return;
@@ -1787,7 +1788,7 @@ public class MainController implements Initializable {
     }
 
     private void luuQueueVaoPlaylistMoi() {
-        if (!checkLogin())
+        if (!checkLogin())				// Khách ko đc dùng
             return;
         if (player == null || player.getPlaylist() == null || player.getPlaylist().getSongs().isEmpty()) {
             showAlert("Thông báo", "Danh sách phát đang trống!");
@@ -1795,7 +1796,7 @@ public class MainController implements Initializable {
         }
         List<Song> currentActiveList = player.getPlaylist().getSongs();
         int currentIndex = 0;
-        try {
+        try {										// Hiển thị giao diện tạo Playlist 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CreatePlaylistDialog.fxml"));
             Parent page = loader.load();
             Stage dialogStage = new Stage();
@@ -1841,20 +1842,20 @@ public class MainController implements Initializable {
         if (player == null || player.getPlaylist() == null)
             return;
 
-        Playlist currentPl = player.getPlaylist();
-        List<Song> originalList = currentPl.getSongs();
+        Playlist currentPl = player.getPlaylist();			// Lấy playlist hiện tại đang chơi
+        List<Song> originalList = currentPl.getSongs();		
         if (originalList.isEmpty())
             return;
 
         Song currentSong = player.getCurrentSong();
 
         List<Song> newList = new ArrayList<>(originalList);
-        newList.remove(currentSong);
+        newList.remove(currentSong);						// Chuẩn bị trộn bài: ko trộn bài đang phát
         Collections.shuffle(newList);
 
-        newList.add(0, currentSong);
+        newList.add(0, currentSong);						// Chèn vào đầu List	
 
-        currentPl.setSongs(newList);
+        currentPl.setSongs(newList);						// Cập nhật currentPlaylist
 
         player.setCurrentIndex(0);
 
@@ -1916,17 +1917,20 @@ public class MainController implements Initializable {
     }
 
     private void toggleLikePlaylist() {
-        if (!checkLogin())
+        if (!checkLogin())				// Khách ko đc dùng
             return;
-        if (currentUser == null) {
+        if (currentUser == null) {		
             showUserScreen();
             return;
         }
+        
         Playlist currentPl = player.getPlaylist();
         if (currentPl == null || currentPl.getTitle().equals("Queue") || currentPl.getTitle().equals("Temp")) {
             showAlert("Thông báo", "Không thể thích danh sách chờ tạm thời.");
             return;
         }
+        
+        // Xử lý trạng thái like / ko like 
         List<Playlist> likedList = currentUser.getLikedPlaylists();
         boolean isLiked = false;
         for (Playlist p : likedList) {
@@ -1936,6 +1940,7 @@ public class MainController implements Initializable {
                 break;
             }
         }
+        
         if (!isLiked) {
             likedList.add(currentPl);
             System.out.println("❤️ Đã thích playlist: " + currentPl.getTitle());
@@ -1983,61 +1988,62 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void handleLike() {
-        if (!checkLogin())
+    private void handleLike() {			
+        if (!checkLogin())				// Khách không được dùng tính năng này
             return;
         User user = UserManager.getInstance().getCurrentUser();
         if (user == null) {
             System.out.println("⚠️ Chưa đăng nhập, không thể like!");
             return;
         }
-        Song currentSong = player.getCurrentSong();
+        Song currentSong = player.getCurrentSong();		
         if (currentSong == null)
             return;
         Playlist favPlaylist = null;
-        for (Playlist p : user.getPlayLists()) {
+        for (Playlist p : user.getPlayLists()) {			// Tìm đến favourite playlist
             if (p.getTitle().equalsIgnoreCase("Favorites")) {
                 favPlaylist = p;
                 break;
             }
         }
-        if (favPlaylist == null) {
+        if (favPlaylist == null) {							// Nếu chưa có => Tạo mới
             favPlaylist = new Playlist("Favorites");
             favPlaylist.setCreator(user.getUsername());
             favPlaylist.setDescription("Bài hát đã thả tim");
             user.getPlayLists().add(favPlaylist);
         }
+        
         boolean isLiked = false;
-        Song songToRemove = null;
-        for (Song s : favPlaylist.getSongs()) {
+        Song songToRemove = null;	
+        for (Song s : favPlaylist.getSongs()) {				// Tìm trong danh sách bài đã thích, nếu tồn tại ID trùng khớp với current => gán songToRemove
             if (s.getSongID().equals(currentSong.getSongID())) {
                 isLiked = true;
                 songToRemove = s;
                 break;
             }
         }
-        if (isLiked) {
+        if (isLiked) {										// Bỏ tim
             favPlaylist.removeSong(songToRemove);
             System.out.println("💔 Đã bỏ thích: " + currentSong.getTitle());
-        } else {
+        } else {											// Tim
             favPlaylist.addSong(currentSong);
             System.out.println("❤️ Đã thích: " + currentSong.getTitle());
         }
-        UserManager.getInstance().saveToJSON();
+        UserManager.getInstance().saveToJSON();				// Lưu vào JSON
         updateLikeButtonColor();
     }
 
     // [UPDATE GIAO DIỆN] Tên bài hát sáng rõ + Nút Footer đóng khung xịn
     @FXML
     private void handleAddToPlaylist() {
-        if (!checkLogin()) return;
-        Song currentSong = player.getCurrentSong();
+        if (!checkLogin()) return;									// Chưa đăng nhập => Trả về (khách không được dùng Playlist)
+        Song currentSong = player.getCurrentSong();					
         if (currentSong == null) {
             showAlert("Lỗi", "Chưa có bài hát nào đang phát!");
             return;
-        }
+        }	
 
-        Stage popupStage = new Stage();
+        Stage popupStage = new Stage();								
         popupStage.initOwner(mainRoot.getScene().getWindow());
         popupStage.initModality(Modality.WINDOW_MODAL);
         popupStage.initStyle(StageStyle.TRANSPARENT);
@@ -2060,7 +2066,7 @@ public class MainController implements Initializable {
         List<Playlist> canAddList = new ArrayList<>();
         List<Playlist> canRemoveList = new ArrayList<>();
 
-        for (Playlist p : currentUser.getPlayLists()) {
+        for (Playlist p : currentUser.getPlayLists()) {								// Duyệt qua các tất cả Playlist, phân loại chúng vào 2 mục là canAdd và canRemove
             boolean isOwner = p.getCreator().equals(currentUser.getUsername());
             boolean isSystem = p.getTitle().equalsIgnoreCase("Favorites") || 
                                p.getTitle().equalsIgnoreCase("History") ||
@@ -2068,7 +2074,7 @@ public class MainController implements Initializable {
                                p.getTitle().equalsIgnoreCase("Bài hát yêu thích") ||
                                p.getTitle().equalsIgnoreCase("Nghe gần đây");
             
-            if (isOwner && !isSystem) {
+            if (isOwner && !isSystem) {		
                 boolean hasSong = false;
                 for (Song s : p.getSongs()) {
                     if (s.getSongID().equals(currentSong.getSongID())) {
@@ -2083,7 +2089,7 @@ public class MainController implements Initializable {
         Label lblAdd = new Label("➕ Thêm vào:");
         lblAdd.setStyle("-fx-text-fill: #1DB954; -fx-font-size: 13px; -fx-font-weight: bold;");
         
-        ComboBox<Playlist> cbAdd = new ComboBox<>();
+        ComboBox<Playlist> cbAdd = new ComboBox<>();	// Thanh thả xuống các Playlist muốn add bài mới
         cbAdd.getItems().addAll(canAddList);
         cbAdd.setPromptText(canAddList.isEmpty() ? "Không có playlist khả dụng" : "Chọn playlist...");
         cbAdd.setMaxWidth(Double.MAX_VALUE);
@@ -2091,7 +2097,7 @@ public class MainController implements Initializable {
 
         Button btnConfirmAdd = new Button("Thêm");
         styleActionButton(btnConfirmAdd, true);
-        btnConfirmAdd.setOnAction(e -> {
+        btnConfirmAdd.setOnAction(e -> {			// Add song rồi lưu vào Json, sau đó hiển thị ra màn hình
             Playlist target = cbAdd.getValue();
             if (target != null) {
                 target.addSong(currentSong);
@@ -2100,6 +2106,7 @@ public class MainController implements Initializable {
                 popupStage.close();
             }
         });
+        
         HBox boxAdd = new HBox(10, cbAdd, btnConfirmAdd);
         HBox.setHgrow(cbAdd, Priority.ALWAYS);
 
@@ -2107,18 +2114,18 @@ public class MainController implements Initializable {
         Label lblRemove = new Label("Xóa khỏi:");
         lblRemove.setStyle("-fx-text-fill: #ff5555; -fx-font-size: 13px; -fx-font-weight: bold;");
         
-        ComboBox<Playlist> cbRemove = new ComboBox<>();
+        ComboBox<Playlist> cbRemove = new ComboBox<>();			// Thanh thả xuống các Playlist muốn xoá bài hát
         cbRemove.getItems().addAll(canRemoveList);
         cbRemove.setPromptText(canRemoveList.isEmpty() ? "Chưa có trong playlist nào" : "Chọn playlist...");
         cbRemove.setMaxWidth(Double.MAX_VALUE);
         stylePlaylistComboBox(cbRemove);
 
         Button btnConfirmRemove = new Button("Xóa");
-        styleActionButton(btnConfirmRemove, false);
+        styleActionButton(btnConfirmRemove, false);				
         btnConfirmRemove.setOnMouseEntered(e -> btnConfirmRemove.setStyle("-fx-background-color: #ff5555; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;"));
         btnConfirmRemove.setOnMouseExited(e -> btnConfirmRemove.setStyle("-fx-background-color: #3e3e3e; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;"));
 
-        btnConfirmRemove.setOnAction(e -> {
+        btnConfirmRemove.setOnAction(e -> {			// Xoá => lưu ngay vào JSON rồi in thông báo ra màn hình.
             Playlist target = cbRemove.getValue();
             if (target != null) {
                 target.getSongs().removeIf(s -> s.getSongID().equals(currentSong.getSongID()));
@@ -2134,13 +2141,13 @@ public class MainController implements Initializable {
         Separator sep = new Separator(); sep.setOpacity(0.3);
 
         // Nút Tạo mới: Đóng khung, nền xám, chữ trắng
-        Button btnCreate = new Button("Tạo Playlist mới");
+        Button btnCreate = new Button("Tạo Playlist mới");				
         btnCreate.setStyle("-fx-background-color: #3E3E3E; -fx-text-fill: white; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 8 15;");
         // Hover thì sáng lên tí
         btnCreate.setOnMouseEntered(e -> btnCreate.setStyle("-fx-background-color: #4D4D4D; -fx-text-fill: white; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 8 15;"));
         btnCreate.setOnMouseExited(e -> btnCreate.setStyle("-fx-background-color: #3E3E3E; -fx-text-fill: white; -fx-font-size: 13px; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 8 15;"));
-        
-        btnCreate.setOnAction(e -> {
+        	
+        btnCreate.setOnAction(e -> {				// Ấn tạo playlist mới => đóng stage hiện tại và chuyển vào createPlaylistDialog
             popupStage.close();
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("CreatePlaylistDialog.fxml"));
@@ -2214,8 +2221,8 @@ public class MainController implements Initializable {
             return;
         }
         boolean isLiked = false;
-        for (Playlist p : user.getPlayLists()) {
-            if (p.getTitle().equalsIgnoreCase("Favorites")) {
+        for (Playlist p : user.getPlayLists()) {							// Duyệt qua các Playlists của user, tìm Playlist "Favourites" để cập nhật trạng thái
+            if (p.getTitle().equalsIgnoreCase("Favorites")) {				
                 for (Song s : p.getSongs()) {
                     if (s.getSongID().equals(currentSong.getSongID())) {
                         isLiked = true;
@@ -2252,11 +2259,11 @@ public class MainController implements Initializable {
         int currentIdx = player.getPlaylist().getSongs().indexOf(player.getCurrentSong());
         int newIdx = currentIdx;
 
-        while (newIdx == currentIdx) {
+        while (newIdx == currentIdx) {				// Random ngẫu nhiên trong phạm vi size Playlist
             newIdx = (int) (Math.random() * size);
         }
 
-        Playlist currentPl = player.getPlaylist();
+        Playlist currentPl = player.getPlaylist();	// Lưu lại playlist và volume hiện tại để shuffle
         double vol = player.getVolume();
         player.stop();
 
@@ -2265,7 +2272,7 @@ public class MainController implements Initializable {
         player.setOnSongEnd(this::handleSongEnd);
 
         for (int i = 0; i < newIdx; i++)
-            player.next();
+            player.next();							
 
         xuLyPlay();
         capNhatGiaoDienDuoiCung();
@@ -2312,7 +2319,7 @@ public class MainController implements Initializable {
     }
 
     // [NEW] Hàm làm mới Sidebar có sắp xếp
-    private void refreshPlaylistSidebar() {
+    private void refreshPlaylistSidebar() {			
         if (playlistListView == null || currentUser == null) return;
 
         // 1. Xóa danh sách cũ trên giao diện
