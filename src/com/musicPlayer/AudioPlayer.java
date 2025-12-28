@@ -7,16 +7,16 @@ import javafx.util.Duration;
 public class AudioPlayer implements Player {
     private Playlist playlist;
     private int currentIndex = 0;
-    
+
     // MediaPlayer thực tế của JavaFX
     private MediaPlayer mediaPlayer;
-    
+
     private double volume = 1.0;
     private boolean playing = false;
     private boolean paused = false;
-    
+
     // Callback để giao diện biết khi nào bài hát kết thúc hoặc thay đổi
-    private Runnable onSongEnd; 
+    private Runnable onSongEnd;
 
     public AudioPlayer() {
         this.playlist = null;
@@ -28,8 +28,9 @@ public class AudioPlayer implements Player {
 
     @Override
     public void play() {
-        // 1. Nếu danh sách rỗng thì nghỉ
-        if (playlist == null || playlist.getSongs().isEmpty()) return;
+        // Kiểm tra danh sách : rỗng -> không làm gì
+        if (playlist == null || playlist.getSongs().isEmpty())
+            return;
 
         // 2. Nếu đang pause và player vẫn còn đó -> Resume lại
         if (paused && mediaPlayer != null) {
@@ -43,9 +44,9 @@ public class AudioPlayer implements Player {
         stop(); // Dọn dẹp player cũ trước
 
         Song currentSong = playlist.getSongs().get(currentIndex);
-        
+
         // Lấy đường dẫn URI chuẩn từ hàm ông đã viết trong Song.java
-        String source = currentSong.getPlayableUrl(); 
+        String source = currentSong.getPlayableUrl();
 
         if (source == null) {
             System.err.println("Không tìm thấy file nhạc: " + currentSong.getTitle());
@@ -62,8 +63,8 @@ public class AudioPlayer implements Player {
             // Xử lý sự kiện: Khi bài hát chạy xong
             mediaPlayer.setOnEndOfMedia(() -> {
                 // Tự động next bài
-                //next(); // Không nên để dòng này để chạy tính năng Repeat.
-                
+                // next(); // Không nên để dòng này để chạy tính năng Repeat.
+
                 // Gọi callback nếu bên ngoài cần biết
                 if (onSongEnd != null) {
                     onSongEnd.run();
@@ -106,21 +107,23 @@ public class AudioPlayer implements Player {
 
     @Override
     public void next() {
-        if (playlist == null || playlist.getSongs().isEmpty()) return;
-        
+        if (playlist == null || playlist.getSongs().isEmpty())
+            return;
+
         // Logic xoay vòng index
         currentIndex = (currentIndex + 1) % playlist.getSongs().size();
-        
+
         // Stop bài cũ và Play bài mới
         // Lưu ý: play() đã có logic gọi stop() ở đầu nên gọi thẳng play() cũng được,
         // nhưng gọi stop() ở đây cho rõ ràng.
-        stop(); 
+        stop();
         play();
     }
 
     @Override
     public void previous() {
-        if (playlist == null || playlist.getSongs().isEmpty()) return;
+        if (playlist == null || playlist.getSongs().isEmpty())
+            return;
 
         // Logic xoay vòng lùi
         currentIndex = (currentIndex - 1 + playlist.getSongs().size()) % playlist.getSongs().size();
@@ -150,7 +153,8 @@ public class AudioPlayer implements Player {
 
     @Override
     public Song getCurrentSong() {
-        if (playlist == null || playlist.getSongs().isEmpty()) return null;
+        if (playlist == null || playlist.getSongs().isEmpty())
+            return null;
         return playlist.getSongs().get(currentIndex);
     }
 
@@ -162,20 +166,20 @@ public class AudioPlayer implements Player {
         }
         return 0.0;
     }
-    
+
     // Hàm mới bổ sung: Lấy duration thực tế từ file (chính xác hơn Song object lưu)
     public double getTotalDuration() {
-         if (mediaPlayer != null && mediaPlayer.getTotalDuration() != null) {
-             return mediaPlayer.getTotalDuration().toSeconds();
-         }
-         return 0.0;
+        if (mediaPlayer != null && mediaPlayer.getTotalDuration() != null) {
+            return mediaPlayer.getTotalDuration().toSeconds();
+        }
+        return 0.0;
     }
 
     @Override
     public double getVolume() {
         return volume;
     }
-    
+
     // Setter volume cập nhật trực tiếp vào player đang chạy
     public void setVolume(double vol) {
         this.volume = vol;
@@ -214,16 +218,16 @@ public class AudioPlayer implements Player {
     public Playlist getPlaylist() {
         return this.playlist;
     }
-    
+
     // Getter cho MediaPlayer để Controller có thể bind slider (Thanh chạy)
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
-    
+
     public int getCurrentIndex() {
         return this.currentIndex;
     }
-    
+
     public void setCurrentIndex(int index) {
         this.currentIndex = index;
     }

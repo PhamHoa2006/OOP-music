@@ -7,31 +7,36 @@ import java.util.function.BiConsumer;
 
 public class UploadDialogController {
 
-    @FXML private TextField titleField;
-    @FXML private TextField artistField;
+    @FXML
+    private TextField titleField;
+    @FXML
+    private TextField artistField;
 
     private Stage dialogStage;
     // Callback trả về 2 tham số: (Title, Artist)
-    private BiConsumer<String, String> onInfoConfirmed; 
+    private BiConsumer<String, String> onInfoConfirmed;
 
     public void setDialogStage(Stage dialogStage, String defaultTitle, BiConsumer<String, String> callback) {
         this.dialogStage = dialogStage;
         this.onInfoConfirmed = callback;
-        
+
         // Điền sẵn tên file vào ô title để đỡ phải gõ nếu lười
         if (defaultTitle != null) {
             titleField.setText(defaultTitle);
         }
     }
 
+    // Xử lí sự kiện Save
     @FXML
     private void handleSave() {
         String title = titleField.getText().trim();
         String artist = artistField.getText().trim();
 
         // Validate cơ bản
-        if (title.isEmpty()) title = "Unknown Title";
-        if (artist.isEmpty()) artist = "Unknown Artist";
+        if (title.isEmpty())
+            title = "Unknown Title";
+        if (artist.isEmpty())
+            artist = "Unknown Artist";
 
         if (onInfoConfirmed != null) {
             onInfoConfirmed.accept(title, artist);
@@ -39,6 +44,7 @@ public class UploadDialogController {
         dialogStage.close();
     }
 
+    // Xử lí sự kiện hủy
     @FXML
     private void handleCancel() {
         dialogStage.close();

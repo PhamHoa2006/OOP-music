@@ -1,14 +1,14 @@
-    package com.musicPlayer;
+package com.musicPlayer;
 
-    // Lớp PlaybackControl quản lý trạng thái và thao tác điều khiển phát nhạc (âm lượng, tốc độ, shuffle, repeat, mute)
+// Lớp PlaybackControl quản lý trạng thái và thao tác điều khiển phát nhạc (âm lượng, tốc độ, shuffle, repeat, mute)
 
-    public class PlaybackControl {
+public class PlaybackControl {
 
-    private int volume;                  // Từ 0 đến 100
-    private boolean isMuted;
-    private double playbackSpeed;        // x0.5 - x2.0
-    private boolean isShuffle;
-    private boolean isRepeat;
+    private int volume; // Từ 0 đến 100
+    private double playbackSpeed; // x0.5 - x2.0
+    private boolean isMuted; // Trạng thái tắt tiếng
+    private boolean isShuffle; // Chế độ phát ngẫu nhiên
+    private boolean isRepeat; // Chế độ phát lặp
 
     public PlaybackControl() {
         resetAll();
@@ -34,8 +34,10 @@
     // Hàm tăng hoặc giảm âm lượng theo giá trị amount, amount có thể âm hoặc dương
     public int changeVolume(int amount) {
         this.volume += amount;
-        if (this.volume > 100) this.volume = 100;
-        if (this.volume < 0) this.volume = 0;
+        if (this.volume > 100)
+            this.volume = 100;
+        if (this.volume < 0)
+            this.volume = 0;
         return this.volume;
     }
 
@@ -44,7 +46,8 @@
         return isMuted;
     }
 
-    // Cập nhật trạng thái tắt tiếng theo giá trị truyền vào (true = mute, false = unmute)
+    // Cập nhật trạng thái tắt tiếng theo giá trị truyền vào (true = mute, false =
+    // unmute)
     public boolean setMuted(boolean muted) {
         this.isMuted = muted;
         return this.isMuted;
@@ -63,7 +66,8 @@
         return playbackSpeed;
     }
 
-    // Đặt tốc độ phát trong khoảng x0.5 – x2.0, tự động giới hạn nếu vượt ngoài biên
+    // Đặt tốc độ phát trong khoảng x0.5 – x2.0, tự động giới hạn nếu vượt ngoài
+    // biên
     public double setSpeed(double speed) {
         if (speed < 0.5) {
             this.playbackSpeed = 0.5;
@@ -75,17 +79,26 @@
         return this.playbackSpeed;
     }
 
-    // Chọn tốc độ phát từ danh sách preset (ví dụ: x0.5, x1.25, x2), thay vì nhập số trực tiếp
+    // Chọn tốc độ phát từ danh sách preset (ví dụ: x0.5, x1.25, x2), thay vì nhập
+    // số trực tiếp
     public double setSpeedPreset(String preset) {
         switch (preset) {
-            case "x0.5": return setSpeed(0.5);
-            case "x0.75": return setSpeed(0.75);
-            case "x1": return setSpeed(1.0);
-            case "x1.25": return setSpeed(1.25);
-            case "x1.5": return setSpeed(1.5);
-            case "x1.75": return setSpeed(1.75);
-            case "x2": return setSpeed(2.0);
-            default: return setSpeed(1.0);
+            case "x0.5":
+                return setSpeed(0.5);
+            case "x0.75":
+                return setSpeed(0.75);
+            case "x1":
+                return setSpeed(1.0);
+            case "x1.25":
+                return setSpeed(1.25);
+            case "x1.5":
+                return setSpeed(1.5);
+            case "x1.75":
+                return setSpeed(1.75);
+            case "x2":
+                return setSpeed(2.0);
+            default:
+                return setSpeed(1.0);
         }
     }
 
@@ -134,7 +147,8 @@
 
     // Hàm tiện ích
 
-    // Đưa toàn bộ cài đặt (âm lượng, tốc độ, phát ngẫu nhiên, lặp lại, tắt tiếng) về mặc định
+    // Đưa toàn bộ cài đặt (âm lượng, tốc độ, phát ngẫu nhiên, lặp lại, tắt tiếng)
+    // về mặc định
     public void resetAll() {
         this.volume = 50;
         this.isMuted = false;
@@ -148,7 +162,6 @@
     public String toString() {
         return String.format(
                 "PlaybackControl[volume=%d, speed=%.1f, shuffle=%s, repeat=%s, muted=%s]",
-                volume, playbackSpeed, isShuffle, isRepeat, isMuted
-        );
+                volume, playbackSpeed, isShuffle, isRepeat, isMuted);
     }
 }
