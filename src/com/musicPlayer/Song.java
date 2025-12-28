@@ -142,7 +142,7 @@ public class Song implements Comparable<Song>, Serializable {
 
     public List<Integer> getTimeStamps() { return timeStamps; }
     public void setTimeStamps(List<Integer> timeStamps) { this.timeStamps = timeStamps; }
-
+    
     // --- LOGIC LYRICS (Giữ nguyên) ---
     public int getIndexAtTime(double currentTimeInSeconds) {
         if (timeStamps == null || lyricLines == null || timeStamps.isEmpty()) return -1;

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" spacing="20.0" style="-fx-background-color: #282828; -fx-padding: 30;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicPlayer.CreatePlaylistController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" spacing="20.0" style="-fx-background-color: #282828; -fx-padding: 30;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicPlayer.CreatePlaylistController">
 
    <Label text="Danh sách phát mới" textFill="WHITE">
       <font>
@@ -27,6 +27,12 @@
             <Font size="14.0" />
          </font>
       </TextField>
+      
+      <Label fx:id="errorLabel" managed="false" text="Tên bị trùng!" textFill="#ff5555" visible="false" wrapText="true">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
    </VBox>
 
    <VBox spacing="5.0">

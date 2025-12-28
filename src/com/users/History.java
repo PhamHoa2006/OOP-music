@@ -3,6 +3,7 @@ package com.users;
 import com.musicPlayer.Song;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -11,9 +12,12 @@ import java.util.*;
 public class History {
 
     // Class con để lưu bản ghi (Giữ nguyên)
+    @JsonIgnoreProperties(ignoreUnknown = true) 
     public static class SongRecord {
         private Song song;
-        private String datePlayed; // Lưu String cho dễ xử lý JSON (YYYY-MM-DD)
+
+        @JsonProperty("datePlayed")
+        private String datePlayed; 
 
         public SongRecord() {}
 
@@ -25,11 +29,15 @@ public class History {
         public Song getSong() { return song; }
         public void setSong(Song song) { this.song = song; }
 
+        @JsonIgnore
         public LocalDate getDatePlayed() { 
             return datePlayed != null ? LocalDate.parse(datePlayed) : LocalDate.now(); 
         }
-        // Setter nhận String cho Jackson
+
         public void setDatePlayed(String datePlayed) { this.datePlayed = datePlayed; }
+        
+        // [XÓA HÀM NÀY ĐI] -> public String getDatePlayedString() { ... }
+        // Xóa nó đi để file JSON không bị đẻ ra trường "datePlayedString" nữa
     }
 
     // --- SỬA ĐỔI QUAN TRỌNG TẠI ĐÂY ---
@@ -70,6 +78,7 @@ public class History {
 
     // --- Các hàm Get History ---
 
+    @JsonIgnore
     public Map<LocalDate, List<Song>> getUserHistoryByDate() {
         Map<LocalDate, List<Song>> historyByDate = new LinkedHashMap<>();
         Iterator<SongRecord> it = userHistory.descendingIterator(); 

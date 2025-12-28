@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_LEFT" spacing="20.0" style="-fx-background-color: #121212;" stylesheets="@../Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.users.GuestViewController">
+   <padding>
+      <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+   </padding>
+   <children>
+      <VBox spacing="5.0">
+         <children>
+            <Label fx:id="titleLabel" text="Đăng nhập" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="32.0" />
+               </font>
+            </Label>
+            <Label text="Tiếp tục để trải nghiệm kho nhạc xịn xò." textFill="#b3b3b3">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+
+      <VBox maxWidth="400.0" spacing="15.0">
+         <children>
+            <VBox spacing="8.0">
+               <Label text="Tên đăng nhập" textFill="WHITE">
+                  <font><Font name="System Bold" size="14.0" /></font>
+               </Label>
+               <TextField fx:id="usernameField" promptText="Nhập username..." style="-fx-background-color: #282828; -fx-text-fill: white; -fx-prompt-text-fill: #808080; -fx-border-color: transparent; -fx-background-radius: 5; -fx-padding: 12;" />
+            </VBox>
+
+            <VBox spacing="8.0">
+               <Label text="Mật khẩu" textFill="WHITE">
+                  <font><Font name="System Bold" size="14.0" /></font>
+               </Label>
+               <PasswordField fx:id="passwordField" promptText="Nhập mật khẩu..." style="-fx-background-color: #282828; -fx-text-fill: white; -fx-prompt-text-fill: #808080; -fx-border-color: transparent; -fx-background-radius: 5; -fx-padding: 12;" />
+            </VBox>
+            
+            <Label fx:id="messageLabel" textFill="#ff5555" wrapText="true" />
+
+            <Button fx:id="actionBtn" maxWidth="1.7976931348623157E308" onAction="#handleAction" style="-fx-background-color: #1DB954; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 12; -fx-cursor: hand;" text="ĐĂNG NHẬP">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
+            
+            <HBox alignment="CENTER_LEFT" spacing="5.0">
+               <children>
+                  <Label fx:id="switchLabel" text="Chưa có tài khoản?" textFill="#b3b3b3" />
+                  <Button fx:id="switchModeBtn" onAction="#toggleMode" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 0;" text="Đăng ký ngay" underline="true" />
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</VBox>

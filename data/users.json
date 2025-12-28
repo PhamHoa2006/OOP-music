@@ -1,0 +1,2488 @@
+[ {
+  "id" : "363046a7-6d9d-4b2b-85cc-a013ba9e9801",
+  "name" : null,
+  "age" : null,
+  "email" : null,
+  "description" : null,
+  "playLists" : [ {
+    "id" : "d21b70b8-ac85-42b0-9359-8cc25d259966",
+    "name" : "Favorites",
+    "songs" : [ {
+      "title" : "Nơi Này Có Anh",
+      "artist" : "Sơn Tùng M-TP",
+      "album" : null,
+      "duration" : 260.0,
+      "genres" : [ ],
+      "playCount" : 45,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "3",
+      "filePath" : "data/Music/song3.mp3"
+    }, {
+      "title" : "Một Bước Yêu, Vạn Dặm Đau",
+      "artist" : "Mr. Siro",
+      "album" : null,
+      "duration" : 299.0,
+      "genres" : [ ],
+      "playCount" : 12,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "9",
+      "filePath" : "data/Music/song9.mp3"
+    }, {
+      "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+      "artist" : "eiei",
+      "album" : "Local Upload",
+      "duration" : 360.411428571,
+      "genres" : [ ],
+      "playCount" : 2,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+      "filePath" : "data/Music/1766580547875.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "iampvq",
+    "description" : "Bài hát đã thả tim",
+    "privacy" : null
+  }, {
+    "id" : "aba2a648-3301-4030-bf6e-34c1ebde2ed9",
+    "name" : "i am ok",
+    "songs" : [ {
+      "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+      "artist" : "eiei",
+      "album" : "Local Upload",
+      "duration" : 360.411428571,
+      "genres" : [ ],
+      "playCount" : 2,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+      "filePath" : "data/Music/1766580547875.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "iampvq",
+    "description" : "",
+    "privacy" : null
+  }, {
+    "id" : "a9c21365-a40a-4bc1-afe5-9eddca5cd21c",
+    "name" : "test",
+    "songs" : [ {
+      "title" : "Whenever, Wherever",
+      "artist" : "Shakira",
+      "album" : null,
+      "duration" : 196.0,
+      "genres" : [ ],
+      "playCount" : 87,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "2",
+      "filePath" : "data/Music/song2.mp3"
+    }, {
+      "title" : "Cắt Đôi Nỗi Sầu",
+      "artist" : "Tăng Duy Tân",
+      "album" : null,
+      "duration" : 203.0,
+      "genres" : [ ],
+      "playCount" : 124,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "4",
+      "filePath" : "data/Music/song4.mp3"
+    }, {
+      "title" : "Hips Don't Lie",
+      "artist" : "Shakira, Wyclef",
+      "album" : null,
+      "duration" : 217.0,
+      "genres" : [ ],
+      "playCount" : 32,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "1",
+      "filePath" : "data/Music/song1.mp3"
+    }, {
+      "title" : "Nơi Này Có Anh",
+      "artist" : "Sơn Tùng M-TP",
+      "album" : null,
+      "duration" : 260.0,
+      "genres" : [ ],
+      "playCount" : 45,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "3",
+      "filePath" : "data/Music/song3.mp3"
+    }, {
+      "title" : "Hãy Trao Cho Anh",
+      "artist" : "Sơn Tùng M-TP, Snoop Dogg",
+      "album" : null,
+      "duration" : 262.0,
+      "genres" : [ ],
+      "playCount" : 61,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "5",
+      "filePath" : "data/Music/song5.mp3"
+    }, {
+      "title" : "Phía Sau Một Cô Gái",
+      "artist" : "Soobin Hoàng Sơn",
+      "album" : null,
+      "duration" : 272.0,
+      "genres" : [ ],
+      "playCount" : 55,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "12",
+      "filePath" : "data/Music/song12.mp3"
+    }, {
+      "title" : "Rời Bỏ",
+      "artist" : "Hoà Minzy",
+      "album" : null,
+      "duration" : 277.0,
+      "genres" : [ ],
+      "playCount" : 50,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "7",
+      "filePath" : "data/Music/song7.mp3"
+    }, {
+      "title" : "Gặp Nhưng Không Ở Lại",
+      "artist" : "Hiền Hồ",
+      "album" : null,
+      "duration" : 281.0,
+      "genres" : [ ],
+      "playCount" : 63,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "11",
+      "filePath" : "data/Music/song11.mp3"
+    }, {
+      "title" : "Thằng Điên",
+      "artist" : "Justatee, Phương Ly",
+      "album" : null,
+      "duration" : 286.0,
+      "genres" : [ ],
+      "playCount" : 63,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "13",
+      "filePath" : "data/Music/song13.mp3"
+    }, {
+      "title" : "Tình Đầu",
+      "artist" : "Tăng Duy Tân",
+      "album" : null,
+      "duration" : 296.0,
+      "genres" : [ ],
+      "playCount" : 3,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "6",
+      "filePath" : "data/Music/song6.mp3"
+    }, {
+      "title" : "Một Bước Yêu, Vạn Dặm Đau",
+      "artist" : "Mr. Siro",
+      "album" : null,
+      "duration" : 299.0,
+      "genres" : [ ],
+      "playCount" : 12,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "9",
+      "filePath" : "data/Music/song9.mp3"
+    }, {
+      "title" : "Không Thể Cùng Nhau Suốt Kiếp",
+      "artist" : "Hoà Minzy, Đức Phúc, Erik",
+      "album" : null,
+      "duration" : 300.0,
+      "genres" : [ ],
+      "playCount" : 74,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "8",
+      "filePath" : "data/Music/song8.mp3"
+    }, {
+      "title" : "Giá Như Mình Đừng Yêu Nhau",
+      "artist" : "Quang Trung",
+      "album" : null,
+      "duration" : 301.0,
+      "genres" : [ ],
+      "playCount" : 41,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "15",
+      "filePath" : "data/Music/song15.mp3"
+    }, {
+      "title" : "Em Gái Mưa",
+      "artist" : "Hương Tràm",
+      "album" : null,
+      "duration" : 347.0,
+      "genres" : [ ],
+      "playCount" : 50,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "10",
+      "filePath" : "data/Music/song10.mp3"
+    }, {
+      "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+      "artist" : "vfv",
+      "album" : "Local Upload",
+      "duration" : 347.350204081,
+      "genres" : [ ],
+      "playCount" : 0,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+      "filePath" : "data/Music/1766580557462.mp3"
+    }, {
+      "title" : "Màu Nước Mắt",
+      "artist" : "Nguyễn Trần Trung Quân",
+      "album" : null,
+      "duration" : 360.0,
+      "genres" : [ ],
+      "playCount" : 23,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "14",
+      "filePath" : "data/Music/song14.mp3"
+    }, {
+      "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+      "artist" : "eiei",
+      "album" : "Local Upload",
+      "duration" : 360.411428571,
+      "genres" : [ ],
+      "playCount" : 1,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+      "filePath" : "data/Music/1766580547875.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "iampvq",
+    "description" : "pucachi",
+    "privacy" : "Riêng tư"
+  } ],
+  "username" : "iampvq",
+  "passwordHash" : "fd3795d47795c116884cf39d9d02c8886ab3d95d1101bb9bbf8ef1a21197f124",
+  "history" : {
+    "userPlayCount" : {
+      "3" : 1,
+      "9" : 1,
+      "10" : 1,
+      "2" : 3,
+      "12" : 1,
+      "7" : 1,
+      "5" : 1,
+      "8" : 2,
+      "13" : 1,
+      "14" : 1,
+      "4" : 4,
+      "6" : 2,
+      "c6b078cc-aa7d-4951-88ec-7c2c232f70e4" : 3
+    },
+    "userHistory" : [ {
+      "song" : {
+        "title" : "Nơi Này Có Anh",
+        "artist" : "Sơn Tùng M-TP",
+        "album" : null,
+        "duration" : 260.0,
+        "genres" : [ ],
+        "playCount" : 45,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "3",
+        "filePath" : "data/Music/song3.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    }, {
+      "song" : {
+        "title" : "Một Bước Yêu, Vạn Dặm Đau",
+        "artist" : "Mr. Siro",
+        "album" : null,
+        "duration" : 299.0,
+        "genres" : [ ],
+        "playCount" : 12,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "9",
+        "filePath" : "data/Music/song9.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    }, {
+      "song" : {
+        "title" : "Em Gái Mưa",
+        "artist" : "Hương Tràm",
+        "album" : null,
+        "duration" : 347.0,
+        "genres" : [ ],
+        "playCount" : 50,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "10",
+        "filePath" : "data/Music/song10.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    }, {
+      "song" : {
+        "title" : "Whenever, Wherever",
+        "artist" : "Shakira",
+        "album" : null,
+        "duration" : 196.0,
+        "genres" : [ ],
+        "playCount" : 86,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "2",
+        "filePath" : "data/Music/song2.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Phía Sau Một Cô Gái",
+        "artist" : "Soobin Hoàng Sơn",
+        "album" : null,
+        "duration" : 272.0,
+        "genres" : [ ],
+        "playCount" : 55,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "12",
+        "filePath" : "data/Music/song12.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Rời Bỏ",
+        "artist" : "Hoà Minzy",
+        "album" : null,
+        "duration" : 277.0,
+        "genres" : [ ],
+        "playCount" : 50,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "7",
+        "filePath" : "data/Music/song7.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Hãy Trao Cho Anh",
+        "artist" : "Sơn Tùng M-TP, Snoop Dogg",
+        "album" : null,
+        "duration" : 262.0,
+        "genres" : [ ],
+        "playCount" : 61,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "5",
+        "filePath" : "data/Music/song5.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Không Thể Cùng Nhau Suốt Kiếp",
+        "artist" : "Hoà Minzy, Đức Phúc, Erik",
+        "album" : null,
+        "duration" : 300.0,
+        "genres" : [ ],
+        "playCount" : 74,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "8",
+        "filePath" : "data/Music/song8.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Whenever, Wherever",
+        "artist" : "Shakira",
+        "album" : null,
+        "duration" : 196.0,
+        "genres" : [ ],
+        "playCount" : 86,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "2",
+        "filePath" : "data/Music/song2.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Thằng Điên",
+        "artist" : "Justatee, Phương Ly",
+        "album" : null,
+        "duration" : 286.0,
+        "genres" : [ ],
+        "playCount" : 63,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "13",
+        "filePath" : "data/Music/song13.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Màu Nước Mắt",
+        "artist" : "Nguyễn Trần Trung Quân",
+        "album" : null,
+        "duration" : 360.0,
+        "genres" : [ ],
+        "playCount" : 23,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "14",
+        "filePath" : "data/Music/song14.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 124,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Tình Đầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 296.0,
+        "genres" : [ ],
+        "playCount" : 3,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "6",
+        "filePath" : "data/Music/song6.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+        "artist" : "eiei",
+        "album" : "Local Upload",
+        "duration" : 360.411428571,
+        "genres" : [ ],
+        "playCount" : 1,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+        "filePath" : "data/Music/1766580547875.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 124,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 124,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 124,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+        "artist" : "eiei",
+        "album" : "Local Upload",
+        "duration" : 360.411428571,
+        "genres" : [ ],
+        "playCount" : 2,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+        "filePath" : "data/Music/1766580547875.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Không Thể Cùng Nhau Suốt Kiếp",
+        "artist" : "Hoà Minzy, Đức Phúc, Erik",
+        "album" : null,
+        "duration" : 300.0,
+        "genres" : [ ],
+        "playCount" : 80,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "8",
+        "filePath" : "data/Music/song8.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Whenever, Wherever",
+        "artist" : "Shakira",
+        "album" : null,
+        "duration" : 196.0,
+        "genres" : [ ],
+        "playCount" : 87,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "2",
+        "filePath" : "data/Music/song2.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+        "artist" : "eiei",
+        "album" : "Local Upload",
+        "duration" : 360.411428571,
+        "genres" : [ ],
+        "playCount" : 2,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+        "filePath" : "data/Music/1766580547875.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Tình Đầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 296.0,
+        "genres" : [ ],
+        "playCount" : 8,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "6",
+        "filePath" : "data/Music/song6.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    } ]
+  },
+  "likedPlaylists" : [ {
+    "id" : "a9c21365-a40a-4bc1-afe5-9eddca5cd21c",
+    "name" : "test",
+    "songs" : [ {
+      "title" : "Cắt Đôi Nỗi Sầu",
+      "artist" : "Tăng Duy Tân",
+      "album" : null,
+      "duration" : 203.0,
+      "genres" : [ ],
+      "playCount" : 124,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "4",
+      "filePath" : "data/Music/song4.mp3"
+    }, {
+      "title" : "Một Bước Yêu, Vạn Dặm Đau",
+      "artist" : "Mr. Siro",
+      "album" : null,
+      "duration" : 299.0,
+      "genres" : [ ],
+      "playCount" : 12,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "9",
+      "filePath" : "data/Music/song9.mp3"
+    }, {
+      "title" : "Phía Sau Một Cô Gái",
+      "artist" : "Soobin Hoàng Sơn",
+      "album" : null,
+      "duration" : 272.0,
+      "genres" : [ ],
+      "playCount" : 55,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "12",
+      "filePath" : "data/Music/song12.mp3"
+    }, {
+      "title" : "Whenever, Wherever",
+      "artist" : "Shakira",
+      "album" : null,
+      "duration" : 196.0,
+      "genres" : [ ],
+      "playCount" : 86,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "2",
+      "filePath" : "data/Music/song2.mp3"
+    }, {
+      "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+      "artist" : "vfv",
+      "album" : "Local Upload",
+      "duration" : 347.350204081,
+      "genres" : [ ],
+      "playCount" : 0,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+      "filePath" : "data/Music/1766580557462.mp3"
+    }, {
+      "title" : "Không Thể Cùng Nhau Suốt Kiếp",
+      "artist" : "Hoà Minzy, Đức Phúc, Erik",
+      "album" : null,
+      "duration" : 300.0,
+      "genres" : [ ],
+      "playCount" : 74,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "8",
+      "filePath" : "data/Music/song8.mp3"
+    }, {
+      "title" : "Em Gái Mưa",
+      "artist" : "Hương Tràm",
+      "album" : null,
+      "duration" : 347.0,
+      "genres" : [ ],
+      "playCount" : 50,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "10",
+      "filePath" : "data/Music/song10.mp3"
+    }, {
+      "title" : "Gặp Nhưng Không Ở Lại",
+      "artist" : "Hiền Hồ",
+      "album" : null,
+      "duration" : 281.0,
+      "genres" : [ ],
+      "playCount" : 63,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "11",
+      "filePath" : "data/Music/song11.mp3"
+    }, {
+      "title" : "Thằng Điên",
+      "artist" : "Justatee, Phương Ly",
+      "album" : null,
+      "duration" : 286.0,
+      "genres" : [ ],
+      "playCount" : 63,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "13",
+      "filePath" : "data/Music/song13.mp3"
+    }, {
+      "title" : "Hãy Trao Cho Anh",
+      "artist" : "Sơn Tùng M-TP, Snoop Dogg",
+      "album" : null,
+      "duration" : 262.0,
+      "genres" : [ ],
+      "playCount" : 61,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "5",
+      "filePath" : "data/Music/song5.mp3"
+    }, {
+      "title" : "Nơi Này Có Anh",
+      "artist" : "Sơn Tùng M-TP",
+      "album" : null,
+      "duration" : 260.0,
+      "genres" : [ ],
+      "playCount" : 45,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "3",
+      "filePath" : "data/Music/song3.mp3"
+    }, {
+      "title" : "Giá Như Mình Đừng Yêu Nhau",
+      "artist" : "Quang Trung",
+      "album" : null,
+      "duration" : 301.0,
+      "genres" : [ ],
+      "playCount" : 41,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "15",
+      "filePath" : "data/Music/song15.mp3"
+    }, {
+      "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+      "artist" : "eiei",
+      "album" : "Local Upload",
+      "duration" : 360.411428571,
+      "genres" : [ ],
+      "playCount" : 1,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+      "filePath" : "data/Music/1766580547875.mp3"
+    }, {
+      "title" : "Màu Nước Mắt",
+      "artist" : "Nguyễn Trần Trung Quân",
+      "album" : null,
+      "duration" : 360.0,
+      "genres" : [ ],
+      "playCount" : 23,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "14",
+      "filePath" : "data/Music/song14.mp3"
+    }, {
+      "title" : "Hips Don't Lie",
+      "artist" : "Shakira, Wyclef",
+      "album" : null,
+      "duration" : 217.0,
+      "genres" : [ ],
+      "playCount" : 32,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "1",
+      "filePath" : "data/Music/song1.mp3"
+    }, {
+      "title" : "Rời Bỏ",
+      "artist" : "Hoà Minzy",
+      "album" : null,
+      "duration" : 277.0,
+      "genres" : [ ],
+      "playCount" : 50,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "7",
+      "filePath" : "data/Music/song7.mp3"
+    }, {
+      "title" : "Tình Đầu",
+      "artist" : "Tăng Duy Tân",
+      "album" : null,
+      "duration" : 296.0,
+      "genres" : [ ],
+      "playCount" : 3,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "6",
+      "filePath" : "data/Music/song6.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "iampvq",
+    "description" : "pucachi",
+    "privacy" : null
+  } ]
+}, {
+  "id" : "251fb14e-24f3-4465-80e6-dad637120aa3",
+  "name" : null,
+  "age" : null,
+  "email" : null,
+  "description" : null,
+  "playLists" : [ {
+    "id" : "0a60eefd-34c9-49ac-86bb-d4266c133b3a",
+    "name" : "Favorites",
+    "songs" : [ {
+      "title" : "Rời Bỏ",
+      "artist" : "Hoà Minzy",
+      "album" : null,
+      "duration" : 277.0,
+      "genres" : [ ],
+      "playCount" : 58,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "7",
+      "filePath" : "data/Music/song7.mp3"
+    }, {
+      "title" : "Cắt Đôi Nỗi Sầu",
+      "artist" : "Tăng Duy Tân",
+      "album" : null,
+      "duration" : 203.0,
+      "genres" : [ ],
+      "playCount" : 120,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "4",
+      "filePath" : "data/Music/song4.mp3"
+    }, {
+      "title" : "Giá Như Mình Đừng Yêu Nhau",
+      "artist" : "Quang Trung",
+      "album" : null,
+      "duration" : 301.0,
+      "genres" : [ ],
+      "playCount" : 41,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "15",
+      "filePath" : "data/Music/song15.mp3"
+    }, {
+      "title" : "Tình Đầu",
+      "artist" : "Tăng Duy Tân",
+      "album" : null,
+      "duration" : 296.0,
+      "genres" : [ ],
+      "playCount" : 5,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "6",
+      "filePath" : "data/Music/song6.mp3"
+    }, {
+      "title" : "Hips Don't Lie",
+      "artist" : "Shakira, Wyclef",
+      "album" : null,
+      "duration" : 217.0,
+      "genres" : [ ],
+      "playCount" : 32,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "1",
+      "filePath" : "data/Music/song1.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "Bài hát đã thả tim",
+    "privacy" : null
+  }, {
+    "id" : "fc6caccc-68ef-4d4c-8775-9d7ce5312ffa",
+    "name" : "Nhạc chill",
+    "songs" : [ {
+      "title" : "Hips Don't Lie",
+      "artist" : "Shakira, Wyclef",
+      "album" : null,
+      "duration" : 217.0,
+      "genres" : [ ],
+      "playCount" : 32,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "1",
+      "filePath" : "data/Music/song1.mp3"
+    }, {
+      "title" : "Rời Bỏ",
+      "artist" : "Hoà Minzy",
+      "album" : null,
+      "duration" : 277.0,
+      "genres" : [ ],
+      "playCount" : 55,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "7",
+      "filePath" : "data/Music/song7.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "Chiu chiu chiu",
+    "privacy" : "Công khai"
+  }, {
+    "id" : "60ae7236-dc53-4b60-aea9-56b3a52d6e4f",
+    "name" : "Nhạc tải lên",
+    "songs" : [ {
+      "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+      "artist" : "vfv",
+      "album" : "Local Upload",
+      "duration" : 347.350204081,
+      "genres" : [ ],
+      "playCount" : 4,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+      "filePath" : "data/Music/1766580557462.mp3"
+    }, {
+      "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+      "artist" : "eiei",
+      "album" : "Local Upload",
+      "duration" : 360.411428571,
+      "genres" : [ ],
+      "playCount" : 2,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+      "filePath" : "data/Music/1766580547875.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "Các bài hát bạn đã tải lên từ máy tính \uD83D\uDCBB",
+    "privacy" : null
+  }, {
+    "id" : "dc93e646-d32c-4f96-93e6-81b7fca314c1",
+    "name" : "Danh sách có nhiều bài",
+    "songs" : [ {
+      "title" : "Whenever, Wherever",
+      "artist" : "Shakira",
+      "album" : null,
+      "duration" : 196.0,
+      "genres" : [ ],
+      "playCount" : 87,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "2",
+      "filePath" : "data/Music/song2.mp3"
+    }, {
+      "title" : "Cắt Đôi Nỗi Sầu",
+      "artist" : "Tăng Duy Tân",
+      "album" : null,
+      "duration" : 203.0,
+      "genres" : [ ],
+      "playCount" : 120,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "4",
+      "filePath" : "data/Music/song4.mp3"
+    }, {
+      "title" : "Hips Don't Lie",
+      "artist" : "Shakira, Wyclef",
+      "album" : null,
+      "duration" : 217.0,
+      "genres" : [ ],
+      "playCount" : 32,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "1",
+      "filePath" : "data/Music/song1.mp3"
+    }, {
+      "title" : "Nơi Này Có Anh",
+      "artist" : "Sơn Tùng M-TP",
+      "album" : null,
+      "duration" : 260.0,
+      "genres" : [ ],
+      "playCount" : 45,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "3",
+      "filePath" : "data/Music/song3.mp3"
+    }, {
+      "title" : "Hãy Trao Cho Anh",
+      "artist" : "Sơn Tùng M-TP, Snoop Dogg",
+      "album" : null,
+      "duration" : 262.0,
+      "genres" : [ ],
+      "playCount" : 61,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "5",
+      "filePath" : "data/Music/song5.mp3"
+    }, {
+      "title" : "Phía Sau Một Cô Gái",
+      "artist" : "Soobin Hoàng Sơn",
+      "album" : null,
+      "duration" : 272.0,
+      "genres" : [ ],
+      "playCount" : 55,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "12",
+      "filePath" : "data/Music/song12.mp3"
+    }, {
+      "title" : "Rời Bỏ",
+      "artist" : "Hoà Minzy",
+      "album" : null,
+      "duration" : 277.0,
+      "genres" : [ ],
+      "playCount" : 50,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "7",
+      "filePath" : "data/Music/song7.mp3"
+    }, {
+      "title" : "Gặp Nhưng Không Ở Lại",
+      "artist" : "Hiền Hồ",
+      "album" : null,
+      "duration" : 281.0,
+      "genres" : [ ],
+      "playCount" : 63,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "11",
+      "filePath" : "data/Music/song11.mp3"
+    }, {
+      "title" : "Thằng Điên",
+      "artist" : "Justatee, Phương Ly",
+      "album" : null,
+      "duration" : 286.0,
+      "genres" : [ ],
+      "playCount" : 63,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "13",
+      "filePath" : "data/Music/song13.mp3"
+    }, {
+      "title" : "Tình Đầu",
+      "artist" : "Tăng Duy Tân",
+      "album" : null,
+      "duration" : 296.0,
+      "genres" : [ ],
+      "playCount" : 2,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "6",
+      "filePath" : "data/Music/song6.mp3"
+    }, {
+      "title" : "Một Bước Yêu, Vạn Dặm Đau",
+      "artist" : "Mr. Siro",
+      "album" : null,
+      "duration" : 299.0,
+      "genres" : [ ],
+      "playCount" : 12,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "9",
+      "filePath" : "data/Music/song9.mp3"
+    }, {
+      "title" : "Không Thể Cùng Nhau Suốt Kiếp",
+      "artist" : "Hoà Minzy, Đức Phúc, Erik",
+      "album" : null,
+      "duration" : 300.0,
+      "genres" : [ ],
+      "playCount" : 74,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "8",
+      "filePath" : "data/Music/song8.mp3"
+    }, {
+      "title" : "Giá Như Mình Đừng Yêu Nhau",
+      "artist" : "Quang Trung",
+      "album" : null,
+      "duration" : 301.0,
+      "genres" : [ ],
+      "playCount" : 41,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "15",
+      "filePath" : "data/Music/song15.mp3"
+    }, {
+      "title" : "Em Gái Mưa",
+      "artist" : "Hương Tràm",
+      "album" : null,
+      "duration" : 347.0,
+      "genres" : [ ],
+      "playCount" : 50,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "10",
+      "filePath" : "data/Music/song10.mp3"
+    }, {
+      "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+      "artist" : "vfv",
+      "album" : "Local Upload",
+      "duration" : 347.350204081,
+      "genres" : [ ],
+      "playCount" : 0,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+      "filePath" : "data/Music/1766580557462.mp3"
+    }, {
+      "title" : "Màu Nước Mắt",
+      "artist" : "Nguyễn Trần Trung Quân",
+      "album" : null,
+      "duration" : 360.0,
+      "genres" : [ ],
+      "playCount" : 23,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "14",
+      "filePath" : "data/Music/song14.mp3"
+    }, {
+      "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+      "artist" : "eiei",
+      "album" : "Local Upload",
+      "duration" : 360.411428571,
+      "genres" : [ ],
+      "playCount" : 0,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+      "filePath" : "data/Music/1766580547875.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "yes",
+    "privacy" : "Công khai"
+  }, {
+    "id" : "d90cc9d5-fea0-4175-98bd-c0e205bfb0dc",
+    "name" : "oop",
+    "songs" : [ {
+      "title" : "Nơi Này Có Anh",
+      "artist" : "Sơn Tùng M-TP",
+      "album" : null,
+      "duration" : 260.0,
+      "genres" : [ ],
+      "playCount" : 49,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "3",
+      "filePath" : "data/Music/song3.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "music",
+    "privacy" : null
+  }, {
+    "id" : "acfe18d4-2b6c-4597-9d17-c7880598a42e",
+    "name" : "Test thử đổi tên",
+    "songs" : [ ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "riêng tư check",
+    "privacy" : "Riêng tư"
+  }, {
+    "id" : "0da83bfd-0e2a-43c3-b1a9-39be545c480d",
+    "name" : "Hoà Minzy",
+    "songs" : [ ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "dì minHoa",
+    "privacy" : "Riêng tư"
+  }, {
+    "id" : "18b737fc-9c86-4f65-879d-7a909fd1ff74",
+    "name" : "ST",
+    "songs" : [ {
+      "title" : "Nơi Này Có Anh",
+      "artist" : "Sơn Tùng M-TP",
+      "album" : null,
+      "duration" : 260.0,
+      "genres" : [ ],
+      "playCount" : 49,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "3",
+      "filePath" : "data/Music/song3.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "mtp",
+    "privacy" : "Riêng tư"
+  } ],
+  "username" : "pvq",
+  "passwordHash" : "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+  "history" : {
+    "userPlayCount" : {
+      "1" : 9,
+      "9" : 3,
+      "6" : 7,
+      "15" : 3,
+      "4" : 15,
+      "c6b078cc-aa7d-4951-88ec-7c2c232f70e4" : 7,
+      "2" : 2,
+      "11" : 1,
+      "08bf29d3-7cac-4af6-8ff9-3af3a605139e" : 7,
+      "8" : 1,
+      "7" : 9,
+      "3" : 1
+    },
+    "userHistory" : [ {
+      "song" : {
+        "title" : "Hips Don't Lie",
+        "artist" : "Shakira, Wyclef",
+        "album" : null,
+        "duration" : 217.0,
+        "genres" : [ ],
+        "playCount" : 32,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "1",
+        "filePath" : "data/Music/song1.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    }, {
+      "song" : {
+        "title" : "Một Bước Yêu, Vạn Dặm Đau",
+        "artist" : "Mr. Siro",
+        "album" : null,
+        "duration" : 299.0,
+        "genres" : [ ],
+        "playCount" : 12,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "9",
+        "filePath" : "data/Music/song9.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    }, {
+      "song" : {
+        "title" : "Tình Đầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 296.0,
+        "genres" : [ ],
+        "playCount" : 2,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "6",
+        "filePath" : "data/Music/song6.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    }, {
+      "song" : {
+        "title" : "Giá Như Mình Đừng Yêu Nhau",
+        "artist" : "Quang Trung",
+        "album" : null,
+        "duration" : 301.0,
+        "genres" : [ ],
+        "playCount" : 41,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "15",
+        "filePath" : "data/Music/song15.mp3"
+      },
+      "datePlayed" : "2025-12-24"
+    }, {
+      "song" : {
+        "title" : "Tình Đầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 296.0,
+        "genres" : [ ],
+        "playCount" : 2,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "6",
+        "filePath" : "data/Music/song6.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Tình Đầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 296.0,
+        "genres" : [ ],
+        "playCount" : 2,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "6",
+        "filePath" : "data/Music/song6.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Giá Như Mình Đừng Yêu Nhau",
+        "artist" : "Quang Trung",
+        "album" : null,
+        "duration" : 301.0,
+        "genres" : [ ],
+        "playCount" : 41,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "15",
+        "filePath" : "data/Music/song15.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Giá Như Mình Đừng Yêu Nhau",
+        "artist" : "Quang Trung",
+        "album" : null,
+        "duration" : 301.0,
+        "genres" : [ ],
+        "playCount" : 41,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "15",
+        "filePath" : "data/Music/song15.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 120,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 120,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 120,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 120,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 120,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+        "artist" : "eiei",
+        "album" : "Local Upload",
+        "duration" : 360.411428571,
+        "genres" : [ ],
+        "playCount" : 0,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+        "filePath" : "data/Music/1766580547875.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 120,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+        "artist" : "eiei",
+        "album" : "Local Upload",
+        "duration" : 360.411428571,
+        "genres" : [ ],
+        "playCount" : 0,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+        "filePath" : "data/Music/1766580547875.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+        "artist" : "eiei",
+        "album" : "Local Upload",
+        "duration" : 360.411428571,
+        "genres" : [ ],
+        "playCount" : 0,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+        "filePath" : "data/Music/1766580547875.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Whenever, Wherever",
+        "artist" : "Shakira",
+        "album" : null,
+        "duration" : 196.0,
+        "genres" : [ ],
+        "playCount" : 86,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "2",
+        "filePath" : "data/Music/song2.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+        "artist" : "eiei",
+        "album" : "Local Upload",
+        "duration" : 360.411428571,
+        "genres" : [ ],
+        "playCount" : 0,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+        "filePath" : "data/Music/1766580547875.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 120,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 120,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 120,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 120,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Gặp Nhưng Không Ở Lại",
+        "artist" : "Hiền Hồ",
+        "album" : null,
+        "duration" : 281.0,
+        "genres" : [ ],
+        "playCount" : 63,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "11",
+        "filePath" : "data/Music/song11.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Hips Don't Lie",
+        "artist" : "Shakira, Wyclef",
+        "album" : null,
+        "duration" : 217.0,
+        "genres" : [ ],
+        "playCount" : 32,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "1",
+        "filePath" : "data/Music/song1.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Hips Don't Lie",
+        "artist" : "Shakira, Wyclef",
+        "album" : null,
+        "duration" : 217.0,
+        "genres" : [ ],
+        "playCount" : 32,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "1",
+        "filePath" : "data/Music/song1.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+        "artist" : "vfv",
+        "album" : "Local Upload",
+        "duration" : 347.350204081,
+        "genres" : [ ],
+        "playCount" : 0,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+        "filePath" : "data/Music/1766580557462.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+        "artist" : "eiei",
+        "album" : "Local Upload",
+        "duration" : 360.411428571,
+        "genres" : [ ],
+        "playCount" : 0,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+        "filePath" : "data/Music/1766580547875.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Hips Don't Lie",
+        "artist" : "Shakira, Wyclef",
+        "album" : null,
+        "duration" : 217.0,
+        "genres" : [ ],
+        "playCount" : 32,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "1",
+        "filePath" : "data/Music/song1.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Hips Don't Lie",
+        "artist" : "Shakira, Wyclef",
+        "album" : null,
+        "duration" : 217.0,
+        "genres" : [ ],
+        "playCount" : 32,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "1",
+        "filePath" : "data/Music/song1.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+        "artist" : "vfv",
+        "album" : "Local Upload",
+        "duration" : 347.350204081,
+        "genres" : [ ],
+        "playCount" : 0,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+        "filePath" : "data/Music/1766580557462.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Không Thể Cùng Nhau Suốt Kiếp",
+        "artist" : "Hoà Minzy, Đức Phúc, Erik",
+        "album" : null,
+        "duration" : 300.0,
+        "genres" : [ ],
+        "playCount" : 74,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "8",
+        "filePath" : "data/Music/song8.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Hips Don't Lie",
+        "artist" : "Shakira, Wyclef",
+        "album" : null,
+        "duration" : 217.0,
+        "genres" : [ ],
+        "playCount" : 32,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "1",
+        "filePath" : "data/Music/song1.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Hips Don't Lie",
+        "artist" : "Shakira, Wyclef",
+        "album" : null,
+        "duration" : 217.0,
+        "genres" : [ ],
+        "playCount" : 32,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "1",
+        "filePath" : "data/Music/song1.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 120,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 120,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 120,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+        "artist" : "vfv",
+        "album" : "Local Upload",
+        "duration" : 347.350204081,
+        "genres" : [ ],
+        "playCount" : 0,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+        "filePath" : "data/Music/1766580557462.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Hips Don't Lie",
+        "artist" : "Shakira, Wyclef",
+        "album" : null,
+        "duration" : 217.0,
+        "genres" : [ ],
+        "playCount" : 33,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "1",
+        "filePath" : "data/Music/song1.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+        "artist" : "vfv",
+        "album" : "Local Upload",
+        "duration" : 347.350204081,
+        "genres" : [ ],
+        "playCount" : 3,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+        "filePath" : "data/Music/1766580557462.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 122,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Một Bước Yêu, Vạn Dặm Đau",
+        "artist" : "Mr. Siro",
+        "album" : null,
+        "duration" : 299.0,
+        "genres" : [ ],
+        "playCount" : 13,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "9",
+        "filePath" : "data/Music/song9.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Rời Bỏ",
+        "artist" : "Hoà Minzy",
+        "album" : null,
+        "duration" : 277.0,
+        "genres" : [ ],
+        "playCount" : 51,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "7",
+        "filePath" : "data/Music/song7.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 122,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+        "artist" : "vfv",
+        "album" : "Local Upload",
+        "duration" : 347.350204081,
+        "genres" : [ ],
+        "playCount" : 3,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+        "filePath" : "data/Music/1766580557462.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+        "artist" : "eiei",
+        "album" : "Local Upload",
+        "duration" : 360.411428571,
+        "genres" : [ ],
+        "playCount" : 2,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+        "filePath" : "data/Music/1766580547875.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+        "artist" : "vfv",
+        "album" : "Local Upload",
+        "duration" : 347.350204081,
+        "genres" : [ ],
+        "playCount" : 3,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+        "filePath" : "data/Music/1766580557462.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+        "artist" : "eiei",
+        "album" : "Local Upload",
+        "duration" : 360.411428571,
+        "genres" : [ ],
+        "playCount" : 2,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+        "filePath" : "data/Music/1766580547875.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Một Bước Yêu, Vạn Dặm Đau",
+        "artist" : "Mr. Siro",
+        "album" : null,
+        "duration" : 299.0,
+        "genres" : [ ],
+        "playCount" : 13,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "9",
+        "filePath" : "data/Music/song9.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Tình Đầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 296.0,
+        "genres" : [ ],
+        "playCount" : 3,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "6",
+        "filePath" : "data/Music/song6.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Hips Don't Lie",
+        "artist" : "Shakira, Wyclef",
+        "album" : null,
+        "duration" : 217.0,
+        "genres" : [ ],
+        "playCount" : 33,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "1",
+        "filePath" : "data/Music/song1.mp3"
+      },
+      "datePlayed" : "2025-12-25"
+    }, {
+      "song" : {
+        "title" : "Tình Đầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 296.0,
+        "genres" : [ ],
+        "playCount" : 3,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "6",
+        "filePath" : "data/Music/song6.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Rời Bỏ",
+        "artist" : "Hoà Minzy",
+        "album" : null,
+        "duration" : 277.0,
+        "genres" : [ ],
+        "playCount" : 52,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "7",
+        "filePath" : "data/Music/song7.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Tình Đầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 296.0,
+        "genres" : [ ],
+        "playCount" : 5,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "6",
+        "filePath" : "data/Music/song6.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Rời Bỏ",
+        "artist" : "Hoà Minzy",
+        "album" : null,
+        "duration" : 277.0,
+        "genres" : [ ],
+        "playCount" : 54,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "7",
+        "filePath" : "data/Music/song7.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Tình Đầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 296.0,
+        "genres" : [ ],
+        "playCount" : 5,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "6",
+        "filePath" : "data/Music/song6.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Rời Bỏ",
+        "artist" : "Hoà Minzy",
+        "album" : null,
+        "duration" : 277.0,
+        "genres" : [ ],
+        "playCount" : 54,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "7",
+        "filePath" : "data/Music/song7.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+        "artist" : "vfv",
+        "album" : "Local Upload",
+        "duration" : 347.350204081,
+        "genres" : [ ],
+        "playCount" : 4,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+        "filePath" : "data/Music/1766580557462.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Rời Bỏ",
+        "artist" : "Hoà Minzy",
+        "album" : null,
+        "duration" : 277.0,
+        "genres" : [ ],
+        "playCount" : 55,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "7",
+        "filePath" : "data/Music/song7.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Nơi Này Có Anh",
+        "artist" : "Sơn Tùng M-TP",
+        "album" : null,
+        "duration" : 260.0,
+        "genres" : [ ],
+        "playCount" : 49,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "3",
+        "filePath" : "data/Music/song3.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Rời Bỏ",
+        "artist" : "Hoà Minzy",
+        "album" : null,
+        "duration" : 277.0,
+        "genres" : [ ],
+        "playCount" : 56,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "7",
+        "filePath" : "data/Music/song7.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Rời Bỏ",
+        "artist" : "Hoà Minzy",
+        "album" : null,
+        "duration" : 277.0,
+        "genres" : [ ],
+        "playCount" : 57,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "7",
+        "filePath" : "data/Music/song7.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Rời Bỏ",
+        "artist" : "Hoà Minzy",
+        "album" : null,
+        "duration" : 277.0,
+        "genres" : [ ],
+        "playCount" : 55,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "7",
+        "filePath" : "data/Music/song7.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Rời Bỏ",
+        "artist" : "Hoà Minzy",
+        "album" : null,
+        "duration" : 277.0,
+        "genres" : [ ],
+        "playCount" : 58,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "7",
+        "filePath" : "data/Music/song7.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Whenever, Wherever",
+        "artist" : "Shakira",
+        "album" : null,
+        "duration" : 196.0,
+        "genres" : [ ],
+        "playCount" : 87,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "2",
+        "filePath" : "data/Music/song2.mp3"
+      },
+      "datePlayed" : "2025-12-26"
+    } ]
+  },
+  "likedPlaylists" : [ {
+    "id" : "0a60eefd-34c9-49ac-86bb-d4266c133b3a",
+    "name" : "Favorites",
+    "songs" : [ {
+      "title" : "Rời Bỏ",
+      "artist" : "Hoà Minzy",
+      "album" : null,
+      "duration" : 277.0,
+      "genres" : [ ],
+      "playCount" : 55,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "7",
+      "filePath" : "data/Music/song7.mp3"
+    }, {
+      "title" : "Cắt Đôi Nỗi Sầu",
+      "artist" : "Tăng Duy Tân",
+      "album" : null,
+      "duration" : 203.0,
+      "genres" : [ ],
+      "playCount" : 120,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "4",
+      "filePath" : "data/Music/song4.mp3"
+    }, {
+      "title" : "Giá Như Mình Đừng Yêu Nhau",
+      "artist" : "Quang Trung",
+      "album" : null,
+      "duration" : 301.0,
+      "genres" : [ ],
+      "playCount" : 41,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "15",
+      "filePath" : "data/Music/song15.mp3"
+    }, {
+      "title" : "Tình Đầu",
+      "artist" : "Tăng Duy Tân",
+      "album" : null,
+      "duration" : 296.0,
+      "genres" : [ ],
+      "playCount" : 5,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "6",
+      "filePath" : "data/Music/song6.mp3"
+    }, {
+      "title" : "Hips Don't Lie",
+      "artist" : "Shakira, Wyclef",
+      "album" : null,
+      "duration" : 217.0,
+      "genres" : [ ],
+      "playCount" : 32,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "1",
+      "filePath" : "data/Music/song1.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "Bài hát đã thả tim",
+    "privacy" : null
+  } ]
+} ]

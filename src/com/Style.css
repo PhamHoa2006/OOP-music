@@ -606,3 +606,62 @@
     -fx-background-color: #1DB954; /* Màu xanh Spotify */
     -fx-text-fill: white;
 }
+
+/* --- STYLE THANH CUỘN (DARK MODE) --- */
+
+/* 1. Xóa nền trắng của ScrollPane */
+.scroll-pane, .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+/* 2. Thanh cuộn tổng thể: Trong suốt */
+.scroll-bar {
+    -fx-background-color: transparent;
+    -fx-pref-width: 12px; /* Độ rộng thanh cuộn */
+    -fx-padding: 0;
+}
+
+/* 3. Cái rãnh trượt (Track): QUAN TRỌNG - Phải trong suốt */
+.scroll-bar .track {
+    -fx-background-color: transparent; 
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+}
+
+/* 4. Cái cục để kéo (Thumb): Màu xám tối, bo tròn */
+.scroll-bar .thumb {
+    -fx-background-color: #404040; /* Màu xám đậm cho chìm vào nền */
+    -fx-background-radius: 10em;
+    -fx-background-insets: 2; /* Tạo khoảng hở để nó nhỏ hơn cái rãnh */
+}
+
+/* Khi di chuột vào thì sáng lên chút */
+.scroll-bar .thumb:hover {
+    -fx-background-color: #666666;
+}
+
+/* Khi đang kéo */
+.scroll-bar .thumb:pressed {
+    -fx-background-color: #888888;
+}
+
+/* 5. Ẩn nút mũi tên 2 đầu (Xóa sạch) */
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-shape: " "; 
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+    -fx-shape: " ";
+}
+
+/* Góc giao nhau giữa 2 thanh cuộn */
+.scroll-pane .corner {
+    -fx-background-color: transparent;
+}
