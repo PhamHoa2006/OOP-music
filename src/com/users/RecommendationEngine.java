@@ -4,7 +4,10 @@ import com.musicPlayer.Song;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 // Gợi ý một số bài hát cho người dùng
 public class RecommendationEngine {
