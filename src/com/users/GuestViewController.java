@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
+// Xử lý việc đăng nhập đăng ký của guest
 public class GuestViewController {
 
     @FXML private Label titleLabel;
@@ -17,7 +17,7 @@ public class GuestViewController {
     @FXML private Label switchLabel;
     @FXML private Button switchModeBtn;
 
-    private boolean isLoginMode = true; // Mặc định là Login
+    private boolean isLoginMode = true;
 
     @FXML
     private void handleAction() {

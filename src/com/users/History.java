@@ -36,8 +36,6 @@ public class History {
 
         public void setDatePlayed(String datePlayed) { this.datePlayed = datePlayed; }
         
-        // [XÓA HÀM NÀY ĐI] -> public String getDatePlayedString() { ... }
-        // Xóa nó đi để file JSON không bị đẻ ra trường "datePlayedString" nữa
     }
 
     // --- SỬA ĐỔI QUAN TRỌNG TẠI ĐÂY ---

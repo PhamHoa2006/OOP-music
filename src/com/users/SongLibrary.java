@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+// Load dữ liệu từ song json
 public class SongLibrary {
     // Singleton
     private static SongLibrary instance;

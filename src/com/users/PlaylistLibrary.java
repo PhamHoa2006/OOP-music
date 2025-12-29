@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
+// Load dữ liệu từ playlist json
 public class PlaylistLibrary {
     private static PlaylistLibrary instance;
     private List<Playlist> allPlaylists;
@@ -46,7 +46,7 @@ public class PlaylistLibrary {
         try {
             // Dùng writerWithDefaultPrettyPrinter để file json dễ đọc (xuống dòng, thụt lề)
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(FILE_PATH), allPlaylists);
-            System.out.println("✅ Đã lưu playlists.json thành công.");
+            System.out.println(" Đã lưu playlists.json thành công.");
         } catch (Exception e) {
             e.printStackTrace();
         }

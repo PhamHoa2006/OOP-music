@@ -19,7 +19,6 @@ public class RecommendationEngine {
         if (numberOfSuggestions <= 0) {
             return new ArrayList<>();
         }
-        // Sửa tên biến trendingMap -> trendingSongs cho đúng nghĩa
         return History.getGlobalTrending(numberOfSuggestions);     
     }
     
@@ -27,15 +26,14 @@ public class RecommendationEngine {
     public List<Song> getListOfSuggestedSongs(History history, int n) {
         if (n <= 0) return new ArrayList<>(); // Fix lỗi crash nếu n=0
 
-        // Dùng Set để TỰ ĐỘNG LỌC TRÙNG bài hát
         Set<Song> uniqueSuggestions = new HashSet<>();
         Random rand = new Random();
 
-        // 1. Lấy khoảng 40-60% là nhạc Trending
+        //Lấy khoảng 40-60% là nhạc Trending
         int trendingCount = (n > 1) ? rand.nextInt(n / 2) + 1 : 1; 
         uniqueSuggestions.addAll(suggestBasedOnGlobalTrending(trendingCount));
 
-        // 2. Còn lại lấp đầy bằng nhạc User hay nghe
+        // Còn lại lấp đầy bằng nhạc User hay nghe
         if (history != null) {
             int remaining = n - uniqueSuggestions.size();
             if (remaining > 0) {
@@ -44,7 +42,7 @@ public class RecommendationEngine {
             }
         }
 
-        // 3. Chuyển về List và xáo trộn
+        //Chuyển về List và trộn
         List<Song> finalResult = new ArrayList<>(uniqueSuggestions);
         Collections.shuffle(finalResult);
 
@@ -57,7 +55,7 @@ public class RecommendationEngine {
     }
     
     // --- [BONUS] Tính năng nâng cao: Gợi ý theo thể loại (Genre) ---
-    // Ông có thể dùng cái này nếu muốn project xịn hơn
+    
     public List<Song> suggestByGenre(SongLibrary library, String genre, int n) {
         List<Song> allSongs = library.getAllSongs();
         return allSongs.stream()

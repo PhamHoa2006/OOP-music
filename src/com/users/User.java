@@ -86,7 +86,7 @@ public class User {
         this.passwordHash = hashPassword(password);
     }
 
-    // Logic Hash (Giữ nguyên)
+    // Logic Hash 
     public static String hashPassword(String password) {
         if (password == null) throw new IllegalArgumentException("password is null");
         try {

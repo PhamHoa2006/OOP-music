@@ -60,7 +60,7 @@ public class UserManager {
         User user = users.get(key);
         
         if (user == null) {
-            System.out.println("❌ User không tồn tại: " + username);
+            System.out.println(" User không tồn tại: " + username);
             return null;
         }
         
@@ -71,7 +71,7 @@ public class UserManager {
             return user; 
         }
         
-        System.out.println("❌ Sai mật khẩu!");
+        System.out.println(" Sai mật khẩu!");
         return null;
     }
     
@@ -83,9 +83,9 @@ public class UserManager {
             
             // Ghi đè file cũ
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, users.values());
-            System.out.println("💾 [UserManager] Đã lưu " + users.size() + " users vào ổ cứng.");
+            System.out.println("[UserManager] Đã lưu " + users.size() + " users vào ổ cứng.");
         } catch (IOException e) {
-            System.err.println("❌ Lỗi CRITICAL: Không thể lưu file users.json! " + e.getMessage());
+            System.err.println("Lỗi CRITICAL: Không thể lưu file users.json! " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -95,7 +95,7 @@ public class UserManager {
     public void loadFromJSON() {
         File file = new File(USER_FILE_PATH);
         if (!file.exists()) {
-            System.out.println("⚠️ File users.json chưa tồn tại. Sẽ tạo mới khi đăng ký.");
+            System.out.println(" File users.json chưa tồn tại. Sẽ tạo mới khi đăng ký.");
             return;
         }
 
@@ -112,13 +112,13 @@ public class UserManager {
             }
             System.out.println("📂 [UserManager] Đã load thành công " + users.size() + " users.");
         } catch (IOException e) {
-            System.err.println("❌ Lỗi ĐỌC file users.json! File có thể bị hỏng hoặc sai cấu trúc.");
+            System.err.println(" Lỗi ĐỌC file users.json! File có thể bị hỏng hoặc sai cấu trúc.");
             e.printStackTrace(); // In lỗi đầy đủ ra để debug
             
             // [FIX] Nếu lỗi format, đổi tên file cũ để backup và reset data
             File backup = new File(USER_FILE_PATH + ".bak");
             if(file.renameTo(backup)) {
-                System.out.println("👉 Đã backup file lỗi thành users.json.bak. Dữ liệu sẽ được reset.");
+                System.out.println("Đã backup file lỗi thành users.json.bak. Dữ liệu sẽ được reset.");
             }
             users.clear(); 
         }

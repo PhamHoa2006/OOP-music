@@ -23,12 +23,12 @@ public class Main extends Application {
 
             // Đoạn debug để chắc chắn file đã được tìm thấy
             if (fxmlUrl == null) {
-                System.out.println("❌ LỖI: Không tìm thấy file MainLayout.fxml!");
-                System.out.println("👉 Code đang tìm file này ngay trong thư mục 'com'");
-                System.out.println("👉 BẠN CẦN 'CLEAN WORKSPACE' ĐỂ VS CODE CẬP NHẬT FILE MỚI.");
+                System.out.println("LỖI: Không tìm thấy file MainLayout.fxml!");
+                System.out.println("Code đang tìm file này ngay trong thư mục 'com'");
+                System.out.println("BẠN CẦN 'CLEAN WORKSPACE' ĐỂ VS CODE CẬP NHẬT FILE MỚI.");
                 System.exit(1);
             } else {
-                System.out.println("✅ Đã tìm thấy FXML: " + fxmlUrl);
+                System.out.println(" Đã tìm thấy FXML: " + fxmlUrl);
             }
 
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
@@ -41,7 +41,7 @@ public class Main extends Application {
             if (cssUrl != null) {
                 scene.getStylesheets().add(cssUrl.toExternalForm());
             } else {
-                System.out.println("⚠️ Cảnh báo: Không tìm thấy Style.css trong thư mục com");
+                System.out.println("Cảnh báo: Không tìm thấy Style.css trong thư mục com");
             }
 
             primaryStage.setTitle("OOP-Music - Project môn IT3100");
@@ -52,7 +52,7 @@ public class Main extends Application {
                 if (iconUrl != null) {
                     primaryStage.getIcons().add(new Image(iconUrl.toString()));
                 } else {
-                    System.out.println("⚠️ Cảnh báo: Không tìm thấy icon tại com/icons/logo.png");
+                    System.out.println(" Cảnh báo: Không tìm thấy icon tại com/icons/logo.png");
                 }
             } catch (Exception ignored) {}
 
