@@ -84,7 +84,7 @@ public class Song implements Comparable<Song>, Serializable {
 
             // --- LOG DEBUG ---
             if (!file.exists()) {
-                System.err.println("❌ FILE NOT FOUND: " + normalizedPath);
+                System.err.println(" FILE NOT FOUND: " + normalizedPath);
                 return null;
             }
             // -----------------

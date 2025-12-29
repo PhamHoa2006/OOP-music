@@ -39,7 +39,7 @@ public class User {
         this.history = new History();
     }
 
-    // Static Factory (Giữ lại của bạn)
+
     public static User create(String username, String password) {
         return new User(username, password);
     }

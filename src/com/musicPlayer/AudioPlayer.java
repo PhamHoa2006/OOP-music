@@ -28,7 +28,7 @@ public class AudioPlayer implements Player {
 
     @Override
     public void play() {
-        // Kiểm tra danh sách : rỗng -> không làm gì
+        // 1. Kiểm tra danh sách : rỗng -> không làm gì
         if (playlist == null || playlist.getSongs().isEmpty())
             return;
 

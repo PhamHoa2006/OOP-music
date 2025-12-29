@@ -110,7 +110,7 @@ public class CreatePlaylistController {
         if (privacyBox != null && privacyBox.getValue() != null) {
             String selectedPrivacy = privacyBox.getValue(); // Lấy trạng thái trong privacyBox
             newPlaylist.setPrivacy(selectedPrivacy); // Lưu vào playlist
-            System.out.println("🔒 Đã set chế độ: " + selectedPrivacy);
+            System.out.println("Đã set chế độ: " + selectedPrivacy);
         } else {
             newPlaylist.setPrivacy("Công khai"); // Chế độ mặc định phòng hờ
         }

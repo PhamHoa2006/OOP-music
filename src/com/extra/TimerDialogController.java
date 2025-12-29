@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
+// Thiết lập giao diện timer
 public class TimerDialogController {
 
     @FXML

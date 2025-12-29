@@ -13,7 +13,7 @@
       "album" : null,
       "duration" : 260.0,
       "genres" : [ ],
-      "playCount" : 45,
+      "playCount" : 46,
       "ratingList" : [ 0, 0, 0, 0, 0 ],
       "timeStamps" : [ ],
       "totalLike" : 0,
@@ -309,7 +309,7 @@
   "passwordHash" : "fd3795d47795c116884cf39d9d02c8886ab3d95d1101bb9bbf8ef1a21197f124",
   "history" : {
     "userPlayCount" : {
-      "3" : 1,
+      "3" : 2,
       "9" : 1,
       "10" : 1,
       "2" : 3,
@@ -319,7 +319,7 @@
       "8" : 2,
       "13" : 1,
       "14" : 1,
-      "4" : 4,
+      "4" : 5,
       "6" : 2,
       "c6b078cc-aa7d-4951-88ec-7c2c232f70e4" : 3
     },
@@ -675,6 +675,38 @@
         "filePath" : "data/Music/song6.mp3"
       },
       "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Nơi Này Có Anh",
+        "artist" : "Sơn Tùng M-TP",
+        "album" : null,
+        "duration" : 260.0,
+        "genres" : [ ],
+        "playCount" : 46,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "3",
+        "filePath" : "data/Music/song3.mp3"
+      },
+      "datePlayed" : "2025-12-29"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 129,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-29"
     } ]
   },
   "likedPlaylists" : [ {
@@ -982,6 +1014,19 @@
       "lyrics" : [ ],
       "id" : "1",
       "filePath" : "data/Music/song1.mp3"
+    }, {
+      "title" : "Hãy Trao Cho Anh",
+      "artist" : "Sơn Tùng M-TP, Snoop Dogg",
+      "album" : null,
+      "duration" : 262.0,
+      "genres" : [ ],
+      "playCount" : 66,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "5",
+      "filePath" : "data/Music/song5.mp3"
     } ],
     "likedByUsers" : [ ],
     "comments" : [ ],
@@ -1052,6 +1097,19 @@
       "lyrics" : [ ],
       "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
       "filePath" : "data/Music/1766580547875.mp3"
+    }, {
+      "title" : "hcbk;",
+      "artist" : "cvcr",
+      "album" : "Local Upload",
+      "duration" : 286.432653061,
+      "genres" : [ ],
+      "playCount" : 0,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "ed5c3732-367e-4dc7-baec-34c9ded49d1d",
+      "filePath" : "data/Music/1766975592615.mp3"
     } ],
     "likedByUsers" : [ ],
     "comments" : [ ],
@@ -1350,23 +1408,276 @@
     "creator" : "pvq",
     "description" : "mtp",
     "privacy" : "Riêng tư"
+  }, {
+    "id" : "bf6323fb-11ed-4ebb-8080-de013600aedf",
+    "name" : "nhạc jhhh",
+    "songs" : [ {
+      "title" : "Hips Don't Lie",
+      "artist" : "Shakira, Wyclef",
+      "album" : null,
+      "duration" : 217.0,
+      "genres" : [ ],
+      "playCount" : 41,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "1",
+      "filePath" : "data/Music/song1.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "dfbbh",
+    "privacy" : "Riêng tư"
+  }, {
+    "id" : "ae3dcc58-c290-436f-96f1-a716962931a1",
+    "name" : "fgh",
+    "songs" : [ {
+      "title" : "Hips Don't Lie",
+      "artist" : "Shakira, Wyclef",
+      "album" : null,
+      "duration" : 217.0,
+      "genres" : [ ],
+      "playCount" : 41,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "1",
+      "filePath" : "data/Music/song1.mp3"
+    }, {
+      "title" : "Whenever, Wherever",
+      "artist" : "Shakira",
+      "album" : null,
+      "duration" : 196.0,
+      "genres" : [ ],
+      "playCount" : 90,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "2",
+      "filePath" : "data/Music/song2.mp3"
+    }, {
+      "title" : "Nơi Này Có Anh",
+      "artist" : "Sơn Tùng M-TP",
+      "album" : null,
+      "duration" : 260.0,
+      "genres" : [ ],
+      "playCount" : 51,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "3",
+      "filePath" : "data/Music/song3.mp3"
+    }, {
+      "title" : "Cắt Đôi Nỗi Sầu",
+      "artist" : "Tăng Duy Tân",
+      "album" : null,
+      "duration" : 203.0,
+      "genres" : [ ],
+      "playCount" : 127,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "4",
+      "filePath" : "data/Music/song4.mp3"
+    }, {
+      "title" : "Hãy Trao Cho Anh",
+      "artist" : "Sơn Tùng M-TP, Snoop Dogg",
+      "album" : null,
+      "duration" : 262.0,
+      "genres" : [ ],
+      "playCount" : 66,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "5",
+      "filePath" : "data/Music/song5.mp3"
+    }, {
+      "title" : "Tình Đầu",
+      "artist" : "Tăng Duy Tân",
+      "album" : null,
+      "duration" : 296.0,
+      "genres" : [ ],
+      "playCount" : 10,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "6",
+      "filePath" : "data/Music/song6.mp3"
+    }, {
+      "title" : "Rời Bỏ",
+      "artist" : "Hoà Minzy",
+      "album" : null,
+      "duration" : 277.0,
+      "genres" : [ ],
+      "playCount" : 55,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "7",
+      "filePath" : "data/Music/song7.mp3"
+    }, {
+      "title" : "Không Thể Cùng Nhau Suốt Kiếp",
+      "artist" : "Hoà Minzy, Đức Phúc, Erik",
+      "album" : null,
+      "duration" : 300.0,
+      "genres" : [ ],
+      "playCount" : 83,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "8",
+      "filePath" : "data/Music/song8.mp3"
+    }, {
+      "title" : "Một Bước Yêu, Vạn Dặm Đau",
+      "artist" : "Mr. Siro",
+      "album" : null,
+      "duration" : 299.0,
+      "genres" : [ ],
+      "playCount" : 17,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "9",
+      "filePath" : "data/Music/song9.mp3"
+    }, {
+      "title" : "Em Gái Mưa",
+      "artist" : "Hương Tràm",
+      "album" : null,
+      "duration" : 347.0,
+      "genres" : [ ],
+      "playCount" : 53,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "10",
+      "filePath" : "data/Music/song10.mp3"
+    }, {
+      "title" : "Gặp Nhưng Không Ở Lại",
+      "artist" : "Hiền Hồ",
+      "album" : null,
+      "duration" : 281.0,
+      "genres" : [ ],
+      "playCount" : 68,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "11",
+      "filePath" : "data/Music/song11.mp3"
+    }, {
+      "title" : "Phía Sau Một Cô Gái",
+      "artist" : "Soobin Hoàng Sơn",
+      "album" : null,
+      "duration" : 272.0,
+      "genres" : [ ],
+      "playCount" : 57,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "12",
+      "filePath" : "data/Music/song12.mp3"
+    }, {
+      "title" : "Thằng Điên",
+      "artist" : "Justatee, Phương Ly",
+      "album" : null,
+      "duration" : 286.0,
+      "genres" : [ ],
+      "playCount" : 68,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "13",
+      "filePath" : "data/Music/song13.mp3"
+    }, {
+      "title" : "Màu Nước Mắt",
+      "artist" : "Nguyễn Trần Trung Quân",
+      "album" : null,
+      "duration" : 360.0,
+      "genres" : [ ],
+      "playCount" : 24,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "14",
+      "filePath" : "data/Music/song14.mp3"
+    }, {
+      "title" : "Giá Như Mình Đừng Yêu Nhau",
+      "artist" : "Quang Trung",
+      "album" : null,
+      "duration" : 301.0,
+      "genres" : [ ],
+      "playCount" : 46,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "15",
+      "filePath" : "data/Music/song15.mp3"
+    }, {
+      "title" : "Màu Nước Mắt - Nguyễn Trần Trung Quân - Official Lyrics Video",
+      "artist" : "eiei",
+      "album" : "Local Upload",
+      "duration" : 360.411428571,
+      "genres" : [ ],
+      "playCount" : 1,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "c6b078cc-aa7d-4951-88ec-7c2c232f70e4",
+      "filePath" : "data/Music/1766580547875.mp3"
+    }, {
+      "title" : "EM GÁI MƯA (BẢN ĐẸP 4K) - HƯƠNG TRÀM live at #RiverFlowsInYouShow",
+      "artist" : "vfv",
+      "album" : "Local Upload",
+      "duration" : 347.350204081,
+      "genres" : [ ],
+      "playCount" : 2,
+      "ratingList" : [ 0, 0, 0, 0, 0 ],
+      "timeStamps" : [ ],
+      "totalLike" : 0,
+      "lyrics" : [ ],
+      "id" : "08bf29d3-7cac-4af6-8ff9-3af3a605139e",
+      "filePath" : "data/Music/1766580557462.mp3"
+    } ],
+    "likedByUsers" : [ ],
+    "comments" : [ ],
+    "creator" : "pvq",
+    "description" : "",
+    "privacy" : "Công khai"
   } ],
   "username" : "pvq",
   "passwordHash" : "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
   "history" : {
     "userPlayCount" : {
-      "1" : 9,
+      "1" : 10,
       "9" : 3,
-      "6" : 7,
+      "6" : 8,
       "15" : 3,
-      "4" : 15,
+      "4" : 16,
       "c6b078cc-aa7d-4951-88ec-7c2c232f70e4" : 7,
       "2" : 2,
       "11" : 1,
       "08bf29d3-7cac-4af6-8ff9-3af3a605139e" : 7,
       "8" : 1,
       "7" : 9,
-      "3" : 1
+      "3" : 1,
+      "5" : 1
     },
     "userHistory" : [ {
       "song" : {
@@ -2408,6 +2719,70 @@
         "filePath" : "data/Music/song2.mp3"
       },
       "datePlayed" : "2025-12-26"
+    }, {
+      "song" : {
+        "title" : "Cắt Đôi Nỗi Sầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 203.0,
+        "genres" : [ ],
+        "playCount" : 127,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "4",
+        "filePath" : "data/Music/song4.mp3"
+      },
+      "datePlayed" : "2025-12-29"
+    }, {
+      "song" : {
+        "title" : "Hãy Trao Cho Anh",
+        "artist" : "Sơn Tùng M-TP, Snoop Dogg",
+        "album" : null,
+        "duration" : 262.0,
+        "genres" : [ ],
+        "playCount" : 66,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "5",
+        "filePath" : "data/Music/song5.mp3"
+      },
+      "datePlayed" : "2025-12-29"
+    }, {
+      "song" : {
+        "title" : "Hips Don't Lie",
+        "artist" : "Shakira, Wyclef",
+        "album" : null,
+        "duration" : 217.0,
+        "genres" : [ ],
+        "playCount" : 41,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "1",
+        "filePath" : "data/Music/song1.mp3"
+      },
+      "datePlayed" : "2025-12-29"
+    }, {
+      "song" : {
+        "title" : "Tình Đầu",
+        "artist" : "Tăng Duy Tân",
+        "album" : null,
+        "duration" : 296.0,
+        "genres" : [ ],
+        "playCount" : 10,
+        "ratingList" : [ 0, 0, 0, 0, 0 ],
+        "timeStamps" : [ ],
+        "totalLike" : 0,
+        "lyrics" : [ ],
+        "id" : "6",
+        "filePath" : "data/Music/song6.mp3"
+      },
+      "datePlayed" : "2025-12-29"
     } ]
   },
   "likedPlaylists" : [ {
