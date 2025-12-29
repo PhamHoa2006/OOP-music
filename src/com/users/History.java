@@ -11,7 +11,7 @@ import java.util.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class History {
 
-    // Class con để lưu bản ghi (Giữ nguyên)
+    // Class con để lưu bản ghi
     @JsonIgnoreProperties(ignoreUnknown = true) 
     public static class SongRecord {
         private Song song;
@@ -70,7 +70,7 @@ public class History {
         String id = song.getSongID();
         userPlayCount.put(id, userPlayCount.getOrDefault(id, 0) + 1);
 
-        // 3. Update count toàn cục (Giữ nguyên)
+        // 3. Update count toàn cục
         globalPlayCount.put(song, globalPlayCount.getOrDefault(song, 0) + 1);
     }
 

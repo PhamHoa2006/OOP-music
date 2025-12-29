@@ -45,7 +45,7 @@ public class AudioPlayer implements Player {
 
         Song currentSong = playlist.getSongs().get(currentIndex);
 
-        // Lấy đường dẫn URI chuẩn từ hàm ông đã viết trong Song.java
+        // Lấy đường dẫn URI chuẩn từ hàm đã viết trong Song.java
         String source = currentSong.getPlayableUrl();
 
         if (source == null) {

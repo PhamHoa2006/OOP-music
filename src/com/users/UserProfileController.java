@@ -74,7 +74,7 @@ public class UserProfileController {
             }
         }
         
-        // --- 2. PLAYLIST ĐÃ THÍCH (Giữ nguyên thứ tự hoặc sắp xếp nếu muốn) ---
+        // --- 2. PLAYLIST ĐÃ THÍCH ---
         likedPlaylistContainer.getChildren().clear();
         if (user.getLikedPlaylists() != null && !user.getLikedPlaylists().isEmpty()) {
             emptyLikedLabel.setVisible(false);

@@ -150,7 +150,7 @@
     -fx-cursor: hand;
 }
 
-/* 5. Label thời gian (Giữ nguyên của ông) */
+/* 5. Label thời gian */
 .time-label {
     -fx-text-fill: #b3b3b3; 
     -fx-font-size: 11px;
@@ -366,7 +366,7 @@
     -fx-opacity: 0; /* Tàng hình luôn nếu muốn giống hệt Spotify Web */
 }
 
-/* Hoặc nếu ông muốn nó hiện lên mờ mờ khi di chuột vào (Giống Spotify App) */
+/* hiện mờ mờ */
 .horizontal-scroll:hover .scroll-bar:horizontal {
     -fx-opacity: 1;
 }
@@ -477,7 +477,6 @@
     -fx-text-fill: white; /* Mặc định là trắng */
 }
 
-/* Nếu ông muốn can thiệp sâu hơn vào ID cụ thể từ CSS */
 #playlistCreator {
     -fx-text-fill: #aaaaaa; /* Màu xám nhạt */
 }

@@ -270,7 +270,7 @@ public class MainController implements Initializable {
         }
 
         try {
-            // mainRoot là cái BorderPane to nhất bao quanh app của ông
+            // mainRoot là cái BorderPane to nhất bao quanh app của
             if (mainRoot != null) {
                 // Lưu ý: Đảm bảo file style.css nằm cùng thư mục với MainController
                 String css = getClass().getResource("Style.css").toExternalForm();
@@ -544,12 +544,11 @@ public class MainController implements Initializable {
             // 4. Set Description
             if (descLbl != null) {
                 descLbl.setText(p.getDescription() != null ? p.getDescription() : "");
-                // Luôn hiện mô tả (kể cả trống) để giữ khoảng cách, hoặc ẩn tùy ông
                 descLbl.setVisible(true); 
                 descLbl.setManaged(true);
             }
             
-            // 5. Set Image (Giữ nguyên code cũ)
+            // 5. Set Image
             if (coverImg != null) {
                 String imgPath = "icons/logo.png";
                 String title = p.getTitle().toLowerCase();
@@ -559,7 +558,6 @@ public class MainController implements Initializable {
                 try { coverImg.setImage(new Image(getClass().getResourceAsStream(imgPath))); } catch (Exception e) {}
             }
 
-            // ... (Các nút PlayAll, Shuffle, Sort giữ nguyên logic cũ) ...
             if (playAllBtn != null) {					// Ấn nút phát tất cả => như bình thường
                 playAllBtn.setOnAction(e -> {
                     if (!p.getSongs().isEmpty()) {
@@ -583,7 +581,6 @@ public class MainController implements Initializable {
                 });
             }
             if (sortBtn != null) {						
-                // ... (Giữ nguyên logic sort) ...
                 if (p.getTitle().toLowerCase().contains("top 100")) {
                     sortBtn.setVisible(false); sortBtn.setManaged(false);
                 } else {								// Tạo sort Menu theo 3 tiêu chí
@@ -1115,7 +1112,7 @@ public class MainController implements Initializable {
         System.out.println("🔀 Random Mode: " + (isShuffle ? "ON" : "OFF"));
     }
 
-    private void toggleLike() {				// Maybe hàm này ko dùng nữa
+    private void toggleLike() {
         Song s = player.getCurrentSong();
         if (s == null || currentUser == null)
             return;
@@ -1962,7 +1959,7 @@ public class MainController implements Initializable {
 
         // 2. Mở khóa nút bấm (trừ khi là Queue/Temp thì chặn)
         if(currentPl.getTitle().equals("Queue") || currentPl.getTitle().equals("Temp")) {
-             // Nếu là playlist tạm thì ẩn luôn cho đỡ rối (hoặc disable tùy ông)
+             // Nếu là playlist tạm thì ẩn luôn cho đỡ rối
              // Ở đây tôi cho ẩn nút ON đi, hiện nút OFF
              setToggleState(queueLikeBtn, onQueueLikeBtn, false);
              queueLikeBtn.setDisable(true); // Disable nút off
@@ -1983,7 +1980,7 @@ public class MainController implements Initializable {
             }
         }
 
-        // 4. Tráo nút (Đã có ảnh nên không cần setStyle màu mè nữa)
+        // 4. Tráo nút
         setToggleState(queueLikeBtn, onQueueLikeBtn, isLiked);
     }
 
@@ -2380,11 +2377,10 @@ public class MainController implements Initializable {
             } 
             // B. Check playlist người dùng tạo (omega, test...)
             else {
-                // [QUAN TRỌNG] Lấy dữ liệu Privacy thực tế đã lưu
-                // Giả sử trong class Playlist ông có hàm getPrivacy() trả về String "Private" hoặc "Riêng tư"
+                // Lấy dữ liệu Privacy thực tế đã lưu
                 String pStatus = "";
                 try {
-                     pStatus = p.getPrivacy(); // Nếu chưa có hàm này thì thêm vào class Playlist nhé
+                     pStatus = p.getPrivacy(); // Nếu chưa có hàm này thì thêm vào class Playlist
                 } catch (Exception e) { 
                      pStatus = "Public"; 
                 }
@@ -2501,7 +2497,7 @@ public class MainController implements Initializable {
             alert.initOwner(editStage);
             
             if (alert.showAndWait().get() == ButtonType.OK) {
-                // 1. Xóa khỏi User hiện tại (Giữ nguyên)
+                // 1. Xóa khỏi User hiện tại
                 if (currentUser != null) {
                     currentUser.getPlayLists().remove(p);
                     UserManager.getInstance().saveToJSON();
@@ -2703,7 +2699,6 @@ public class MainController implements Initializable {
             
             // 2. Mở Player
             hienThiManHinhPlayer();
-            // (Trong hàm hienThiManHinhPlayer ông nhớ vẫn giữ dòng isPlayerMode = true nhé)
         }
     }
 
