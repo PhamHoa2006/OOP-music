@@ -17,21 +17,21 @@ public interface Player {
 
     void seek(int seconds); // tua cu the
 
-    Song getCurrentSong();
+    Song getCurrentSong(); // Lấy bài hát hiện tại
 
-    double getCurrentTime();
+    double getCurrentTime(); // Lấy thời lượng hiện tại
 
-    double getVolume(); // lay am thanh
+    double getVolume(); // lay am luong
 
-    boolean isPlaying(); // check tt
+    boolean isPlaying(); // check trang thai
 
-    boolean isStopped(); // check tt
+    boolean isStopped(); // heck trang thai
 
     boolean isPaused(); // check trang thai
 
-    void setOnSongEnd(Runnable callback); // de sau tim hieu them
+    void setOnSongEnd(Runnable callback); // Hàm callback
 
-    void setVolume(double volume);
-    
-    double getTotalDuration();
+    void setVolume(double volume); // Thiết lập âm lượng
+
+    double getTotalDuration(); // Lấy duration thực tế từ file (chính xác hơn Song object lưu)
 }
